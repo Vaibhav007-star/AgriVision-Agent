@@ -1,0 +1,76 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Environment Variables
+.env
+.env.local
+
+# Databases
+*.sqlite3
+*.db
+*.db-journal
+
+# ML / Heavy Model Checkpoints (>20MB)
+*.h5
+*.keras
+*.pt
+*.pth
+*.onnx
+models/saved_models/*.h5
+models/saved_models/*.keras
+!models/saved_models/.gitkeep
+
+# Keep lightweight mobile TFLite model (<3MB) and metadata
+!models/saved_models/crop_disease_model.tflite
+!models/saved_models/labels.txt
+!models/saved_models/class_indices.json
+!mobile/agrivision_app/assets/crop_disease_model.tflite
+
+# Large datasets
+data/cache/
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/sample_images/
+!data/rag_docs/
+
+# Streamlit & Cache
+.streamlit/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Mobile App & Build Artifacts
+mobile/agrivision_app/build/
+mobile/agrivision_app/.dart_tool/
+mobile/agrivision_app/.flutter-plugins
+mobile/agrivision_app/.flutter-plugins-dependencies
+mobile/agrivision_app/android/.gradle/
+mobile/agrivision_app/android/local.properties
+mobile/agrivision_app/android/app/build/
+*.apk
+AgriVision-Offline-v1.0.apk
+*.aab
+*.tmp
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+

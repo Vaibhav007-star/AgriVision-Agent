@@ -1,0 +1,137 @@
+{
+  "0": {
+    "index": 0,
+    "class_name": "Pepper__bell___Bacterial_spot",
+    "crop": "Pepper Bell",
+    "disease": "Bacterial Spot",
+    "is_healthy": false,
+    "pathogen_type": "Bacterial",
+    "severity_level": "High"
+  },
+  "1": {
+    "index": 1,
+    "class_name": "Pepper__bell___healthy",
+    "crop": "Pepper Bell",
+    "disease": "Healthy",
+    "is_healthy": true,
+    "pathogen_type": "None",
+    "severity_level": "None"
+  },
+  "2": {
+    "index": 2,
+    "class_name": "Potato___Early_blight",
+    "crop": "Potato",
+    "disease": "Early Blight",
+    "is_healthy": false,
+    "pathogen_type": "Fungal",
+    "severity_level": "Moderate"
+  },
+  "3": {
+    "index": 3,
+    "class_name": "Potato___healthy",
+    "crop": "Potato",
+    "disease": "Healthy",
+    "is_healthy": true,
+    "pathogen_type": "None",
+    "severity_level": "None"
+  },
+  "4": {
+    "index": 4,
+    "class_name": "Potato___Late_blight",
+    "crop": "Potato",
+    "disease": "Late Blight",
+    "is_healthy": false,
+    "pathogen_type": "Oomycete",
+    "severity_level": "High"
+  },
+  "5": {
+    "index": 5,
+    "class_name": "Tomato_Bacterial_spot",
+    "crop": "Tomato",
+    "disease": "Bacterial Spot",
+    "is_healthy": false,
+    "pathogen_type": "Bacterial",
+    "severity_level": "High"
+  },
+  "6": {
+    "index": 6,
+    "class_name": "Tomato_Early_blight",
+    "crop": "Tomato",
+    "disease": "Early Blight",
+    "is_healthy": false,
+    "pathogen_type": "Fungal",
+    "severity_level": "Moderate"
+  },
+  "7": {
+    "index": 7,
+    "class_name": "Tomato_healthy",
+    "crop": "Tomato",
+    "disease": "Healthy",
+    "is_healthy": true,
+    "pathogen_type": "None",
+    "severity_level": "None"
+  },
+  "8": {
+    "index": 8,
+    "class_name": "Tomato_Late_blight",
+    "crop": "Tomato",
+    "disease": "Late Blight",
+    "is_healthy": false,
+    "pathogen_type": "Oomycete",
+    "severity_level": "High"
+  },
+  "9": {
+    "index": 9,
+    "class_name": "Tomato_Leaf_Mold",
+    "crop": "Tomato",
+    "disease": "Leaf Mold",
+    "is_healthy": false,
+    "pathogen_type": "Fungal",
+    "severity_level": "Moderate"
+  },
+  "10": {
+    "index": 10,
+    "class_name": "Tomato_Septoria_leaf_spot",
+    "crop": "Tomato",
+    "disease": "Septoria Leaf Spot",
+    "is_healthy": false,
+    "pathogen_type": "Fungal",
+    "severity_level": "Moderate"
+  },
+  "11": {
+    "index": 11,
+    "class_name": "Tomato_Spider_mites_Two_spotted_spider_mite",
+    "crop": "Tomato",
+    "disease": "Two-Spotted Spider Mite",
+    "is_healthy": false,
+    "pathogen_type": "Pest / Acarina",
+    "severity_level": "Moderate"
+  },
+  "12": {
+    "index": 12,
+    "class_name": "Tomato__Target_Spot",
+    "crop": "Tomato",
+    "disease": "Target Spot",
+    "is_healthy": false,
+    "pathogen_type": "Fungal",
+    "severity_level": "Moderate"
+  },
+  "13": {
+    "index": 13,
+    "class_name": "Tomato__Tomato_mosaic_virus",
+    "crop": "Tomato",
+    "disease": "Tomato Mosaic Virus",
+    "is_healthy": false,
+    "pathogen_type": "Viral",
+    "severity_level": "High"
+  },
+  "14": {
+    "index": 14,
+    "class_name": "Tomato__Tomato_YellowLeaf__Curl_Virus",
+    "crop": "Tomato",
+    "disease": "Tomato Yellow Leaf Curl Virus",
+    "is_healthy": false,
+    "pathogen_type": "Viral",
+    "severity_level": "High"
+  }
+}

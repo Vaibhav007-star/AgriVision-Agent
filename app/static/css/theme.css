@@ -1,0 +1,937 @@
+/* ==========================================================================
+   AgriVision Agent — Zenze-Inspired Dark Agriculture Theme
+   Palette: Deep Forest Green (#0b130e), Pine Slate (#111d15), Vibrant Lime (#84cc16, #4ade80)
+   ========================================================================== */
+
+:root {
+  --bg-dark: #0b130e;
+  --bg-surface: #111e16;
+  --bg-card: rgba(18, 32, 24, 0.72);
+  --bg-card-hover: rgba(24, 42, 32, 0.9);
+  --border-subtle: rgba(74, 222, 128, 0.14);
+  --border-focus: rgba(132, 204, 22, 0.5);
+  
+  --lime-accent: #84cc16;
+  --lime-glow: rgba(132, 204, 22, 0.35);
+  --emerald-accent: #10b981;
+  --text-primary: #f0fdf4;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 65%, rgba(132, 204, 22, 0.06) 0%, transparent 45%);
+}
+
+/* Glassmorphism Cards */
+/* Glassmorphism Cards with 3D Hover & Glow */
+.zenze-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem;
+  transition: all 0.28s ease;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.zenze-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(74, 222, 128, 0.28);
+  box-shadow: 0 12px 32px -8px rgba(11, 23, 16, 0.8), 0 0 16px -4px rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.32);
+  box-shadow: 0 16px 36px -8px rgba(11, 23, 16, 0.85), 0 0 20px -4px rgba(74, 222, 128, 0.18);
+}
+
+/* Before/After Split Comparison Slider */
+.split-slider-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  user-select: none;
+}
+
+.split-slider-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.split-slider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50%;
+  overflow: hidden;
+  border-right: 2px solid #84cc16;
+  box-shadow: 2px 0 12px rgba(132, 204, 22, 0.6);
+}
+
+.split-slider-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #84cc16;
+  color: #0b130e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  box-shadow: 0 0 16px rgba(132, 204, 22, 0.8);
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Knapsack Fluid Tank Visualization */
+.tank-visualizer {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(74, 222, 128, 0.3);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.tank-fluid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(74, 222, 128, 0.65), rgba(16, 185, 129, 0.9));
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+  transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tank-bubbles {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.35;
+  animation: float-bubbles 4s linear infinite;
+}
+
+@keyframes float-bubbles {
+  from { background-position: 0 0; }
+  to { background-position: 0 -64px; }
+}
+
+/* Pulsing Leaf Hotspots */
+.lesion-hotspot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 12px #ef4444;
+  cursor: pointer;
+  z-index: 25;
+  transform: translate(-50%, -50%);
+}
+
+.lesion-hotspot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+  animation: ping-hotspot 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping-hotspot {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Accent Buttons */
+.btn-lime {
+  background-color: var(--lime-accent);
+  color: #0b130e;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.7rem 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(132, 204, 22, 0.3);
+}
+
+.btn-lime:hover {
+  background-color: #99e622;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(132, 204, 22, 0.45);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 0.7rem 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.22s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Floating Farm Insights Card */
+.insights-badge {
+  background: rgba(13, 27, 19, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(74, 222, 128, 0.22);
+  border-radius: 1rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+/* Scanning Animation Beam */
+@keyframes laser-scan {
+  0% {
+    top: 0%;
+    opacity: 0.8;
+  }
+  50% {
+    top: 96%;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    opacity: 0.8;
+  }
+}
+
+.scanner-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanning-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #84cc16, #4ade80, transparent);
+  box-shadow: 0 0 12px #84cc16, 0 0 20px #4ade80;
+  animation: laser-scan 2.4s ease-in-out infinite;
+  z-index: 20;
+}
+
+/* ========================================================================== */
+/* Executive Agricultural Pathology Lab Report Theme                          */
+/* ========================================================================== */
+
+.printable-report {
+  display: none;
+  background: #ffffff;
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.45;
+}
+
+.report-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 28px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Header */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 2.5px solid #047857;
+  gap: 16px;
+}
+
+.report-brand {
+  flex: 1;
+}
+
+.report-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.report-logo svg {
+  width: 40px;
+  height: 40px;
+  color: #047857;
+  flex-shrink: 0;
+}
+
+.brand-text h1 {
+  font-size: 19px;
+  font-weight: 800;
+  color: #064e3b;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.brand-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: #047857;
+  margin: 2px 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.brand-iso {
+  font-size: 9.5px;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+.report-meta-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 10.5px;
+  min-width: 250px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+.meta-label {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 9.5px;
+}
+
+.meta-val {
+  color: #0f172a;
+  font-weight: 600;
+  text-align: right;
+}
+
+.meta-badge {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed #86efac;
+  font-size: 9px;
+  font-weight: 800;
+  color: #047857;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.05em;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+}
+
+/* Sections */
+.report-section-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: #ffffff;
+}
+
+.section-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.section-title-bar h2,
+.section-title-bar h3 {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.sec-num {
+  font-size: 9.5px;
+  font-weight: 800;
+  background: #047857;
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Profile Grid */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.prof-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.03em;
+}
+
+.prof-val {
+  font-size: 11.5px;
+  color: #0f172a;
+  margin-top: 1px;
+}
+
+/* Tri-Modal Vision Images */
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.vision-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.vision-card .img-frame {
+  width: 100%;
+  height: 120px;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.vision-card .img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vision-caption {
+  padding: 6px 8px;
+  font-size: 9.5px;
+  line-height: 1.25;
+}
+
+.vision-caption strong {
+  display: block;
+  color: #0f172a;
+  font-size: 10px;
+}
+
+.vision-caption span {
+  color: #64748b;
+  font-size: 8.5px;
+}
+
+/* Diagnosis Banner */
+.diagnosis-banner-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  border: 1.5px solid #059669;
+  border-left: 5px solid #047857;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+
+.diag-sub-tag {
+  font-size: 9px;
+  font-weight: 800;
+  color: #047857;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.diag-headline {
+  font-size: 18px;
+  font-weight: 900;
+  color: #064e3b;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.diag-pathogen {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #047857;
+  margin: 3px 0 0 0;
+}
+
+.diag-desc {
+  font-size: 10px;
+  color: #334155;
+  margin: 4px 0 0 0;
+}
+
+.conf-box {
+  background: #ffffff;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 120px;
+  box-shadow: 0 2px 4px rgba(4, 120, 87, 0.08);
+}
+
+.conf-label {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  display: block;
+}
+
+.conf-percent {
+  font-size: 22px;
+  font-weight: 900;
+  color: #047857;
+  line-height: 1.1;
+  margin: 2px 0;
+}
+
+.conf-certainty {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #ffffff;
+  background: #047857;
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  letter-spacing: 0.05em;
+}
+
+/* Two-column layout */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.col-half {
+  margin-bottom: 0 !important;
+}
+
+/* Top-3 Differential */
+.diff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.diff-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+}
+
+.diff-name {
+  width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.diff-bar-wrap {
+  flex: 1;
+  height: 7px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.diff-bar {
+  height: 100%;
+  background: #059669;
+  border-radius: 4px;
+}
+
+.diff-score {
+  width: 38px;
+  text-align: right;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Weather Metrics */
+.weather-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.w-metric {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.w-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: #64748b;
+  display: block;
+}
+
+.w-val {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.weather-note {
+  font-size: 9.5px;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Dosage Table */
+.dosage-table-wrap {
+  overflow-x: auto;
+}
+
+.dosage-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.dosage-report-table th {
+  background: #064e3b;
+  color: #ffffff;
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.dosage-report-table td {
+  padding: 7px 10px;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+/* Three Columns Rx */
+.rx-three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.rx-col {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.rx-col-header {
+  padding: 5px 8px;
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.rx-list {
+  padding: 8px 12px 8px 20px;
+  margin: 0;
+  font-size: 9.5px;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.rx-list li {
+  margin-bottom: 4px;
+}
+
+/* Hindi Advisory Box */
+.hindi-advisory-box {
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-left: 4px solid #ca8a04;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.hindi-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.hindi-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #854d0e;
+}
+
+.hindi-body {
+  font-size: 10.5px;
+  color: #713f12;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Footer & Seal */
+.report-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  gap: 16px;
+}
+
+.footer-left {
+  flex: 1;
+}
+
+.barcode-graphic {
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #475569;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
+
+.footer-fine {
+  font-size: 8.5px;
+  color: #64748b;
+  margin: 0 0 2px 0;
+}
+
+.footer-notice {
+  font-size: 8px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.footer-right {
+  flex-shrink: 0;
+}
+
+.signature-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.seal-stamp {
+  width: 55px;
+  height: 55px;
+  border: 2px dashed #047857;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #047857;
+  font-weight: 900;
+  transform: rotate(-8deg);
+  background: rgba(4, 120, 87, 0.04);
+}
+
+.stamp-org {
+  font-size: 7px;
+  letter-spacing: 0.05em;
+}
+
+.stamp-status {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+}
+
+.stamp-date {
+  font-size: 6.5px;
+}
+
+.sig-lines {
+  text-align: right;
+}
+
+.sig-image {
+  font-family: "Brush Script MT", "Segoe Script", cursive, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #047857;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 1px;
+  margin-bottom: 1px;
+}
+
+.sig-title {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.sig-org {
+  font-size: 7.5px;
+  color: #64748b;
+}
+
+/* ========================================================================== */
+/* STRICT ISOLATED PRINT STYLESHEET                                           */
+/* ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm 8mm 10mm;
+  }
+
+  /* Reset body */
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Completely suppress all regular website components */
+  body > *:not(#printable-lab-report) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #report-modal-backdrop {
+    display: none !important;
+  }
+
+  /* Show ONLY the dedicated clinical report */
+  #printable-lab-report {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #printable-lab-report * {
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .report-page {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Keep cards cohesive and prevent ugly split lines */
+  .report-header,
+  .report-section-card,
+  .diagnosis-banner-box,
+  .two-col-grid,
+  .hindi-advisory-box,
+  .report-footer {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b130e;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e3325;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a4734;
+}
+

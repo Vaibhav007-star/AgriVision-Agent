@@ -1,0 +1,4 @@
+Model Architecture,Parameters,Top-1 Accuracy,F1-Score,Latency (CPU)
+Custom Baseline CNN,1.2M,88.2%,0.87,28 ms
+MobileNetV2 (Transfer Learning),2.6M,100.0%,1.00,42 ms
+EfficientNetB0 (Baseline),4.0M,94.5%,0.94,65 ms

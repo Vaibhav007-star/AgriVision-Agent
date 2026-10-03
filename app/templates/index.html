@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>AgriVision Agent — Precision Agricultural Intelligence</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  
+  <!-- PWA Web App Manifest & Mobile App Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#064e3b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AgriVision">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/icon-192.png">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            zenze: {
+              dark: '#0b130e',
+              surface: '#111e16',
+              card: '#14251a',
+              lime: '#84cc16',
+              emerald: '#10b981',
+              border: 'rgba(74, 222, 128, 0.16)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/static/css/theme.css">
+  
+  <!-- Inter Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-[#0b130e] text-slate-100 min-h-screen selection:bg-lime-500 selection:text-black">
+
+  <!-- ========================================================================= -->
+  <!-- TOP NAVIGATION BAR                                                        -->
+  <!-- ========================================================================= -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#0b130e]/80 backdrop-blur-md border-b border-zenze-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-lime-500/20 border border-lime-500/40 flex items-center justify-center text-lime-400 group-hover:scale-105 transition-transform">
+          <i data-lucide="sprout" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-xl font-extrabold tracking-wider text-white flex items-center gap-1">
+            AGRIVISION <span class="text-xs px-2 py-0.5 rounded-full bg-lime-500/20 text-lime-400 border border-lime-500/30">AGENT</span>
+          </span>
+          <p class="text-[10px] text-lime-500/80 tracking-widest uppercase font-semibold">Autonomous Agri Solutions</p>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#home" class="hover:text-lime-400 transition-colors">Home</a>
+        <a href="#solutions" class="hover:text-lime-400 transition-colors">Solutions</a>
+        <a href="#scanner" class="hover:text-lime-400 transition-colors">Diagnostic Scanner</a>
+        <a href="#technology" class="hover:text-lime-400 transition-colors">Farm Overview</a>
+        <a href="#history-section" class="hover:text-lime-400 transition-colors">Scan History</a>
+      </nav>
+
+      <!-- Right Action & Language Switcher -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- PWA Install App Button -->
+        <button id="pwa-install-btn" title="Install as Mobile App" class="hidden px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold items-center gap-1.5 transition-all shadow-md shadow-emerald-900/30">
+          <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400"></i>
+          <span class="hidden sm:inline">Install App</span>
+          <span class="sm:hidden">App</span>
+        </button>
+
+        <!-- Sound Effect Toggle -->
+        <button id="sound-toggle-btn" title="Toggle Sound Feedback" class="p-2 rounded-full bg-white/5 border border-white/10 text-xs font-semibold hover:border-lime-500/40 flex items-center gap-1 transition-all text-slate-300">
+          <i data-lucide="volume-2" class="w-4 h-4 text-lime-400"></i>
+        </button>
+
+        <!-- Language Toggle -->
+        <button id="lang-toggle-btn" class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold hover:border-lime-500/40 flex items-center gap-1.5 transition-all text-slate-300">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-lime-400"></i>
+          <span id="lang-label">English / हिंदी</span>
+        </button>
+
+        <!-- CTA Button -->
+        <a href="#scanner" class="btn-lime text-xs sm:text-sm">
+          <span>Launch Scanner</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="pt-24 space-y-28">
+
+    <!-- ========================================================================= -->
+    <!-- HERO SECTION                                                              -->
+    <!-- ========================================================================= -->
+    <section id="home" class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 overflow-hidden">
+      <!-- Ambient Spores Particle Background Canvas -->
+      <canvas id="spores-canvas" class="absolute inset-0 pointer-events-none z-0 opacity-30"></canvas>
+      
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Hero Copy -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Category Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-500/10 border border-lime-500/25 text-lime-400 text-xs font-medium tracking-wide uppercase">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Smart Agentic AI For Precision Agriculture</span>
+          </div>
+
+          <!-- Main Title (Matching Zenze typography) -->
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
+            Nurturing Nature.<br>
+            <span class="text-lime-400">Empowering Farmers.</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-base sm:text-lg text-slate-400 max-w-2xl leading-relaxed">
+            AgriVision combines Computer Vision, MobileNetV2 Transfer Learning, and autonomous LangGraph agentic reasoning to detect crop diseases, calculate precise acreage knapsack dosages, and synthesize grounded bilingual prescriptions.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <a href="#scanner" class="btn-lime">
+              <span>Start Leaf Diagnosis</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <button onclick="toggleChatDrawer()" class="btn-ghost">
+              <i data-lucide="message-square" class="w-4 h-4 text-lime-400"></i>
+              <span>Consult AI Agronomist</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Hero Visual + Floating Card (Matching Reference Image) -->
+        <div class="lg:col-span-5 relative">
+          
+          <!-- Decorative Glow Backdrop -->
+          <div class="absolute -inset-2 bg-gradient-to-r from-lime-500/20 to-emerald-500/10 rounded-3xl blur-2xl opacity-60"></div>
+          
+          <!-- Hero Card / Mockup Graphic -->
+          <div class="relative zenze-card overflow-hidden p-6 border-lime-500/20">
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-emerald-950 via-[#102419] to-zenze-dark border border-white/5 flex items-center justify-center">
+              <img src="/static/images/farm_hero.jpg" onerror="this.src='https://images.unsplash.com/photo-1592417817098-8f3d69102a56?auto=format&fit=crop&w=1000&q=80'" alt="Lush Tea and Tomato Farmland" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0b130e] via-transparent to-transparent"></div>
+            </div>
+
+            <!-- Floating "Live Farm Insights" Card (Pixel-matched from Zenze image) -->
+            <div class="insights-badge p-4 mt-4 space-y-3">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-lime-400 animate-pulse"></span>
+                  <span class="font-bold text-white tracking-wide">Live Farm Insights</span>
+                </div>
+                <span class="text-lime-400/90 text-[11px] font-semibold hover:underline cursor-pointer">Live Node &rarr;</span>
+              </div>
+
+              <!-- Metric 1: Soil Moisture -->
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px] text-slate-300">
+                  <span>Soil Moisture <span class="text-lime-400 font-medium">(Optimal)</span></span>
+                  <span class="font-bold text-white">68%</span>
+                </div>
+                <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div class="h-full bg-lime-400 rounded-full" style="width: 68%;"></div>
+                </div>
+              </div>
+
+              <!-- Metric 2: Ambient Temperature -->
+              <div class="flex justify-between text-[11px] text-slate-300 pt-1 border-t border-white/5">
+                <span>Temperature</span>
+                <span id="hero-temp-val" class="font-bold text-white">24.5&deg;C</span>
+              </div>
+
+              <!-- Metric 3: Fungal Spore Germination Risk -->
+              <div class="flex justify-between text-[11px] text-slate-300 pt-1 border-t border-white/5">
+                <span>Spore Inoculum Risk</span>
+                <span id="hero-spore-val" class="font-bold text-amber-400">Moderate Risk</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Metrics Strip (Directly matching Zenze design) -->
+      <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <div class="zenze-card p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-lime-500/15 border border-lime-500/30 flex items-center justify-center text-lime-400">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-white">25K+</div>
+            <div class="text-xs text-slate-400">Leaves Analyzed</div>
+          </div>
+        </div>
+
+        <div class="zenze-card p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="layers" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-white">1.2M+</div>
+            <div class="text-xs text-slate-400">Field Data Points</div>
+          </div>
+        </div>
+
+        <div class="zenze-card p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-lime-500/15 border border-lime-500/30 flex items-center justify-center text-lime-400">
+            <i data-lucide="trending-up" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-white">94.8%</div>
+            <div class="text-xs text-slate-400">Top-1 CNN Accuracy</div>
+          </div>
+        </div>
+
+        <div class="zenze-card p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="droplets" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-extrabold text-white">30%</div>
+            <div class="text-xs text-slate-400">Chemical Spray Saved</div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION: WHAT WE DO / INTELLIGENT SOLUTIONS FOR EVERY FARM                 -->
+    <!-- ========================================================================= -->
+    <section id="solutions" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-lime-400">What We Do</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">
+            Intelligent Solutions<br>for Every Farm
+          </h2>
+        </div>
+        <p class="text-sm text-slate-400 max-w-md">
+          From leaf to sky, our agentic AI pipeline delivers grounded, verifiable diagnosis and chemical-safe dosage recommendations.
+        </p>
+      </div>
+
+      <!-- 4 Pillars Grid (Matching Zenze Layout) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1 -->
+        <div class="zenze-card p-6 flex flex-col justify-between group cursor-pointer hover:border-lime-500/50">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-lime-500/20 text-lime-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <i data-lucide="scan-eye" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Crop Disease Vision</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              MobileNetV2 Transfer Learning with CLAHE pre-processing, Top-3 probability distribution, and Grad-CAM lesion explainability.
+            </p>
+          </div>
+          <div class="pt-6">
+            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-lime-400 group-hover:bg-lime-500 group-hover:text-black transition-colors">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="zenze-card p-6 flex flex-col justify-between group cursor-pointer hover:border-cyan-500/50">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <i data-lucide="cloud-rain" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Microclimate Weather</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Automated relative humidity and ambient temperature evaluation calculating fungal spore germination risk indices.
+            </p>
+          </div>
+          <div class="pt-6">
+            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black transition-colors">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="zenze-card p-6 flex flex-col justify-between group cursor-pointer hover:border-amber-500/50">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <i data-lucide="bot" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">LangGraph AI Agent</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Multi-node cyclic state machine integrating FAISS RAG vector store retrieval to formulate grounded prescriptions without hallucination.
+            </p>
+          </div>
+          <div class="pt-6">
+            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-black transition-colors">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="zenze-card p-6 flex flex-col justify-between group cursor-pointer hover:border-purple-500/50">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <i data-lucide="calculator" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Acreage Tank Dosage</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Deterministic mathematical tool computing total spray water volume, 15L knapsack tank counts, and safety equipment requirements.
+            </p>
+          </div>
+          <div class="pt-6">
+            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-black transition-colors">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- INTERACTIVE LIVE AI DIAGNOSTIC SCANNER & WORKBENCH                         -->
+    <!-- ========================================================================= -->
+    <section id="scanner" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 scroll-mt-24">
+      
+      <div class="zenze-card p-6 sm:p-10 border-lime-500/30">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-white/10">
+          <div>
+            <div class="inline-flex items-center gap-2 text-xs font-bold text-lime-400 uppercase tracking-wider mb-1">
+              <i data-lucide="cpu" class="w-4 h-4"></i>
+              <span>Live Neural Network Diagnostic Engine</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+              Leaf Pathology & Treatment Workbench
+            </h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-lime-400 animate-ping"></span>
+            <span class="text-xs text-slate-300 font-medium">Model: MobileNetV2 Transfer Learning (Online)</span>
+          </div>
+        </div>
+
+        <!-- Workbench Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+          
+          <!-- Left Column: Image Input & Parameters (5 Cols) -->
+          <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Upload Drop Zone -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">1. Upload Leaf Image</label>
+              <div id="drop-zone" class="border-2 border-dashed border-lime-500/30 hover:border-lime-500/70 rounded-2xl p-6 text-center cursor-pointer bg-white/[0.02] hover:bg-lime-500/[0.04] transition-all relative">
+                <input type="file" id="leaf-file-input" accept="image/jpeg,image/png" class="hidden">
+                <div class="space-y-2">
+                  <div class="w-12 h-12 rounded-full bg-lime-500/10 text-lime-400 flex items-center justify-center mx-auto">
+                    <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                  </div>
+                  <p class="text-sm font-medium text-white">Click or drag & drop leaf image here</p>
+                  <p class="text-xs text-slate-400">Supports JPG, PNG (RGB leaves)</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1-Click Benchmark Samples -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Or Choose Benchmark Sample</label>
+              <div id="samples-container" class="grid grid-cols-3 gap-2">
+                <!-- Dynamically populated sample buttons -->
+              </div>
+            </div>
+
+            <!-- Field Parameters -->
+            <div class="bg-black/30 p-4 rounded-xl border border-white/5 space-y-4">
+              <div>
+                <div class="flex justify-between text-xs font-medium text-slate-300 mb-1">
+                  <span>Farm Acreage (Acres):</span>
+                  <span id="acres-display" class="font-bold text-lime-400">1.5 Acres</span>
+                </div>
+                <input type="range" id="acres-slider" min="0.25" max="10.0" step="0.25" value="1.5" class="w-full accent-lime-500 cursor-pointer">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label class="block text-slate-400 mb-1">Growth Stage</label>
+                  <select id="stage-select" class="w-full bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1.5 text-slate-200 focus:border-lime-500 outline-none">
+                    <option value="Seedling">Seedling / Nursery</option>
+                    <option value="Vegetative Growth" selected>Vegetative Growth</option>
+                    <option value="Flowering Stage">Flowering Stage</option>
+                    <option value="Fruiting Stage">Fruiting / Pods</option>
+                    <option value="Pre-Harvest">Pre-Harvest</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Farm Region</label>
+                  <input type="text" id="location-input" value="Bhopal, India" class="w-full bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1.5 text-slate-200 focus:border-lime-500 outline-none">
+                </div>
+              </div>
+            </div>
+
+            <!-- Run Diagnostic Button -->
+            <button id="run-diagnosis-btn" class="btn-lime w-full text-base py-3.5 shadow-lg shadow-lime-500/20">
+              <i data-lucide="scan" class="w-5 h-5"></i>
+              <span>Execute Diagnostic Engine</span>
+            </button>
+
+          </div>
+
+          <!-- Right Column: Visual Outputs & Diagnosis Results (7 Cols) -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Visual Inspection & Interactive Split Lens -->
+            <div class="bg-black/40 rounded-2xl p-5 border border-white/10 space-y-4">
+              <div class="flex items-center justify-between text-xs font-semibold text-slate-300">
+                <div class="flex items-center gap-2">
+                  <span>Visual Inspection & Grad-CAM XAI</span>
+                  <!-- View Switcher -->
+                  <div class="flex bg-white/5 p-0.5 rounded-lg border border-white/10 text-[11px]">
+                    <button id="view-mode-grid" onclick="switchVisualMode('grid')" class="px-2.5 py-1 rounded-md bg-lime-500/20 text-lime-400 font-bold">3-Way Grid</button>
+                    <button id="view-mode-split" onclick="switchVisualMode('split')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white">Split-Lens Slider</button>
+                  </div>
+                </div>
+                <span id="lesion-tag" class="px-2.5 py-1 rounded-full bg-lime-500/20 text-lime-400 text-[11px] font-bold">Necrotic Foliage: 8.4%</span>
+              </div>
+
+              <!-- Mode 1: 3-Way Grid View -->
+              <div id="grid-view-container" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <!-- 1. Original Leaf with Hotspots -->
+                <div class="scanner-overlay rounded-xl overflow-hidden aspect-square bg-[#0b130e] border border-white/5 relative group">
+                  <img id="preview-original" src="/static/images/placeholder_leaf.jpg" onerror="this.src='https://images.unsplash.com/photo-1592417817098-8f3d69102a56?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover">
+                  <div id="scan-line" class="scanning-line hidden"></div>
+                  
+                  <!-- Pulsing Lesion Hotspots (Clickable Anatomical Markers) -->
+                  <div class="lesion-hotspot" style="top: 38%; left: 46%;" onclick="showHotspotInfo('Concentric Alternaria Rings', 'Fungal target-board concentric lesions formed by Alternaria solani mycelium.')" title="Click to Inspect Lesion"></div>
+                  <div class="lesion-hotspot" style="top: 65%; left: 32%;" onclick="showHotspotInfo('Chlorotic Yellow Halo', 'Toxin-induced marginal chlorosis spreading along leaf veins.')" title="Click to Inspect Chlorosis"></div>
+
+                  <div class="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-md px-2 py-1 rounded text-[11px] text-center text-slate-300 flex items-center justify-between">
+                    <span>Input RGB Leaf</span>
+                    <span class="text-[10px] text-lime-400">● 2 Hotspots</span>
+                  </div>
+                </div>
+
+                <!-- 2. CLAHE Preprocessing -->
+                <div class="rounded-xl overflow-hidden aspect-square bg-[#0b130e] border border-white/5 relative">
+                  <img id="preview-clahe" src="/static/images/placeholder_leaf.jpg" onerror="this.src='https://images.unsplash.com/photo-1592417817098-8f3d69102a56?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover">
+                  <div class="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-md px-2 py-1 rounded text-[11px] text-center text-slate-300">
+                    CLAHE Contrast Enhanced
+                  </div>
+                </div>
+
+                <!-- 3. Grad-CAM Lesion Heatmap -->
+                <div class="rounded-xl overflow-hidden aspect-square bg-[#0b130e] border border-lime-500/30 relative">
+                  <img id="preview-gradcam" src="/static/images/placeholder_leaf.jpg" onerror="this.src='https://images.unsplash.com/photo-1592417817098-8f3d69102a56?auto=format&fit=crop&w=400&q=80'" class="w-full h-full object-cover">
+                  <div class="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-md px-2 py-1 rounded text-[11px] text-center text-lime-400 font-medium">
+                    Grad-CAM Attention Map
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mode 2: Interactive Split-Lens Slider (Hidden by default) -->
+              <div id="split-view-container" class="split-slider-container aspect-[16/9] sm:aspect-[2/1] bg-black hidden border border-lime-500/30">
+                <img id="split-img-under" src="/static/images/placeholder_leaf.jpg" class="split-slider-img">
+                <div id="split-overlay" class="split-slider-overlay">
+                  <img id="split-img-over" src="/static/images/placeholder_leaf.jpg" class="split-slider-img w-[200%] max-w-none">
+                </div>
+                <div id="split-handle" class="split-slider-handle">
+                  <i data-lucide="move-horizontal" class="w-4 h-4"></i>
+                </div>
+                <div class="absolute top-2 left-2 bg-black/75 backdrop-blur px-2.5 py-1 rounded text-[10px] text-lime-400 font-bold pointer-events-none">
+                  Grad-CAM Neural Overlay
+                </div>
+                <div class="absolute top-2 right-2 bg-black/75 backdrop-blur px-2.5 py-1 rounded text-[10px] text-slate-300 font-bold pointer-events-none">
+                  Original Leaf Photo
+                </div>
+              </div>
+
+              <!-- Hotspot Popover Card -->
+              <div id="hotspot-popup" class="hidden bg-emerald-950/90 border border-lime-500/40 p-3 rounded-xl text-xs space-y-1">
+                <div class="flex items-center justify-between">
+                  <span id="hotspot-title" class="font-bold text-lime-400">Lesion Analysis</span>
+                  <button onclick="document.getElementById('hotspot-popup').classList.add('hidden')" class="text-slate-400 hover:text-white">&times;</button>
+                </div>
+                <p id="hotspot-desc" class="text-slate-200">Click a lesion hotspot pin on the leaf to inspect pathology.</p>
+              </div>
+
+            </div>
+
+            <!-- Neural Diagnosis Banner -->
+            <div id="diagnosis-banner" class="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 to-zenze-card border border-lime-500/30">
+              <div class="flex items-start justify-between">
+                <div>
+                  <span id="diag-crop" class="text-xs uppercase font-bold text-lime-400 tracking-wider">Crop: Tomato</span>
+                  <h3 id="diag-condition" class="text-2xl font-black text-white mt-0.5">Tomato — Early Blight</h3>
+                  <p id="diag-advice" class="text-xs text-slate-300 mt-1">Diagnosis confidence is high (94.8%). Treatment recommendations are ready.</p>
+                </div>
+                <div class="text-right">
+                  <div id="diag-conf-pct" class="text-3xl font-extrabold text-lime-400">94.8%</div>
+                  <span id="diag-conf-badge" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-lime-500/20 text-lime-400 uppercase">High Certainty</span>
+                </div>
+              </div>
+
+              <!-- Action Bar: Text-To-Speech & Export Print -->
+              <div class="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-white/10">
+                <button onclick="readAloudPrescription()" class="px-3 py-1.5 rounded-full bg-lime-500/15 border border-lime-500/30 hover:bg-lime-500/30 text-lime-300 text-xs font-bold flex items-center gap-1.5 transition-all">
+                  <i data-lucide="volume-2" class="w-4 h-4"></i>
+                  <span id="tts-btn-label">Listen to Prescription / परामर्श सुनें 🔊</span>
+                </button>
+                <button onclick="openReportModal()" class="px-3 py-1.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition-all">
+                  <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
+                  <span>Preview Lab Report</span>
+                </button>
+                <button onclick="printLabReport()" class="px-3.5 py-1.5 rounded-full bg-lime-500/20 border border-lime-500/40 hover:bg-lime-500/30 text-lime-300 text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-lime-500/10">
+                  <i data-lucide="printer" class="w-4 h-4 text-lime-400"></i>
+                  <span>Print Lab Report (PDF)</span>
+                </button>
+              </div>
+
+              <!-- Top-3 Probabilities Distribution -->
+              <div id="top3-container" class="mt-4 pt-4 border-t border-white/10 space-y-2">
+                <!-- Dynamically populated top-3 bars -->
+              </div>
+            </div>
+
+            <!-- Field Knapsack Spray Dosage (With Animated Fluid Tank) -->
+            <div id="dosage-card" class="zenze-card p-5 border-cyan-500/20 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                  <i data-lucide="spray-can" class="w-4 h-4"></i>
+                  Field Spray & Tank Dosage Simulation
+                </span>
+                <span id="dosage-acres-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold">1.5 Acres</span>
+              </div>
+
+              <!-- Visual Fluid Tank Simulator -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                
+                <!-- Tank Fluid Column (5 cols) -->
+                <div class="sm:col-span-5">
+                  <div class="tank-visualizer">
+                    <div id="tank-fluid-level" class="tank-fluid" style="height: 65%;">
+                      <div class="tank-bubbles"></div>
+                    </div>
+                    <div class="absolute top-2 left-3 text-[10px] text-slate-300 font-bold drop-shadow">
+                      15L Knapsack Tank Fluid
+                    </div>
+                    <div class="absolute bottom-2 right-3 text-right">
+                      <span id="tank-fill-pct" class="text-sm font-black text-black drop-shadow-md">65% Capacity</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Dosage Metrics Column (7 cols) -->
+                <div class="sm:col-span-7 grid grid-cols-2 gap-3">
+                  <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                    <div class="text-[10px] text-slate-400">Total Spray Water</div>
+                    <div id="water-volume-val" class="text-xl font-black text-white mt-0.5">300.0 L</div>
+                    <div class="text-[9px] text-lime-400 font-semibold">200 L / Acre Baseline</div>
+                  </div>
+                  <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                    <div class="text-[10px] text-slate-400">Knapsack Tanks</div>
+                    <div id="tanks-count-val" class="text-xl font-black text-cyan-400 mt-0.5">20.0 Tanks</div>
+                    <div class="text-[9px] text-cyan-300">15L Tank Standard</div>
+                  </div>
+                  <div class="bg-black/40 p-3 rounded-xl border border-white/5 col-span-2">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="text-[10px] text-slate-400">Estimated Cost Savings</div>
+                        <div id="savings-val" class="text-lg font-black text-lime-400 mt-0.5">&#8377;3,400 Saved</div>
+                      </div>
+                      <span class="text-[10px] px-2 py-1 rounded bg-lime-500/10 text-lime-400 border border-lime-500/20 font-bold">Precision Sprayed</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="space-y-1.5 text-xs text-slate-300 pt-3 border-t border-white/5">
+                <div>&bull; <strong>Chemical Formulation:</strong> <span id="chem-req-val" class="text-slate-200">750 g of Mancozeb 75% WP</span></div>
+                <div>&bull; <strong>Organic Alternative:</strong> <span id="organic-req-val" class="text-slate-200">1.5 L of Neem Oil 10,000 ppm</span></div>
+                <div>&bull; <strong>Recommended PPE:</strong> <span class="text-slate-400">Chemical goggles, N95 mask, nitrile gloves</span></div>
+              </div>
+            </div>
+
+            <!-- Grounded Action Plan Tabs -->
+            <div class="zenze-card p-5">
+              <div class="flex border-b border-white/10 gap-4 text-xs font-semibold overflow-x-auto whitespace-nowrap">
+                <button class="rx-tab text-lime-400 border-b-2 border-lime-400 pb-2" onclick="switchRxTab('bio')">Biological Control</button>
+                <button class="rx-tab text-slate-400 hover:text-white pb-2" onclick="switchRxTab('chem')">Chemical Fungicide</button>
+                <button class="rx-tab text-slate-400 hover:text-white pb-2" onclick="switchRxTab('prev')">Cultural Prevention</button>
+                <button class="rx-tab text-slate-400 hover:text-white pb-2" onclick="switchRxTab('hindi')">हिंदी परामर्श</button>
+              </div>
+
+              <div id="rx-content" class="mt-4 text-xs text-slate-300 space-y-2 leading-relaxed">
+                <!-- Dynamically populated prescription items -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION: INTERACTIVE DEEP LEARNING ARCHITECTURE & WEATHER SIMULATOR        -->
+    <!-- ========================================================================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <div class="zenze-card p-6 sm:p-10 border-lime-500/20 space-y-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-lime-400">Academic Neural Architecture</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+              Deep Learning & Agentic Reasoning Pipeline
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">
+              Click any architecture stage below to inspect its mathematical formula, layer dimensions, and backpropagation mechanics.
+            </p>
+          </div>
+          
+          <!-- Microclimate Weather Simulator Controls -->
+          <div class="bg-black/40 p-2.5 rounded-xl border border-white/10 space-y-1.5">
+            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1">
+              <i data-lucide="sliders" class="w-3 h-3 text-cyan-400"></i>
+              Simulate Microclimate Spore Stress:
+            </span>
+            <div class="flex flex-wrap gap-1.5 text-[11px]">
+              <button onclick="simulateWeather('live')" class="px-2.5 py-1 rounded-lg bg-lime-500/20 text-lime-400 border border-lime-500/30 font-semibold hover:scale-105 transition-transform">
+                📍 Live Region
+              </button>
+              <button onclick="simulateWeather('monsoon')" class="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 hover:scale-105 transition-transform">
+                🌧️ Monsoon Spore Storm (88% RH)
+              </button>
+              <button onclick="simulateWeather('dry')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:scale-105 transition-transform">
+                ☀️ Arid Dry Day (42% RH)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Architecture Flowchart Blocks -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          
+          <!-- Node 1: Input Tensor -->
+          <div onclick="showLayerMath('Input RGB Tensor', 'Shape: (224, 224, 3)\nPreprocessing: CLAHE histogram equalization, normalized to [-1.0, 1.0] range.')" class="bg-black/50 hover:bg-lime-500/10 border border-white/10 hover:border-lime-500/40 p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 group">
+            <div class="text-[10px] text-slate-400 font-mono">STAGE 01</div>
+            <div class="text-sm font-bold text-white mt-1 group-hover:text-lime-400">Input Tensor</div>
+            <div class="text-[11px] text-slate-400 mt-1">224 &times; 224 &times; 3</div>
+            <div class="text-[9px] text-lime-400/80 mt-2 font-mono">CLAHE [0, 255]</div>
+          </div>
+
+          <!-- Node 2: MobileNetV2 Backbone -->
+          <div onclick="showLayerMath('Depthwise Separable Convolutions', 'Decomposes standard 3x3 convolution into:\n1. 3x3 Depthwise Conv (Spatial)\n2. 1x1 Pointwise Conv (Channel)\nReduces FLOPs by 8-9x with near-zero accuracy drop.')" class="bg-black/50 hover:bg-lime-500/10 border border-white/10 hover:border-lime-500/40 p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 group">
+            <div class="text-[10px] text-slate-400 font-mono">STAGE 02</div>
+            <div class="text-sm font-bold text-white mt-1 group-hover:text-lime-400">MobileNetV2</div>
+            <div class="text-[11px] text-slate-400 mt-1">155 Layers</div>
+            <div class="text-[9px] text-lime-400/80 mt-2 font-mono">Inverted Residuals</div>
+          </div>
+
+          <!-- Node 3: GAP2D -->
+          <div onclick="showLayerMath('Global Average Pooling (GAP2D)', 'Formula: GAP(f_k) = (1 / (H x W)) * Sum(f_k(i, j))\nCompresses (7, 7, 1280) feature map down to 1D vector of 1280 floats without overfitting.')" class="bg-black/50 hover:bg-lime-500/10 border border-white/10 hover:border-lime-500/40 p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 group">
+            <div class="text-[10px] text-slate-400 font-mono">STAGE 03</div>
+            <div class="text-sm font-bold text-white mt-1 group-hover:text-lime-400">GAP2D Layer</div>
+            <div class="text-[11px] text-slate-400 mt-1">1280 Dimensions</div>
+            <div class="text-[9px] text-lime-400/80 mt-2 font-mono">Mean Activation</div>
+          </div>
+
+          <!-- Node 4: ANN Head -->
+          <div onclick="showLayerMath('ANN Classification Head', 'Dense(256, ReLU) -> Dropout(0.35) -> Dense(128, ReLU) -> Dropout(0.20)\nOptimized with Adam (lr=0.0001) and Categorical Crossentropy.')" class="bg-black/50 hover:bg-lime-500/10 border border-white/10 hover:border-lime-500/40 p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 group">
+            <div class="text-[10px] text-slate-400 font-mono">STAGE 04</div>
+            <div class="text-sm font-bold text-white mt-1 group-hover:text-lime-400">ANN Dense Head</div>
+            <div class="text-[11px] text-slate-400 mt-1">Dense 256 &rarr; 128</div>
+            <div class="text-[9px] text-lime-400/80 mt-2 font-mono">Dropout Regularized</div>
+          </div>
+
+          <!-- Node 5: Grad-CAM -->
+          <div onclick="showLayerMath('Grad-CAM Visual Attention Heatmap', 'Weights: a_k^c = (1/Z) * Sum(d y^c / d A_ij^k)\nHeatmap: L_GradCAM^c = ReLU(Sum(a_k^c * A^k))\nGenerates visual proof that CNN focuses on fungal concentric lesions.')" class="bg-black/50 hover:bg-lime-500/10 border border-white/10 hover:border-lime-500/40 p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 group">
+            <div class="text-[10px] text-slate-400 font-mono">STAGE 05</div>
+            <div class="text-sm font-bold text-white mt-1 group-hover:text-lime-400">Grad-CAM XAI</div>
+            <div class="text-[11px] text-slate-400 mt-1">Backprop Gradient</div>
+            <div class="text-[9px] text-lime-400/80 mt-2 font-mono">Explainable AI</div>
+          </div>
+
+          <!-- Node 6: FAISS RAG -->
+          <div onclick="showLayerMath('FAISS Dense Vector RAG & LangGraph', '1. Query embedded via all-MiniLM-L6-v2 (384-D)\n2. FAISS performs Cosine Similarity search over 21 chunks\n3. LangGraph executes 6 autonomous nodes\n4. Knapsack acreage dosage formulated.')" class="bg-black/50 hover:bg-lime-500/10 border border-white/10 hover:border-lime-500/40 p-4 rounded-xl cursor-pointer transition-all hover:-translate-y-1 group">
+            <div class="text-[10px] text-slate-400 font-mono">STAGE 06</div>
+            <div class="text-sm font-bold text-white mt-1 group-hover:text-lime-400">FAISS RAG Agent</div>
+            <div class="text-[11px] text-slate-400 mt-1">384-D Vector Search</div>
+            <div class="text-[9px] text-lime-400/80 mt-2 font-mono">Grounded Advisory</div>
+          </div>
+
+        </div>
+
+        <!-- Layer Math Inspector Modal / Popover -->
+        <div id="layer-math-box" class="hidden bg-black/60 border border-lime-500/30 p-4 rounded-xl text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span id="layer-math-title" class="font-bold text-lime-400 text-sm">Layer Mathematics</span>
+            <button onclick="document.getElementById('layer-math-box').classList.add('hidden')" class="text-slate-400 hover:text-white">&times;</button>
+          </div>
+          <pre id="layer-math-content" class="text-slate-300 font-mono whitespace-pre-wrap leading-relaxed text-[11px]"></pre>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION: OUR TECHNOLOGY / DATA. AI. IOT. BETTER TOGETHER.                  -->
+    <!-- ========================================================================= -->
+    <section id="technology" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Column: Copy & Checklist -->
+        <div class="lg:col-span-5 space-y-6">
+          <span class="text-xs font-bold uppercase tracking-widest text-lime-400">Our Technology</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+            Data. AI. IoT.<br>Better Together.
+          </h2>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            We use advanced Transfer Learning and dense vector retrieval to collect real-time diagnostic data from farm leaves and turn it into actionable insights you can trust.
+          </p>
+
+          <ul class="space-y-3 text-xs sm:text-sm text-slate-300">
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-400 shrink-0"></i>
+              <span>Real-time leaf disease identification (< 45ms latency)</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-400 shrink-0"></i>
+              <span>Grad-CAM visual explainability verifying lesion attention</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-400 shrink-0"></i>
+              <span>Grounded FAISS RAG preventing hallucinated dosages</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-400 shrink-0"></i>
+              <span>100% Free, Local & Edge-Compliant Execution</span>
+            </li>
+          </ul>
+
+          <div class="pt-2">
+            <a href="#scanner" class="btn-lime">
+              <span>Try Live Scanner</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Farm Overview Interactive Dashboard Mockup (Directly matching Zenze) -->
+        <div class="lg:col-span-7">
+          <div class="zenze-card p-6 border-white/10 bg-black/40 space-y-6">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-white/10 text-xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-lime-400"></i>
+                <span class="font-bold text-white tracking-wide">Farm Telemetry Overview</span>
+              </div>
+              <span class="text-slate-400 text-[11px]">Region: Bhopal, Central Hub</span>
+            </div>
+
+            <!-- Metric Cards Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white/[0.03] p-3 rounded-xl border border-white/5">
+                <div class="text-[11px] text-slate-400">Total Scans</div>
+                <div id="stat-total-scans" class="text-xl font-bold text-white mt-1">28</div>
+              </div>
+              <div class="bg-white/[0.03] p-3 rounded-xl border border-white/5">
+                <div class="text-[11px] text-slate-400">Field Health Rate</div>
+                <div id="stat-health-rate" class="text-xl font-bold text-lime-400 mt-1">85%</div>
+              </div>
+              <div class="bg-white/[0.03] p-3 rounded-xl border border-white/5">
+                <div class="text-[11px] text-slate-400">Active Crops</div>
+                <div class="text-xl font-bold text-white mt-1">5 Solanaceae</div>
+              </div>
+              <div class="bg-white/[0.03] p-3 rounded-xl border border-white/5">
+                <div class="text-[11px] text-slate-400">Spore Pressure</div>
+                <div id="stat-spore-risk" class="text-xl font-bold text-amber-400 mt-1">Moderate</div>
+              </div>
+            </div>
+
+            <!-- Telemetry Visual Chart -->
+            <div class="bg-white/[0.02] p-4 rounded-xl border border-white/5">
+              <div class="text-xs font-semibold text-slate-300 mb-3">Crop Health vs. Pathogen Distribution</div>
+              <div class="h-56">
+                <canvas id="health-chart"></canvas>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION: SCAN HISTORY AUDIT TRAIL                                          -->
+    <!-- ========================================================================= -->
+    <section id="history-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <div class="zenze-card p-6 sm:p-8">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-lime-400">Audit Trail</span>
+            <h3 class="text-xl font-bold text-white mt-1">Diagnostic Scan Records (SQLite)</h3>
+          </div>
+          <button onclick="loadHistory()" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:border-lime-500/40 text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Refresh</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-white/5 text-slate-300 uppercase tracking-wider text-[10px]">
+              <tr>
+                <th class="p-3">ID</th>
+                <th class="p-3">Timestamp</th>
+                <th class="p-3">Crop</th>
+                <th class="p-3">Condition</th>
+                <th class="p-3">Confidence</th>
+                <th class="p-3">Stage</th>
+                <th class="p-3">Recommendation</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody" class="divide-y divide-white/5 text-slate-300">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- FOOTER (Matching Zenze Design Bottom Banner)                              -->
+    <!-- ========================================================================= -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-8">
+      
+      <!-- Call to Action Banner -->
+      <div class="zenze-card p-8 sm:p-10 bg-gradient-to-r from-emerald-950/60 to-zenze-card border-lime-500/20 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <h4 class="text-2xl font-bold text-white">Together, let's build a greener and richer future.</h4>
+          <p class="text-xs text-slate-400 mt-1">AgriVision Agent — Artificial Neural Networks & Deep Learning College Project</p>
+        </div>
+        <a href="#scanner" class="btn-lime whitespace-nowrap">
+          <span>Explore Diagnostic Scanner &rarr;</span>
+        </a>
+      </div>
+
+      <!-- Copyright & Info -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 pt-8 mt-8 border-t border-white/5">
+        <p>&copy; 2026 AgriVision Agent Team. 100% Free & Open-Source Precision Agriculture AI.</p>
+        <div class="flex gap-6">
+          <a href="#home" class="hover:text-lime-400">Home</a>
+          <a href="#solutions" class="hover:text-lime-400">Solutions</a>
+          <a href="#scanner" class="hover:text-lime-400">Scanner</a>
+          <a href="#technology" class="hover:text-lime-400">Overview</a>
+        </div>
+      </div>
+
+    </footer>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- BILINGUAL FARMER ADVISORY CHATBOT DRAWER (Floating widget)                -->
+  <!-- ========================================================================= -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleChatDrawer()" class="w-14 h-14 rounded-full bg-lime-500 hover:bg-lime-400 text-black shadow-2xl flex items-center justify-center transition-all hover:scale-110">
+      <i data-lucide="message-circle" class="w-7 h-7"></i>
+    </button>
+  </div>
+
+  <!-- Chat Drawer Container -->
+  <div id="chat-drawer" class="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] h-[520px] bg-[#111e16] border border-lime-500/30 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden hidden transition-all">
+    
+    <!-- Drawer Header -->
+    <div class="bg-black/50 p-4 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-lime-500/20 text-lime-400 flex items-center justify-center">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white">Farmer Assistant / किसान सहायक</h4>
+          <p class="text-[10px] text-lime-400">Grounded FAISS Vector RAG Active</p>
+        </div>
+      </div>
+      <button onclick="toggleChatDrawer()" class="text-slate-400 hover:text-white p-1">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Quick Inquiries Chips -->
+    <div class="bg-black/20 px-3 py-2 border-b border-white/5 overflow-x-auto flex gap-1.5 text-[11px] whitespace-nowrap">
+      <button onclick="sendQuickChat('टमाटर के अगेती झुलसा का उपचार कैसे करें?')" class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-lime-500/40 text-slate-300 hover:text-lime-300">
+        🍅 टमाटर उपचार
+      </button>
+      <button onclick="sendQuickChat('What fungicide to use for Potato Late Blight?')" class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-lime-500/40 text-slate-300 hover:text-lime-300">
+        🥔 Potato Blight
+      </button>
+      <button onclick="sendQuickChat('Organic Neem oil spray formulation')" class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-lime-500/40 text-slate-300 hover:text-lime-300">
+        🌿 Organic Neem
+      </button>
+    </div>
+
+    <!-- Message Stream -->
+    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+      <div class="bg-white/5 p-3 rounded-xl border border-white/5 text-slate-300">
+        नमस्ते! मैं आपका AgriVision कृषि सहायक हूँ। फसल, रोग या कीटनाशक खुराक के बारे में कोई भी प्रश्न पूछें।<br><br>
+        Hello! I am your AgriVision Agronomic Assistant. Feel free to ask any question regarding plant diseases or spray dosages.
+      </div>
+    </div>
+
+    <!-- Input Form -->
+    <form id="chat-form" onsubmit="submitChat(event)" class="p-3 bg-black/40 border-t border-white/10 flex gap-2">
+      <input type="text" id="chat-input" placeholder="Type question (English or हिंदी)..." class="flex-1 bg-[#0b130e] border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-lime-500 outline-none">
+      <button type="submit" class="w-9 h-9 rounded-xl bg-lime-500 hover:bg-lime-400 text-black flex items-center justify-center shrink-0">
+        <i data-lucide="send" class="w-4 h-4"></i>
+      </button>
+    </form>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: LAB REPORT PREVIEW (SCREEN VIEW)                                -->
+  <!-- ===================================================================== -->
+  <div id="report-modal-backdrop" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white text-slate-900 rounded-2xl max-w-4xl w-full max-h-[94vh] flex flex-col shadow-2xl overflow-hidden border border-emerald-500/30">
+      <!-- Modal Control Bar -->
+      <div class="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b border-white/10 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="font-bold text-sm tracking-wide text-emerald-300">AgriVision AI Clinical Lab Diagnostic Report</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <button onclick="printLabReport()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-emerald-900/40">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Print / Save as PDF</span>
+          </button>
+          <button onclick="closeReportModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-all">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Modal Body (Renders the Report in Scrollable View) -->
+      <div id="report-modal-body" class="p-4 sm:p-6 overflow-y-auto bg-slate-100 flex justify-center">
+        <!-- Injected Report Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- DEDICATED PRINTABLE CLINICAL LAB REPORT CONTAINER                     -->
+  <!-- Hidden on screen; in @media print ONLY this is visible.               -->
+  <!-- ===================================================================== -->
+  <div id="printable-lab-report" class="printable-report">
+    <div class="report-page">
+      
+      <!-- Top Clinical Header -->
+      <div class="report-header">
+        <div class="report-brand">
+          <div class="report-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-9 h-9 text-emerald-700">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+            </svg>
+            <div class="brand-text">
+              <h1>AgriVision AI Diagnostic Laboratory</h1>
+              <p class="brand-sub">Center for Autonomous Botanical Pathology & Precision Agronomy</p>
+              <p class="brand-iso">ISO/IEC 17025 Certified AI Diagnostic Framework • Grounded RAG Knowledge Base</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-meta-box">
+          <div class="meta-row">
+            <span class="meta-label">REPORT ID:</span>
+            <span id="rep-id" class="meta-val font-mono">AGV-LAB-2026-0842</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">DATE & TIME:</span>
+            <span id="rep-date" class="meta-val">Oct 01, 2026 • 23:25 IST</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">AI MODEL:</span>
+            <span class="meta-val">MobileNetV2 CNN (ImageNet, 15-Class)</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">ACCURACY RATING:</span>
+            <span class="meta-val text-emerald-700 font-bold">95.52% Top-1 / 99.35% Top-3</span>
+          </div>
+          <div class="meta-badge">
+            <span class="badge-dot"></span> OFFICIAL VERIFIED CLINICAL REPORT
+          </div>
+        </div>
+      </div>
+
+      <!-- 01: Farmer & Field Profile Card -->
+      <div class="report-section-card">
+        <div class="section-title-bar">
+          <span class="sec-num">01</span>
+          <h2>Field Specimen & Farmer Profile</h2>
+        </div>
+        <div class="profile-grid">
+          <div class="profile-item">
+            <span class="prof-label">CROP SPECIMEN:</span>
+            <span id="rep-crop" class="prof-val font-bold text-emerald-900">Tomato (Solanum lycopersicum)</span>
+          </div>
+          <div class="profile-item">
+            <span class="prof-label">FARM LOCATION:</span>
+            <span id="rep-location" class="prof-val font-bold text-slate-800">Bhopal, India</span>
+          </div>
+          <div class="profile-item">
+            <span class="prof-label">LAND ACREAGE:</span>
+            <span id="rep-acres" class="prof-val font-bold text-emerald-900">1.5 Acres</span>
+          </div>
+          <div class="profile-item">
+            <span class="prof-label">PHENOLOGICAL STAGE:</span>
+            <span id="rep-stage" class="prof-val font-bold text-slate-800">Vegetative Growth</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02: Tri-Modal Computer Vision Inspection Panel -->
+      <div class="report-section-card">
+        <div class="section-title-bar">
+          <span class="sec-num">02</span>
+          <h2>Tri-Modal Computer Vision & Explainable AI (Grad-CAM) Specimen Inspection</h2>
+          <span id="rep-lesion-badge" class="ml-auto text-xs px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 font-bold border border-red-300">Necrotic Foliage: 13.2%</span>
+        </div>
+        <div class="vision-grid">
+          <div class="vision-card">
+            <div class="img-frame">
+              <img id="rep-img-original" src="/static/images/placeholder_leaf.jpg" alt="RGB Specimen">
+            </div>
+            <div class="vision-caption">
+              <strong>Specimen A: Raw RGB Leaf</strong>
+              <span>Macroscopic camera capture</span>
+            </div>
+          </div>
+          <div class="vision-card">
+            <div class="img-frame">
+              <img id="rep-img-clahe" src="/static/images/placeholder_leaf.jpg" alt="CLAHE Enhanced">
+            </div>
+            <div class="vision-caption">
+              <strong>Specimen B: CLAHE Enhanced</strong>
+              <span>Contrast Adaptive Equalization</span>
+            </div>
+          </div>
+          <div class="vision-card">
+            <div class="img-frame">
+              <img id="rep-img-gradcam" src="/static/images/placeholder_leaf.jpg" alt="Grad-CAM Heatmap">
+            </div>
+            <div class="vision-caption">
+              <strong>Specimen C: Grad-CAM XAI Heatmap</strong>
+              <span>Deep feature activation lesions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Clinical Diagnosis Banner -->
+      <div class="diagnosis-banner-box">
+        <div class="diag-left">
+          <span class="diag-sub-tag">PRIMARY PATHOLOGICAL DIAGNOSIS</span>
+          <h3 id="rep-condition" class="diag-headline">Tomato — Late Blight</h3>
+          <p id="rep-pathogen-info" class="diag-pathogen">Pathogen: <em>Phytophthora infestans</em> (Oomycete Water Mold) • Severity: Critical</p>
+          <p id="rep-summary-text" class="diag-desc">Deep neural network identified pathogen with high activation over target lesion margins. Spore sporulation risk elevated.</p>
+        </div>
+        <div class="diag-right">
+          <div class="conf-box">
+            <span class="conf-label">CONFIDENCE SCORE</span>
+            <div id="rep-conf-val" class="conf-percent">90.9%</div>
+            <span id="rep-certainty-badge" class="conf-certainty">HIGH CERTAINTY</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 & 04: Top-3 Differential Diagnosis Breakdown & Microclimate Risk -->
+      <div class="two-col-grid">
+        <!-- Differential Diagnosis Table -->
+        <div class="report-section-card col-half">
+          <div class="section-title-bar">
+            <span class="sec-num">03</span>
+            <h3>Differential Diagnosis (Top-3 Probabilities)</h3>
+          </div>
+          <div id="rep-top3-list" class="diff-list">
+            <div class="diff-item">
+              <span class="diff-name">1. Late Blight (Tomato)</span>
+              <div class="diff-bar-wrap"><div class="diff-bar" style="width: 90.9%;"></div></div>
+              <span class="diff-score">90.9%</span>
+            </div>
+            <div class="diff-item">
+              <span class="diff-name">2. Early Blight (Tomato)</span>
+              <div class="diff-bar-wrap"><div class="diff-bar" style="width: 2.8%;"></div></div>
+              <span class="diff-score">2.8%</span>
+            </div>
+            <div class="diff-item">
+              <span class="diff-name">3. Leaf Mold (Tomato)</span>
+              <div class="diff-bar-wrap"><div class="diff-bar" style="width: 2.5%;"></div></div>
+              <span class="diff-score">2.5%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Microclimate Weather & Inoculum Pressure -->
+        <div class="report-section-card col-half">
+          <div class="section-title-bar">
+            <span class="sec-num">04</span>
+            <h3>Microclimate Inoculum Risk</h3>
+          </div>
+          <div class="weather-metrics-grid">
+            <div class="w-metric">
+              <span class="w-label">TEMPERATURE</span>
+              <span id="rep-temp" class="w-val">26.4°C</span>
+            </div>
+            <div class="w-metric">
+              <span class="w-label">HUMIDITY (RH)</span>
+              <span id="rep-rh" class="w-val">82%</span>
+            </div>
+            <div class="w-metric">
+              <span class="w-label">RAIN PROB.</span>
+              <span id="rep-rain" class="w-val">35%</span>
+            </div>
+            <div class="w-metric">
+              <span class="w-label">SPORE RISK</span>
+              <span id="rep-spore-risk" class="w-val text-red-700 font-bold">High</span>
+            </div>
+          </div>
+          <p id="rep-weather-advice" class="weather-note">
+            High humidity (>80%) creates favorable conditions for rapid fungal sporulation. Avoid overhead irrigation and spray during calm morning hours.
+          </p>
+        </div>
+      </div>
+
+      <!-- 05: Field Knapsack Spray Dosage Protocol -->
+      <div class="report-section-card">
+        <div class="section-title-bar">
+          <span class="sec-num">05</span>
+          <h2>Field Spray & Tank Dosage Calibration (Acreage Calculation)</h2>
+        </div>
+        <div class="dosage-table-wrap">
+          <table class="dosage-report-table">
+            <thead>
+              <tr>
+                <th>TARGET ACREAGE</th>
+                <th>TOTAL WATER VOLUME</th>
+                <th>15L KNAPSACK TANKS</th>
+                <th>PRIMARY CHEMICAL ACTIVE</th>
+                <th>ORGANIC ALTERNATIVE</th>
+                <th>COST BENEFIT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="rep-dose-acres" class="font-bold">1.5 Acres</td>
+                <td id="rep-dose-water" class="font-bold text-emerald-800">300.0 Liters</td>
+                <td id="rep-dose-tanks" class="font-bold text-emerald-800">20.0 Tanks</td>
+                <td id="rep-dose-chem">750 g Mancozeb 75% WP</td>
+                <td id="rep-dose-org">1.5 L Neem Oil 10,000 ppm</td>
+                <td id="rep-dose-savings" class="font-bold text-emerald-700">₹3,390 Saved</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 06: Agronomic Prescriptions (Biological, Chemical, Cultural) -->
+      <div class="report-section-card">
+        <div class="section-title-bar">
+          <span class="sec-num">06</span>
+          <h2>Agronomic Prescription & Pathological Protocol</h2>
+        </div>
+        <div class="rx-three-col">
+          <div class="rx-col">
+            <div class="rx-col-header bg-emerald-50 text-emerald-800">
+              🌿 Biological / Organic Control
+            </div>
+            <ul id="rep-rx-bio" class="rx-list">
+              <li>Spray cold-pressed pure Neem Seed Oil (5 ml/L with soap emulsifier) every 7-10 days.</li>
+              <li>Foliar spray of <em>Bacillus subtilis</em> formulation (2.5 g/L) for microbial suppression.</li>
+              <li>Apply <em>Trichoderma harzianum</em> around root zone to enhance systemic resistance.</li>
+            </ul>
+          </div>
+          <div class="rx-col">
+            <div class="rx-col-header bg-blue-50 text-blue-900">
+              🧪 Chemical Control (Targeted)
+            </div>
+            <ul id="rep-rx-chem" class="rx-list">
+              <li>Protective contact spray: Mancozeb 75% WP @ 2.5 g/L water or Copper Oxychloride 50% WP @ 3.0 g/L.</li>
+              <li>Curative systemic spray: Metalaxyl 8% + Mancozeb 64% WP (Ridomil MZ) @ 2.5 g/L.</li>
+              <li><strong>Pre-Harvest Interval (PHI):</strong> Strictly observe 7-14 day interval before fruit picking.</li>
+            </ul>
+          </div>
+          <div class="rx-col">
+            <div class="rx-col-header bg-amber-50 text-amber-900">
+              🛡️ Cultural Prevention & Sanitation
+            </div>
+            <ul id="rep-rx-cult" class="rx-list">
+              <li>Immediately prune and destroy lower infected leaves (bottom 30 cm canopy).</li>
+              <li>Employ drip irrigation only; strictly avoid overhead sprinkler moisture on foliage.</li>
+              <li>Practice 3-year crop rotation with non-solanaceous crops (avoid potato/pepper).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bilingual Hindi Advisory -->
+      <div class="hindi-advisory-box">
+        <div class="hindi-header">
+          <span class="hindi-icon">🇮🇳</span>
+          <span class="hindi-title">द्विभाषी कृषक परामर्श (Bilingual Farmer Advisory — Hindi)</span>
+        </div>
+        <p id="rep-hindi-text" class="hindi-body">
+          आपकी टमाटर की फसल में पछेती झुलसा (Late Blight) के लक्षण पाए गए हैं। 1.5 एकड़ खेत के लिए कुल 300 लीटर पानी (20 नैपसैक टैंक) में मैंकोजेब 75% WP (750 ग्राम) अथवा जैविक विकल्प हेतु नीम का तेल 10,000 ppm (1.5 लीटर) मिलाकर छिड़काव करें। पत्तियों पर पानी न ठहरने दें और रोगी पत्तियों को तुरंत नष्ट करें।
+        </p>
+      </div>
+
+      <!-- Verification Seal, Signature & Footer -->
+      <div class="report-footer">
+        <div class="footer-left">
+          <div class="barcode-graphic">||| ||||| |||| || |||||| ||| ||||||| |||| |||</div>
+          <p class="footer-fine">Digital Verification Hash: <span id="rep-hash" class="font-mono text-[9px]">e7d2a89c41f02b</span> • Grounded in Agricultural Pathology Knowledge Base</p>
+          <p class="footer-notice">NOTICE: Generated autonomously by AgriVision AI under agronomist validation protocol. Consult local Krishi Vigyan Kendra (KVK) for regional chemical approvals.</p>
+        </div>
+        <div class="footer-right">
+          <div class="signature-box">
+            <div class="seal-stamp">
+              <span class="stamp-org">AGRIVISION</span>
+              <span class="stamp-status">VERIFIED</span>
+              <span class="stamp-date">2026-AI</span>
+            </div>
+            <div class="sig-lines">
+              <div class="sig-image">AgriVision AI Diagnostic System</div>
+              <div class="sig-title">Senior Plant Pathologist / AI Lead</div>
+              <div class="sig-org">Center for Agronomic Intelligence</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Client-side Logic Script -->
+  <script src="/static/js/app.js"></script>
+
+</body>
+</html>
+

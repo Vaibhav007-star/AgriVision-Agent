@@ -1,0 +1,192 @@
+[
+  {
+    "chunk_id": "apple_pathology_001",
+    "source": "knowledge/documents/apple_pathology.md",
+    "doc_title": "Apple Pathology",
+    "section": "Apple - Apple Scab (Venturia inaequalis)",
+    "crop": "Apple",
+    "disease": "Apple Scab",
+    "text": "## Apple - Apple Scab (Venturia inaequalis)\n- **Pathogen:** *Venturia inaequalis* (Ascomycete fungus)\n- **Severity Level:** High\n- **Symptoms:**\n  - Olive-green, velvety to dark brown circular spots on leaves and young fruit.\n  - Leaves become distorted, puckered, and turn yellow before premature drop.\n  - On fruit: Corky, brown scab lesions that crack open, facilitating secondary fungal rot.\n- **Favorable Weather:**\n  - Cool (15\u00b0C to 20\u00b0C), wet spring weather with prolonged leaf moisture (> 9 hours).\n- **Organic Controls:**\n  - Lime sulfur sprays during delayed dormant stage.\n  - Wettable sulfur (3-4 g/L) or Copper soaps during pre-bloom to petal fall.\n  - Shred or rake fallen autumn orchard leaves and spray urea (5%) on leaf litter to accelerate decomposition of overwintering pseudothecia.\n- **Chemical Control:**\n  - Captan 50% WP @ 2.5 g/L or Dodine 65% WP @ 1.5 g/L (Protective).\n  - Difenoconazole 25% EC @ 0.3 ml/L or Myclobutanil 10% WP @ 0.5 g/L (Curative kick-back).\n- **Prevention:**\n  - Plant scab-resistant cultivars (e.g., Liberty, Prima, Enterprise, GoldRush).\n  - Annual canopy pruning to maximize sunlight penetration and rapid foliage drying.\n\n---",
+    "clean_text": "Apple - Apple Scab (Venturia inaequalis) - Pathogen: *Venturia inaequalis* (Ascomycete fungus) - Severity Level: High - Symptoms:   - Olive-green, velvety to dark brown circular spots on leaves and young fruit.   - Leaves become distorted, puckered, and turn yellow before premature drop.   - On fruit: Corky, brown scab lesions that crack open, facilitating secondary fungal rot. - Favorable Weather:   - Cool (15\u00b0C to 20\u00b0C), wet spring weather with prolonged leaf moisture (> 9 hours). - Organic Controls:   - Lime sulfur sprays during delayed dormant stage.   - Wettable sulfur (3-4 g/L) or Copper soaps during pre-bloom to petal fall.   - Shred or rake fallen autumn orchard leaves and spray urea (5%) on leaf litter to accelerate decomposition of overwintering pseudothecia. - Chemical Control:   - Captan 50% WP @ 2.5 g/L or Dodine 65% WP @ 1.5 g/L (Protective).   - Difenoconazole 25% EC @ 0.3 ml/L or Myclobutanil 10% WP @ 0.5 g/L (Curative kick-back). - Prevention:   - Plant scab-resistant cultivars (e.g., Liberty, Prima, Enterprise, GoldRush).   - Annual canopy pruning to maximize sunlight penetration and rapid foliage drying. ---"
+  },
+  {
+    "chunk_id": "apple_pathology_002",
+    "source": "knowledge/documents/apple_pathology.md",
+    "doc_title": "Apple Pathology",
+    "section": "Apple - Black Rot (Botryosphaeria obtusa)",
+    "crop": "Apple",
+    "disease": "Black Rot",
+    "text": "## Apple - Black Rot (Botryosphaeria obtusa)\n- **Pathogen:** *Botryosphaeria obtusa* (Fungal)\n- **Symptoms:**\n  - \"Frog-eye\" leaf spots: Small purple specks expanding into circular lesions with light brown centers and purple margins.\n  - Fruit rot: Firm, brown rotting areas expanding in concentric rings, turning completely black and mummified.\n- **Management:**\n  - Prune out dead wood, fire blight strikes, and cankers.\n  - Captan 50% WP @ 2.5 g/L or Thiophanate-methyl 70% WP @ 1.0 g/L from pink bud through cover sprays.",
+    "clean_text": "Apple - Black Rot (Botryosphaeria obtusa) - Pathogen: *Botryosphaeria obtusa* (Fungal) - Symptoms:   - \"Frog-eye\" leaf spots: Small purple specks expanding into circular lesions with light brown centers and purple margins.   - Fruit rot: Firm, brown rotting areas expanding in concentric rings, turning completely black and mummified. - Management:   - Prune out dead wood, fire blight strikes, and cankers.   - Captan 50% WP @ 2.5 g/L or Thiophanate-methyl 70% WP @ 1.0 g/L from pink bud through cover sprays."
+  },
+  {
+    "chunk_id": "corn_pathology_001",
+    "source": "knowledge/documents/corn_pathology.md",
+    "doc_title": "Corn Pathology",
+    "section": "Corn (Maize) Pathology & Agronomic Management",
+    "crop": "Corn",
+    "disease": "Agronomy",
+    "text": "# Corn (Maize) Pathology & Agronomic Management",
+    "clean_text": "Corn (Maize) Pathology & Agronomic Management"
+  },
+  {
+    "chunk_id": "corn_pathology_002",
+    "source": "knowledge/documents/corn_pathology.md",
+    "doc_title": "Corn Pathology",
+    "section": "Corn - Common Rust (Puccinia sorghi)",
+    "crop": "Corn",
+    "disease": "Common Rust",
+    "text": "## Corn - Common Rust (Puccinia sorghi)\n- **Pathogen:** *Puccinia sorghi* (Fungal obligate parasite)\n- **Severity Level:** Moderate\n- **Symptoms:**\n  - Small, circular to elongate reddish-brown cinnamon pustules (uredinia) scattered across both upper and lower leaf surfaces.\n  - Pustules rupture the leaf epidermis, releasing powdery golden-brown rust spores upon touch.\n  - Chlorosis and necrosis of leaf tissue surrounding dense pustule clusters.\n- **Favorable Weather:**\n  - Cool to moderate temperatures (16\u00b0C to 25\u00b0C) and high humidity (> 95%).\n- **Organic & Biological Control:**\n  - Foliar application of sulfur dust or wettable sulfur (3 g/L).\n  - Spray bio-fungicide *Bacillus amyloliquefaciens* (2.5 g/L).\n- **Chemical Control:**\n  - Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 1.0 ml/liter.\n  - Propiconazole 25% EC (Tilt) @ 1.0 ml/L or Pyraclostrobin 20% WG @ 1.0 g/L applied at first sign of pustules prior to tasseling.\n- **Cultural Management:**\n  - Plant resistant hybrids containing Rp1-D or multi-gene resistance.\n  - Early planting to avoid peak late-season airborne rust spore showers.\n\n---",
+    "clean_text": "Corn - Common Rust (Puccinia sorghi) - Pathogen: *Puccinia sorghi* (Fungal obligate parasite) - Severity Level: Moderate - Symptoms:   - Small, circular to elongate reddish-brown cinnamon pustules (uredinia) scattered across both upper and lower leaf surfaces.   - Pustules rupture the leaf epidermis, releasing powdery golden-brown rust spores upon touch.   - Chlorosis and necrosis of leaf tissue surrounding dense pustule clusters. - Favorable Weather:   - Cool to moderate temperatures (16\u00b0C to 25\u00b0C) and high humidity (> 95%). - Organic & Biological Control:   - Foliar application of sulfur dust or wettable sulfur (3 g/L).   - Spray bio-fungicide *Bacillus amyloliquefaciens* (2.5 g/L). - Chemical Control:   - Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 1.0 ml/liter.   - Propiconazole 25% EC (Tilt) @ 1.0 ml/L or Pyraclostrobin 20% WG @ 1.0 g/L applied at first sign of pustules prior to tasseling. - Cultural Management:   - Plant resistant hybrids containing Rp1-D or multi-gene resistance.   - Early planting to avoid peak late-season airborne rust spore showers. ---"
+  },
+  {
+    "chunk_id": "corn_pathology_003",
+    "source": "knowledge/documents/corn_pathology.md",
+    "doc_title": "Corn Pathology",
+    "section": "Corn - Northern Leaf Blight (Exserohilum turcicum)",
+    "crop": "Corn",
+    "disease": "Agronomy",
+    "text": "## Corn - Northern Leaf Blight (Exserohilum turcicum)\n- **Pathogen:** *Exserohilum turcicum* (Fungal)\n- **Symptoms:**\n  - Long, elliptical cigar-shaped grayish-green to tan lesions (2.5 cm to 15 cm long) parallel to leaf veins.\n  - In damp weather, dark olivaceous spore masses form inside the lesions.\n- **Management:**\n  - Propiconazole 25% EC @ 1.0 ml/L or Azoxystrobin + Cyproconazole.\n  - Deep tillage of crop residues and 2-year rotation with non-cereal crops (soybeans, legumes).\n\n---",
+    "clean_text": "Corn - Northern Leaf Blight (Exserohilum turcicum) - Pathogen: *Exserohilum turcicum* (Fungal) - Symptoms:   - Long, elliptical cigar-shaped grayish-green to tan lesions (2.5 cm to 15 cm long) parallel to leaf veins.   - In damp weather, dark olivaceous spore masses form inside the lesions. - Management:   - Propiconazole 25% EC @ 1.0 ml/L or Azoxystrobin + Cyproconazole.   - Deep tillage of crop residues and 2-year rotation with non-cereal crops (soybeans, legumes). ---"
+  },
+  {
+    "chunk_id": "corn_pathology_004",
+    "source": "knowledge/documents/corn_pathology.md",
+    "doc_title": "Corn Pathology",
+    "section": "Corn - Healthy Crop Care",
+    "crop": "Corn",
+    "disease": "Healthy",
+    "text": "## Corn - Healthy Crop Care\n- Ensure adequate nitrogen application at knee-high and silking stages.\n- Maintain soil moisture during critical tasseling and grain filling windows.",
+    "clean_text": "Corn - Healthy Crop Care - Ensure adequate nitrogen application at knee-high and silking stages. - Maintain soil moisture during critical tasseling and grain filling windows."
+  },
+  {
+    "chunk_id": "general_agronomy_001",
+    "source": "knowledge/documents/general_agronomy.md",
+    "doc_title": "General Agronomy",
+    "section": "General Agronomy, Integrated Pest Management (IPM) & Hindi Glossary",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "# General Agronomy, Integrated Pest Management (IPM) & Hindi Glossary",
+    "clean_text": "General Agronomy, Integrated Pest Management (IPM) & Hindi Glossary"
+  },
+  {
+    "chunk_id": "general_agronomy_002",
+    "source": "knowledge/documents/general_agronomy.md",
+    "doc_title": "General Agronomy",
+    "section": "Integrated Pest & Disease Management (IPM) Principles",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Integrated Pest & Disease Management (IPM) Principles\n1. **Prevention First:** Resistant crop varieties, crop rotation, sanitation, certified seed.\n2. **Monitoring & Microclimate Alert:** Check relative humidity (>80%) and temperatures. Fungal spores (blight, rust) require at least 6-8 hours of free leaf moisture to germinate.\n3. **Biological & Organic Priority:**\n   - Neem Kernel Formulation (Azadirachtin): Repels insect vectors (aphids, whiteflies) and disrupts fungal spore attachment.\n   - Bio-fungicides (*Trichoderma*, *Bacillus*): Colonize root zones and leaf surfaces, outcompeting pathogenic fungi.\n4. **Targeted Chemical Intervention:**\n   - Always rotate fungicide FRAC groups (Fungicide Resistance Action Committee) to prevent pathogen resistance.\n   - Strictly adhere to Pre-Harvest Intervals (PHI) to guarantee food safety.",
+    "clean_text": "Integrated Pest & Disease Management (IPM) Principles 1. Prevention First: Resistant crop varieties, crop rotation, sanitation, certified seed. 2. Monitoring & Microclimate Alert: Check relative humidity (>80%) and temperatures. Fungal spores (blight, rust) require at least 6-8 hours of free leaf moisture to germinate. 3. Biological & Organic Priority:    - Neem Kernel Formulation (Azadirachtin): Repels insect vectors (aphids, whiteflies) and disrupts fungal spore attachment.    - Bio-fungicides (*Trichoderma*, *Bacillus*): Colonize root zones and leaf surfaces, outcompeting pathogenic fungi. 4. Targeted Chemical Intervention:    - Always rotate fungicide FRAC groups (Fungicide Resistance Action Committee) to prevent pathogen resistance.    - Strictly adhere to Pre-Harvest Intervals (PHI) to guarantee food safety."
+  },
+  {
+    "chunk_id": "general_agronomy_003",
+    "source": "knowledge/documents/general_agronomy.md",
+    "doc_title": "General Agronomy",
+    "section": "Hindi Agricultural Terms & Glossary (\u0939\u093f\u0902\u0926\u0940 \u0936\u092c\u094d\u0926\u093e\u0935\u0932\u0940)",
+    "crop": "General",
+    "disease": "Early Blight",
+    "text": "## Hindi Agricultural Terms & Glossary (\u0939\u093f\u0902\u0926\u0940 \u0936\u092c\u094d\u0926\u093e\u0935\u0932\u0940)\n- **Early Blight / Late Blight:** \u0905\u0917\u0947\u0924\u0940 \u091d\u0941\u0932\u0938\u093e (Early Blight) / \u092a\u091b\u0947\u0924\u0940 \u091d\u0941\u0932\u0938\u093e (Late Blight)\n- **Rust:** \u0917\u0947\u0930\u0941\u0906 / \u0930\u0924\u0941\u0906 \u0930\u094b\u0917 (Rust)\n- **Leaf Spot / Scab:** \u092a\u0924\u094d\u0924\u0940 \u0927\u092c\u094d\u092c\u093e \u0930\u094b\u0917 / \u0938\u094d\u0915\u0948\u092c\n- **Fungicide:** \u092b\u092b\u0942\u0902\u0926\u0928\u093e\u0936\u0915\n- **Bio-pesticide:** \u091c\u0948\u0935\u093f\u0915 \u0915\u0940\u091f\u0928\u093e\u0936\u0915 / \u0928\u0940\u092e \u0915\u093e \u0924\u0947\u0932\n- **Crop Rotation:** \u092b\u0938\u0932 \u091a\u0915\u094d\u0930\n- **Dosage Guide:** 2 \u0917\u094d\u0930\u093e\u092e \u092a\u094d\u0930\u0924\u093f \u0932\u0940\u091f\u0930 \u092a\u093e\u0928\u0940 \u092e\u0947\u0902 \u092e\u093f\u0932\u093e\u0915\u0930 \u091b\u093f\u0921\u093c\u0915\u093e\u0935 \u0915\u0930\u0947\u0902\u0964\n- **Pre-Harvest Interval:** \u0924\u0941\u0921\u093c\u093e\u0908 \u0938\u0947 \u092a\u0939\u0932\u0947 \u0915\u0940 \u092a\u094d\u0930\u0924\u0940\u0915\u094d\u0937\u093e \u0905\u0935\u0927\u093f (PHI)\u0964",
+    "clean_text": "Hindi Agricultural Terms & Glossary (\u0939\u093f\u0902\u0926\u0940 \u0936\u092c\u094d\u0926\u093e\u0935\u0932\u0940) - Early Blight / Late Blight: \u0905\u0917\u0947\u0924\u0940 \u091d\u0941\u0932\u0938\u093e (Early Blight) / \u092a\u091b\u0947\u0924\u0940 \u091d\u0941\u0932\u0938\u093e (Late Blight) - Rust: \u0917\u0947\u0930\u0941\u0906 / \u0930\u0924\u0941\u0906 \u0930\u094b\u0917 (Rust) - Leaf Spot / Scab: \u092a\u0924\u094d\u0924\u0940 \u0927\u092c\u094d\u092c\u093e \u0930\u094b\u0917 / \u0938\u094d\u0915\u0948\u092c - Fungicide: \u092b\u092b\u0942\u0902\u0926\u0928\u093e\u0936\u0915 - Bio-pesticide: \u091c\u0948\u0935\u093f\u0915 \u0915\u0940\u091f\u0928\u093e\u0936\u0915 / \u0928\u0940\u092e \u0915\u093e \u0924\u0947\u0932 - Crop Rotation: \u092b\u0938\u0932 \u091a\u0915\u094d\u0930 - Dosage Guide: 2 \u0917\u094d\u0930\u093e\u092e \u092a\u094d\u0930\u0924\u093f \u0932\u0940\u091f\u0930 \u092a\u093e\u0928\u0940 \u092e\u0947\u0902 \u092e\u093f\u0932\u093e\u0915\u0930 \u091b\u093f\u0921\u093c\u0915\u093e\u0935 \u0915\u0930\u0947\u0902\u0964 - Pre-Harvest Interval: \u0924\u0941\u0921\u093c\u093e\u0908 \u0938\u0947 \u092a\u0939\u0932\u0947 \u0915\u0940 \u092a\u094d\u0930\u0924\u0940\u0915\u094d\u0937\u093e \u0905\u0935\u0927\u093f (PHI)\u0964"
+  },
+  {
+    "chunk_id": "pepper_pathology_001",
+    "source": "knowledge/documents/pepper_pathology.md",
+    "doc_title": "Pepper Pathology",
+    "section": "Pepper Bell - Bacterial Spot (Xanthomonas campestris pv. vesicatoria)",
+    "crop": "Pepper",
+    "disease": "Bacterial Spot",
+    "text": "## Pepper Bell - Bacterial Spot (Xanthomonas campestris pv. vesicatoria)\n- **Pathogen:** *Xanthomonas campestris pv. vesicatoria* (Bacterium)\n- **Severity Level:** Severe\n- **Symptoms:**\n  - Small, water-soaked, angular, dark brown to black spots (1-3 mm) on leaves.\n  - Lesions may develop a pale yellowish border; centers dry out and drop out, giving a \"shot-hole\" look.\n  - Severe leaf drop leaving fruits exposed to sunscald.\n  - Raised, scab-like warty brown spots on green and red bell pepper fruits.\n- **Favorable Weather:**\n  - Warm (24\u00b0C to 32\u00b0C), wet, windy conditions with driving rain and high humidity.\n- **Organic & Bactericidal Controls:**\n  - Copper Hydroxide (2.0 g/L) combined with bio-formulation *Bacillus subtilis* (2.5 g/L).\n  - Streptomycin Sulfate + Tetracycline Hydrochloride (Streptocycline) @ 0.5 g/10 liters of water in agricultural emergency use where permitted.\n  - Disinfect pruning tools with 70% isopropyl alcohol or 10% bleach between plants.\n- **Cultural Management:**\n  - Use hot-water treated certified disease-free seeds (50\u00b0C for 25 minutes).\n  - Avoid touching or cultivating pepper rows when plants are wet with dew or rain.\n  - Employ drip irrigation only; rotate out of Solanaceae crops for minimum 2 seasons.",
+    "clean_text": "Pepper Bell - Bacterial Spot (Xanthomonas campestris pv. vesicatoria) - Pathogen: *Xanthomonas campestris pv. vesicatoria* (Bacterium) - Severity Level: Severe - Symptoms:   - Small, water-soaked, angular, dark brown to black spots (1-3 mm) on leaves.   - Lesions may develop a pale yellowish border; centers dry out and drop out, giving a \"shot-hole\" look.   - Severe leaf drop leaving fruits exposed to sunscald.   - Raised, scab-like warty brown spots on green and red bell pepper fruits. - Favorable Weather:   - Warm (24\u00b0C to 32\u00b0C), wet, windy conditions with driving rain and high humidity. - Organic & Bactericidal Controls:   - Copper Hydroxide (2.0 g/L) combined with bio-formulation *Bacillus subtilis* (2.5 g/L).   - Streptomycin Sulfate + Tetracycline Hydrochloride (Streptocycline) @ 0.5 g/10 liters of water in agricultural emergency use where permitted.   - Disinfect pruning tools with 70% isopropyl alcohol or 10% bleach between plants. - Cultural Management:   - Use hot-water treated certified disease-free seeds (50\u00b0C for 25 minutes).   - Avoid touching or cultivating pepper rows when plants are wet with dew or rain.   - Employ drip irrigation only; rotate out of Solanaceae crops for minimum 2 seasons."
+  },
+  {
+    "chunk_id": "potato_pathology_001",
+    "source": "knowledge/documents/potato_pathology.md",
+    "doc_title": "Potato Pathology",
+    "section": "Potato Crop Pathology & Agronomic Management",
+    "crop": "Potato",
+    "disease": "Agronomy",
+    "text": "# Potato Crop Pathology & Agronomic Management",
+    "clean_text": "Potato Crop Pathology & Agronomic Management"
+  },
+  {
+    "chunk_id": "potato_pathology_002",
+    "source": "knowledge/documents/potato_pathology.md",
+    "doc_title": "Potato Pathology",
+    "section": "Potato - Early Blight (Alternaria solani)",
+    "crop": "Potato",
+    "disease": "Early Blight",
+    "text": "## Potato - Early Blight (Alternaria solani)\n- **Pathogen:** *Alternaria solani* (Fungal)\n- **Severity Level:** Moderate\n- **Symptoms:**\n  - Dark brown, angular to circular spots with concentric rings on mature potato leaves.\n  - Tuber lesions: Dark, sunken, circular lesions with raised purple-brown margins.\n  - Gradual yellowing of lower foliage leading to premature leaf senescence.\n- **Favorable Weather:**\n  - High humidity cycles alternating between wet and dry conditions; temperatures 20\u00b0C - 28\u00b0C.\n- **Organic Controls:**\n  - Bio-fungicide spray of *Trichoderma harzianum* (5 g/L).\n  - Neem seed kernel extract (NSKE 5%) or copper octanoate (soap).\n  - Adequate soil potassium and balanced nitrogen to maintain plant vigor.\n- **Chemical Treatment:**\n  - Contact fungicide: Chlorothalonil 75% WP @ 2.0 g/L or Mancozeb 75% WP @ 2.5 g/L.\n  - Translaminar/Systemic: Pyraclostrobin 20% WG @ 1.0 g/L or Boscalid + Pyraclostrobin formulation.\n- **Cultural Practices:**\n  - Avoid moisture stress; maintain uniform soil moisture with sprinkler morning schedules so leaves dry before sunset.\n  - Harvest mature tubers after vine killing to reduce skinning and spore inoculation.\n\n---",
+    "clean_text": "Potato - Early Blight (Alternaria solani) - Pathogen: *Alternaria solani* (Fungal) - Severity Level: Moderate - Symptoms:   - Dark brown, angular to circular spots with concentric rings on mature potato leaves.   - Tuber lesions: Dark, sunken, circular lesions with raised purple-brown margins.   - Gradual yellowing of lower foliage leading to premature leaf senescence. - Favorable Weather:   - High humidity cycles alternating between wet and dry conditions; temperatures 20\u00b0C - 28\u00b0C. - Organic Controls:   - Bio-fungicide spray of *Trichoderma harzianum* (5 g/L).   - Neem seed kernel extract (NSKE 5%) or copper octanoate (soap).   - Adequate soil potassium and balanced nitrogen to maintain plant vigor. - Chemical Treatment:   - Contact fungicide: Chlorothalonil 75% WP @ 2.0 g/L or Mancozeb 75% WP @ 2.5 g/L.   - Translaminar/Systemic: Pyraclostrobin 20% WG @ 1.0 g/L or Boscalid + Pyraclostrobin formulation. - Cultural Practices:   - Avoid moisture stress; maintain uniform soil moisture with sprinkler morning schedules so leaves dry before sunset.   - Harvest mature tubers after vine killing to reduce skinning and spore inoculation. ---"
+  },
+  {
+    "chunk_id": "potato_pathology_003",
+    "source": "knowledge/documents/potato_pathology.md",
+    "doc_title": "Potato Pathology",
+    "section": "Potato - Late Blight (Phytophthora infestans)",
+    "crop": "Potato",
+    "disease": "Late Blight",
+    "text": "## Potato - Late Blight (Phytophthora infestans)\n- **Pathogen:** *Phytophthora infestans* (Oomycete)\n- **Severity Level:** Severe / Destructive\n- **Symptoms:**\n  - Dark, water-soaked, spreading necrotic lesions on leaves and stems.\n  - White mildew fringe on the underside of leaves during cool, moist periods.\n  - Infected tubers exhibit copper-brown or purplish granular dry rot beneath the skin extending into the flesh.\n- **Favorable Weather:**\n  - Temperatures 10\u00b0C - 20\u00b0C with relative humidity > 90% and continuous free moisture.\n- **Organic Controls:**\n  - Bordeaux mixture 1% or Copper Hydroxide (2.5 g/L) preventative sprays.\n  - Strict culling and disposal of seed tubers showing dry rot or brown discoloration.\n- **Chemical Control:**\n  - Dimethomorph 50% WP @ 1.0 g/L + Mancozeb @ 2.0 g/L.\n  - Cymoxanil 8% + Mancozeb 64% WP @ 2.0 g/L or Fluopicolide + Propamocarb Hydrochloride (Infinito) @ 1.5 ml/L.\n- **Prevention:**\n  - Use certified blight-free seed tubers (e.g., Kufri Girdhari, Kufri Khyati, Kennebec).\n  - High hilling of rows (20-25 cm ridge height) to protect developing tubers from surface wash of spores.\n  - Destroy cull piles before crop emergence.\n\n---",
+    "clean_text": "Potato - Late Blight (Phytophthora infestans) - Pathogen: *Phytophthora infestans* (Oomycete) - Severity Level: Severe / Destructive - Symptoms:   - Dark, water-soaked, spreading necrotic lesions on leaves and stems.   - White mildew fringe on the underside of leaves during cool, moist periods.   - Infected tubers exhibit copper-brown or purplish granular dry rot beneath the skin extending into the flesh. - Favorable Weather:   - Temperatures 10\u00b0C - 20\u00b0C with relative humidity > 90% and continuous free moisture. - Organic Controls:   - Bordeaux mixture 1% or Copper Hydroxide (2.5 g/L) preventative sprays.   - Strict culling and disposal of seed tubers showing dry rot or brown discoloration. - Chemical Control:   - Dimethomorph 50% WP @ 1.0 g/L + Mancozeb @ 2.0 g/L.   - Cymoxanil 8% + Mancozeb 64% WP @ 2.0 g/L or Fluopicolide + Propamocarb Hydrochloride (Infinito) @ 1.5 ml/L. - Prevention:   - Use certified blight-free seed tubers (e.g., Kufri Girdhari, Kufri Khyati, Kennebec).   - High hilling of rows (20-25 cm ridge height) to protect developing tubers from surface wash of spores.   - Destroy cull piles before crop emergence. ---"
+  },
+  {
+    "chunk_id": "potato_pathology_004",
+    "source": "knowledge/documents/potato_pathology.md",
+    "doc_title": "Potato Pathology",
+    "section": "Potato - Healthy Crop Care",
+    "crop": "Potato",
+    "disease": "Healthy",
+    "text": "## Potato - Healthy Crop Care\n- Ensure deep loose sandy-loam soil with good drainage.\n- Maintain soil pH 5.2 - 6.4 (slightly acidic helps suppress common scab).\n- Balanced N-P-K (150:100:120 kg/ha) with micronutrient foliar sprays of Zinc and Boron.",
+    "clean_text": "Potato - Healthy Crop Care - Ensure deep loose sandy-loam soil with good drainage. - Maintain soil pH 5.2 - 6.4 (slightly acidic helps suppress common scab). - Balanced N-P-K (150:100:120 kg/ha) with micronutrient foliar sprays of Zinc and Boron."
+  },
+  {
+    "chunk_id": "tomato_pathology_001",
+    "source": "knowledge/documents/tomato_pathology.md",
+    "doc_title": "Tomato Pathology",
+    "section": "Tomato Crop Pathology & Agronomic Management",
+    "crop": "Tomato",
+    "disease": "Agronomy",
+    "text": "# Tomato Crop Pathology & Agronomic Management",
+    "clean_text": "Tomato Crop Pathology & Agronomic Management"
+  },
+  {
+    "chunk_id": "tomato_pathology_002",
+    "source": "knowledge/documents/tomato_pathology.md",
+    "doc_title": "Tomato Pathology",
+    "section": "Tomato - Early Blight (Alternaria solani)",
+    "crop": "Tomato",
+    "disease": "Early Blight",
+    "text": "## Tomato - Early Blight (Alternaria solani)\n- **Pathogen:** *Alternaria solani* (Fungal)\n- **Severity Level:** Moderate to High\n- **Diagnostic Symptoms:**\n  - Distinct dark brown to black circular lesions on older lower leaves.\n  - Classic concentric rings creating a \"target-board\" or \"bullseye\" pattern.\n  - Yellow chlorotic halo surrounding necrotic spots.\n  - Premature defoliation, sunscald of fruits, and dark collar rot at stem base.\n- **Favorable Weather Conditions:**\n  - Warm temperatures (24\u00b0C to 30\u00b0C / 75\u00b0F to 86\u00b0F).\n  - High relative humidity (> 80%) with heavy dew or frequent rainfall.\n  - Prolonged leaf wetness duration (over 8-10 hours).\n- **Organic & Biological Treatment:**\n  - Spray cold-pressed pure Neem Seed Oil (5 ml per liter of water with 1 ml liquid soap emulsifier) every 7-10 days.\n  - Apply bio-fungicide *Trichoderma viride* or *Trichoderma harzianum* (5-10 g/L) to soil and foliage.\n  - Foliar spray of *Bacillus subtilis* formulation (2-3 g/L) during early emergence.\n  - Immediately prune and burn/bury all lower infected leaves (bottom 30 cm of canopy).\n- **Chemical Control & Fungicides:**\n  - Protective contact spray: Mancozeb 75% WP @ 2.5 g/liter of water or Copper Oxychloride 50% WP @ 3.0 g/liter.\n  - Systemic curative spray for active spread: Azoxystrobin 23% SC @ 1.0 ml/L or Difenoconazole 25% EC @ 0.5-1.0 ml/L.\n  - Pre-Harvest Interval (PHI): 7-14 days. Observe safety intervals before harvest.\n- **Cultural Prevention & Next Cycle:**\n  - Practice 3-year crop rotation with non-solanaceous crops (avoid potato, eggplant, pepper).\n  - Use plastic or organic straw mulching to prevent soil spores splashing onto lower foliage.\n  - Shift exclusively to drip irrigation; strictly avoid overhead sprinkler watering.\n  - Maintain plant spacing of 60 cm x 45 cm for adequate cross-ventilation.\n\n---",
+    "clean_text": "Tomato - Early Blight (Alternaria solani) - Pathogen: *Alternaria solani* (Fungal) - Severity Level: Moderate to High - Diagnostic Symptoms:   - Distinct dark brown to black circular lesions on older lower leaves.   - Classic concentric rings creating a \"target-board\" or \"bullseye\" pattern.   - Yellow chlorotic halo surrounding necrotic spots.   - Premature defoliation, sunscald of fruits, and dark collar rot at stem base. - Favorable Weather Conditions:   - Warm temperatures (24\u00b0C to 30\u00b0C / 75\u00b0F to 86\u00b0F).   - High relative humidity (> 80%) with heavy dew or frequent rainfall.   - Prolonged leaf wetness duration (over 8-10 hours). - Organic & Biological Treatment:   - Spray cold-pressed pure Neem Seed Oil (5 ml per liter of water with 1 ml liquid soap emulsifier) every 7-10 days.   - Apply bio-fungicide *Trichoderma viride* or *Trichoderma harzianum* (5-10 g/L) to soil and foliage.   - Foliar spray of *Bacillus subtilis* formulation (2-3 g/L) during early emergence.   - Immediately prune and burn/bury all lower infected leaves (bottom 30 cm of canopy). - Chemical Control & Fungicides:   - Protective contact spray: Mancozeb 75% WP @ 2.5 g/liter of water or Copper Oxychloride 50% WP @ 3.0 g/liter.   - Systemic curative spray for active spread: Azoxystrobin 23% SC @ 1.0 ml/L or Difenoconazole 25% EC @ 0.5-1.0 ml/L.   - Pre-Harvest Interval (PHI): 7-14 days. Observe safety intervals before harvest. - Cultural Prevention & Next Cycle:   - Practice 3-year crop rotation with non-solanaceous crops (avoid potato, eggplant, pepper).   - Use plastic or organic straw mulching to prevent soil spores splashing onto lower foliage.   - Shift exclusively to drip irrigation; strictly avoid overhead sprinkler watering.   - Maintain plant spacing of 60 cm x 45 cm for adequate cross-ventilation. ---"
+  },
+  {
+    "chunk_id": "tomato_pathology_003",
+    "source": "knowledge/documents/tomato_pathology.md",
+    "doc_title": "Tomato Pathology",
+    "section": "Tomato - Late Blight (Phytophthora infestans)",
+    "crop": "Tomato",
+    "disease": "Late Blight",
+    "text": "## Tomato - Late Blight (Phytophthora infestans)\n- **Pathogen:** *Phytophthora infestans* (Oomycete water mold)\n- **Severity Level:** Critical / Emergency\n- **Diagnostic Symptoms:**\n  - Large, irregular water-soaked pale green to dark brown oily lesions on leaves and stems.\n  - White, cottony fungal growth (sporangiophores) on the underside of leaves in damp morning conditions.\n  - Rapid browning, shriveling, and death of entire foliage within days.\n  - Firm, greasy, dark brown sunken rot on green and ripe tomato fruits.\n- **Favorable Weather Conditions:**\n  - Cool to moderate temperatures (12\u00b0C to 22\u00b0C).\n  - High relative humidity (> 90%) and continuous cloudiness or rainfall.\n- **Organic & Biological Control:**\n  - Preventive Bordeaux mixture (1%) or Copper Hydroxide (2.0 g/L).\n  - Bio-control *Pseudomonas fluorescens* (5 g/L) foliar spray.\n  - Rapid removal and destruction of all severely infected plants to prevent field-wide epidemic.\n- **Chemical Control:**\n  - Systemic action: Metalaxyl 8% + Mancozeb 64% WP (Ridomil MZ) @ 2.5 g/liter.\n  - Cymoxanil 8% + Mancozeb 64% WP @ 2.0 g/L or Dimethomorph 50% WP @ 1.0 g/L.\n  - Spray during dry foliage conditions with surfactant. Repeat after 7 days if weather remains overcast.\n- **Preventive Practices:**\n  - Plant certified disease-free transplants and blight-resistant hybrids (e.g., Mountain Magic, Defiant).\n  - Destroy all solanaceous volunteer plants and cull piles in surrounding vicinity.\n\n---",
+    "clean_text": "Tomato - Late Blight (Phytophthora infestans) - Pathogen: *Phytophthora infestans* (Oomycete water mold) - Severity Level: Critical / Emergency - Diagnostic Symptoms:   - Large, irregular water-soaked pale green to dark brown oily lesions on leaves and stems.   - White, cottony fungal growth (sporangiophores) on the underside of leaves in damp morning conditions.   - Rapid browning, shriveling, and death of entire foliage within days.   - Firm, greasy, dark brown sunken rot on green and ripe tomato fruits. - Favorable Weather Conditions:   - Cool to moderate temperatures (12\u00b0C to 22\u00b0C).   - High relative humidity (> 90%) and continuous cloudiness or rainfall. - Organic & Biological Control:   - Preventive Bordeaux mixture (1%) or Copper Hydroxide (2.0 g/L).   - Bio-control *Pseudomonas fluorescens* (5 g/L) foliar spray.   - Rapid removal and destruction of all severely infected plants to prevent field-wide epidemic. - Chemical Control:   - Systemic action: Metalaxyl 8% + Mancozeb 64% WP (Ridomil MZ) @ 2.5 g/liter.   - Cymoxanil 8% + Mancozeb 64% WP @ 2.0 g/L or Dimethomorph 50% WP @ 1.0 g/L.   - Spray during dry foliage conditions with surfactant. Repeat after 7 days if weather remains overcast. - Preventive Practices:   - Plant certified disease-free transplants and blight-resistant hybrids (e.g., Mountain Magic, Defiant).   - Destroy all solanaceous volunteer plants and cull piles in surrounding vicinity. ---"
+  },
+  {
+    "chunk_id": "tomato_pathology_004",
+    "source": "knowledge/documents/tomato_pathology.md",
+    "doc_title": "Tomato Pathology",
+    "section": "Tomato - Leaf Mold (Passalora fulva)",
+    "crop": "Tomato",
+    "disease": "Agronomy",
+    "text": "## Tomato - Leaf Mold (Passalora fulva)\n- **Pathogen:** *Passalora fulva* (Fungal)\n- **Diagnostic Symptoms:**\n  - Pale green to yellowish diffuse spots on upper leaf surfaces.\n  - Olive-green to velvety brown mold growth on lower leaf surfaces beneath the yellow spots.\n- **Management:**\n  - Increase greenhouse and canopy air circulation; reduce relative humidity below 80%.\n  - Apply Potassium Bicarbonate (3 g/L) or Copper-based fungicides.\n\n---",
+    "clean_text": "Tomato - Leaf Mold (Passalora fulva) - Pathogen: *Passalora fulva* (Fungal) - Diagnostic Symptoms:   - Pale green to yellowish diffuse spots on upper leaf surfaces.   - Olive-green to velvety brown mold growth on lower leaf surfaces beneath the yellow spots. - Management:   - Increase greenhouse and canopy air circulation; reduce relative humidity below 80%.   - Apply Potassium Bicarbonate (3 g/L) or Copper-based fungicides. ---"
+  },
+  {
+    "chunk_id": "tomato_pathology_005",
+    "source": "knowledge/documents/tomato_pathology.md",
+    "doc_title": "Tomato Pathology",
+    "section": "Tomato - Healthy Care Guidelines",
+    "crop": "Tomato",
+    "disease": "Healthy",
+    "text": "## Tomato - Healthy Care Guidelines\n- Maintain soil pH between 6.0 and 6.8.\n- Balanced fertilization: Avoid excessive nitrogen which promotes dense, humid foliage susceptible to fungal spores.\n- Apply calcium-rich amendments (gypsum / lime) to prevent blossom end rot.",
+    "clean_text": "Tomato - Healthy Care Guidelines - Maintain soil pH between 6.0 and 6.8. - Balanced fertilization: Avoid excessive nitrogen which promotes dense, humid foliage susceptible to fungal spores. - Apply calcium-rich amendments (gypsum / lime) to prevent blossom end rot."
+  }
+]

@@ -1,0 +1,499 @@
+{
+  "Pepper__bell___Bacterial_spot": {
+    "crop_en": "Pepper Bell",
+    "crop_hi": "शिमला मिर्च",
+    "disease_en": "Bacterial Spot",
+    "disease_hi": "जीवाणु धब्बा रोग",
+    "is_healthy": false,
+    "severity": "High",
+    "pathogen_type": "Bacterial (Xanthomonas campestris)",
+    "symptoms_en": "Small water-soaked, dark brown angular lesions on leaves and fruit. Leaves turn yellow and drop prematurely.",
+    "symptoms_hi": "पत्तियों और फलों पर छोटे, पानी से भरे गहरे भूरे रंग के धब्बे। पत्तियां पीली पड़कर झड़ने लगती हैं।",
+    "chemical_treatment": {
+      "name_en": "Copper Oxychloride (50% WP) + Streptocycline",
+      "name_hi": "कॉपर ऑक्सीक्लोराइड (50% WP) + स्ट्रेप्टोसाइक्लिन",
+      "dosage_per_liter": "2.5 g Copper Oxychloride + 0.05 g Streptocycline per Liter of water",
+      "spray_interval_days": "7 to 10 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Bacillus subtilis bio-formulation + Neem Oil",
+      "name_hi": "बैसिलस सबटिलिस जैविक उपचार + नीम का तेल",
+      "dosage_per_liter": "5 ml Neem Oil (10,000 ppm) + 2.5 g Bacillus subtilis per Liter",
+      "notes_en": "Spray early morning or late evening during overcast conditions.",
+      "notes_hi": "सुबह जल्दी या शाम के समय छिड़काव करें।"
+    },
+    "prevention_en": [
+      "Use certified disease-free seeds and hot water treatment (50°C for 25 min).",
+      "Avoid overhead sprinkler irrigation; practice drip irrigation.",
+      "Maintain 2 to 3-year crop rotation avoiding solanaceous crops."
+    ],
+    "prevention_hi": [
+      "प्रमाणित रोगमुक्त बीजों का प्रयोग करें या गर्म पानी से बीजोपचार करें।",
+      "ऊपर से फव्वारा सिंचाई से बचें; टपक (ड्रिप) सिंचाई अपनाएं।",
+      "सोलेनेसी कुल की फसलों के साथ 2-3 वर्ष का फसल चक्र अपनाएं।"
+    ]
+  },
+  "Pepper__bell___healthy": {
+    "crop_en": "Pepper Bell",
+    "crop_hi": "शिमला मिर्च",
+    "disease_en": "Healthy Crop",
+    "disease_hi": "स्वस्थ फसल",
+    "is_healthy": true,
+    "severity": "None",
+    "pathogen_type": "None",
+    "symptoms_en": "Vibrant green leaves, robust stems, no lesions or chlorosis.",
+    "symptoms_hi": "चमकदार हरी पत्तियां, मजबूत तना, कोई दाग-धब्बे नहीं।",
+    "chemical_treatment": {
+      "name_en": "None needed - Maintain balanced NPK nutrition",
+      "name_hi": "रासायनिक दवा की आवश्यकता नहीं है - संतुलित खाद दें",
+      "dosage_per_liter": "N/A",
+      "spray_interval_days": "N/A",
+      "phi_days": 0
+    },
+    "organic_treatment": {
+      "name_en": "Neem Oil 3000 ppm (Preventive protective coating)",
+      "name_hi": "नीम का तेल 3000 ppm (सुरक्षात्मक छिड़काव)",
+      "dosage_per_liter": "3 ml per Liter of water",
+      "notes_en": "Apply every 14 days as an organic immunity booster.",
+      "notes_hi": "हर 14 दिन में एक बार फसल की रोग प्रतिरोधक क्षमता बढ़ाने हेतु डालें।"
+    },
+    "prevention_en": [
+      "Maintain adequate spacing for optimal airflow.",
+      "Apply mulch to retain uniform soil moisture."
+    ],
+    "prevention_hi": [
+      "हवा के उचित संचार हेतु पौधों के बीच उचित दूरी रखें।",
+      "नमी बनाए रखने के लिए मल्चिंग का प्रयोग करें।"
+    ]
+  },
+  "Potato___Early_blight": {
+    "crop_en": "Potato",
+    "crop_hi": "आलू",
+    "disease_en": "Early Blight",
+    "disease_hi": "अगेती झुलसा रोग",
+    "is_healthy": false,
+    "severity": "Moderate",
+    "pathogen_type": "Fungal (Alternaria solani)",
+    "symptoms_en": "Concentric rings ('bullseye' target pattern) with yellow chlorotic halos on older lower leaves.",
+    "symptoms_hi": "निचली पुरानी पत्तियों पर चक्राकार (छल्लेदार) भूरे धब्बे जिनके चारों ओर पीला घेरा होता है।",
+    "chemical_treatment": {
+      "name_en": "Mancozeb 75% WP or Azoxystrobin 23% SC",
+      "name_hi": "मैंकोजेब 75% WP या एज़ोक्सीस्ट्रोबिन 23% SC",
+      "dosage_per_liter": "2.5 g Mancozeb or 1.0 ml Azoxystrobin per Liter of water",
+      "spray_interval_days": "7 to 10 days",
+      "phi_days": 7
+    },
+    "organic_treatment": {
+      "name_en": "Trichoderma harzianum + Neem Extract",
+      "name_hi": "ट्राइकोडर्मा हरजिएनम + नीम का काढ़ा",
+      "dosage_per_liter": "5.0 g Trichoderma + 5 ml Neem Oil per Liter",
+      "notes_en": "Apply thoroughly covering both upper and lower leaf surfaces.",
+      "notes_hi": "पत्तियों के दोनों तरफ अच्छी तरह से छिड़काव करें।"
+    },
+    "prevention_en": [
+      "Promptly remove and burn severely infected bottom foliage.",
+      "Ensure balanced potassium fertilization to fortify cell walls."
+    ],
+    "prevention_hi": [
+      "संक्रमित निचली पत्तियों को तुरंत तोड़कर नष्ट कर दें।",
+      "पोटाश की उचित मात्रा दें जिससे पौधे की कोशिका भित्ति मजबूत हो।"
+    ]
+  },
+  "Potato___healthy": {
+    "crop_en": "Potato",
+    "crop_hi": "आलू",
+    "disease_en": "Healthy Crop",
+    "disease_hi": "स्वस्थ फसल",
+    "is_healthy": true,
+    "severity": "None",
+    "pathogen_type": "None",
+    "symptoms_en": "Dark green, uniform foliage, vigorous canopy growth.",
+    "symptoms_hi": "गहरा हरा, एकसमान पत्ते और स्वस्थ वानस्पतिक विकास।",
+    "chemical_treatment": {
+      "name_en": "None needed",
+      "name_hi": "किसी रासायनिक दवा की आवश्यकता नहीं है",
+      "dosage_per_liter": "N/A",
+      "spray_interval_days": "N/A",
+      "phi_days": 0
+    },
+    "organic_treatment": {
+      "name_en": "Liquid Seaweed extract or Bio-stimulant spray",
+      "name_hi": "समुद्री शैवाल का अर्क (Bio-stimulant)",
+      "dosage_per_liter": "2 ml per Liter of water",
+      "notes_en": "Promotes tuber bulking and robust root development.",
+      "notes_hi": "कंदों के विकास और जड़ों की मजबूती में सहायक।"
+    },
+    "prevention_en": [
+      "Keep earthing up tubers to prevent greening.",
+      "Monitor soil moisture carefully; avoid waterlogging."
+    ],
+    "prevention_hi": [
+      "आलू के कंदों पर समय पर मिट्टी चढ़ाएं ताकि वे हरे न हों।",
+      "खेत में जलभराव न होने दें।"
+    ]
+  },
+  "Potato___Late_blight": {
+    "crop_en": "Potato",
+    "crop_hi": "आलू",
+    "disease_en": "Late Blight",
+    "disease_hi": "पछेती झुलसा रोग",
+    "is_healthy": false,
+    "severity": "High",
+    "pathogen_type": "Oomycete (Phytophthora infestans)",
+    "symptoms_en": "Rapidly expanding water-soaked dark purplish lesions with white fluffy mold on leaf undersides in cool, humid weather.",
+    "symptoms_hi": "ठंडे और नम मौसम में पत्तियों पर तेजी से फैलने वाले काले-बैंगनी धब्बे और निचली सतह पर सफेद फफूंद।",
+    "chemical_treatment": {
+      "name_en": "Ridomil Gold (Metalaxyl 8% + Mancozeb 64% WP) or Cymoxanil",
+      "name_hi": "रिडोमिल गोल्ड (मेटालेक्सिल + मैंकोजेब) या साइमोक्सानिल",
+      "dosage_per_liter": "2.5 g per Liter of water",
+      "spray_interval_days": "5 to 7 days during foggy/humid weather",
+      "phi_days": 7
+    },
+    "organic_treatment": {
+      "name_en": "Copper Hydroxide (Bordeaux Mixture 1%)",
+      "name_hi": "बोर्डो मिश्रण 1% या कॉपर हाइड्रोक्साइड",
+      "dosage_per_liter": "2.5 g per Liter of water",
+      "notes_en": "Must be applied preventively before dense fog or continuous rain.",
+      "notes_hi": "कोहरा पड़ने या लगातार बारिश से पहले ही सुरक्षात्मक छिड़काव करें।"
+    },
+    "prevention_en": [
+      "Destroy potato volunteer plants and cull piles.",
+      "Kill potato haulms 10-14 days before harvest to prevent tuber infection."
+    ],
+    "prevention_hi": [
+      "खेत के आसपास पिछले साल के बचे हुए पौधे और सड़े आलू नष्ट करें।",
+      "खुदाई से 10-12 दिन पहले पौधों की बेलें (Haulms) काट दें।"
+    ]
+  },
+  "Tomato_Bacterial_spot": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Bacterial Spot",
+    "disease_hi": "जीवाणु धब्बा रोग",
+    "is_healthy": false,
+    "severity": "High",
+    "pathogen_type": "Bacterial (Xanthomonas spp.)",
+    "symptoms_en": "Small, dark, greasy circular lesions on leaves and raised scab-like lesions on green fruit.",
+    "symptoms_hi": "पत्तियों पर छोटे, काले, तैलीय धब्बे और फलों पर खुरदरे उभरे हुए धब्बे।",
+    "chemical_treatment": {
+      "name_en": "Copper Oxychloride (50% WP) + Streptocycline",
+      "name_hi": "कॉपर ऑक्सीक्लोराइड + स्ट्रेप्टोसाइक्लिन",
+      "dosage_per_liter": "2.5 g COC + 0.05 g Streptocycline per Liter of water",
+      "spray_interval_days": "7 to 10 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Bacillus subtilis + Panchagavya spray",
+      "name_hi": "बैसिलस सबटिलिस + पंचगव्य छिड़काव",
+      "dosage_per_liter": "30 ml Panchagavya + 2 g Bacillus subtilis per Liter",
+      "notes_en": "Boosts plant systemic acquired resistance.",
+      "notes_hi": "पौधे की रोगरोधी शक्ति को बढ़ाता है।"
+    },
+    "prevention_en": [
+      "Stake and prune plants to improve airflow and facilitate quick leaf drying.",
+      "Never work in tomato fields when leaves are wet from dew or rain."
+    ],
+    "prevention_hi": [
+      "टमाटर के पौधों को सहारा (स्टेकिंग) दें ताकि हवा का बहाव अच्छा रहे।",
+      "ओस या बारिश के समय जब पत्ते गीले हों, खेत में निराई-गुड़ाई न करें।"
+    ]
+  },
+  "Tomato_Early_blight": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Early Blight",
+    "disease_hi": "अगेती झुलसा रोग",
+    "is_healthy": false,
+    "severity": "Moderate",
+    "pathogen_type": "Fungal (Alternaria solani)",
+    "symptoms_en": "Dark brown concentric rings forming a bullseye pattern on leaves, stem collar rot, and fruit sunscald.",
+    "symptoms_hi": "पत्तियों पर गहरे भूरे रंग के छल्लेदार धब्बे, तने पर सड़न और फल खराब होना।",
+    "chemical_treatment": {
+      "name_en": "Mancozeb 75% WP or Difenoconazole 25% EC",
+      "name_hi": "मैंकोजेब 75% WP या डाइफेनोकोनाज़ोल 25% EC",
+      "dosage_per_liter": "2.5 g Mancozeb or 0.5 ml Difenoconazole per Liter of water",
+      "spray_interval_days": "7 to 10 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Trichoderma viride + Neem Oil formulation",
+      "name_hi": "ट्राइकोडर्मा विरिडी + नीम का तेल",
+      "dosage_per_liter": "5 g Trichoderma + 5 ml Neem Oil per Liter",
+      "notes_en": "Spray early morning; repeat after heavy rainfall.",
+      "notes_hi": "सुबह जल्दी छिड़कें; तेज बारिश के बाद दोबारा दोहराएं।"
+    },
+    "prevention_en": [
+      "Remove bottom 30 cm foliage to prevent soil splash transmission.",
+      "Apply straw or plastic mulch around the base of the tomato plants."
+    ],
+    "prevention_hi": [
+      "जमीन से 1 फीट ऊंचाई तक की निचली पत्तियां हटा दें ताकि मिट्टी के छींटे न लगें।",
+      "पौधों की जड़ के पास पुआल या प्लास्टिक मल्चिंग लगाएं।"
+    ]
+  },
+  "Tomato_healthy": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Healthy Crop",
+    "disease_hi": "स्वस्थ फसल",
+    "is_healthy": true,
+    "severity": "None",
+    "pathogen_type": "None",
+    "symptoms_en": "Lush foliage, firm green leaves, vigorous flowering and fruit set.",
+    "symptoms_hi": "घनी हरी पत्तियां, मजबूत तना, स्वस्थ फूल एवं फल विकास।",
+    "chemical_treatment": {
+      "name_en": "None required - Continue optimum irrigation and feeding",
+      "name_hi": "रासायनिक दवा की आवश्यकता नहीं - समय पर पानी और खाद दें",
+      "dosage_per_liter": "N/A",
+      "spray_interval_days": "N/A",
+      "phi_days": 0
+    },
+    "organic_treatment": {
+      "name_en": "Vermiwash or Panchagavya 3% foliar spray",
+      "name_hi": "वर्मीवाश या पंचगव्य (3% घोल) का पर्णीय छिड़काव",
+      "dosage_per_liter": "30 ml per Liter of water",
+      "notes_en": "Improves fruit weight, luster, and shelf-life.",
+      "notes_hi": "फलों की चमक, वजन और गुणवत्ता बढ़ाने में अत्यंत उपयोगी।"
+    },
+    "prevention_en": [
+      "Maintain consistent drip irrigation to prevent blossom end rot.",
+      "Scout the field twice weekly for early pest detection."
+    ],
+    "prevention_hi": [
+      "नियमित रूप से टपक सिंचाई करें ताकि फल नीचे से न सड़ें।",
+      "सप्ताह में दो बार खेत का निरीक्षण करें।"
+    ]
+  },
+  "Tomato_Late_blight": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Late Blight",
+    "disease_hi": "पछेती झुलसा रोग",
+    "is_healthy": false,
+    "severity": "High",
+    "pathogen_type": "Oomycete (Phytophthora infestans)",
+    "symptoms_en": "Water-soaked lesions turning dark brown to black with white fungal sporulation under leaves during high humidity.",
+    "symptoms_hi": "पत्तियों पर काले-भूरे गीले धब्बे और नमी में पत्तियों के नीचे सफेद रंग की फफूंद।",
+    "chemical_treatment": {
+      "name_en": "Dimethomorph 50% WP or Metalaxyl + Mancozeb (Ridomil)",
+      "name_hi": "डाइमेथोमोर्फ 50% WP या मेटालेक्सिल + मैंकोजेब (रिडोमिल)",
+      "dosage_per_liter": "1.5 g Dimethomorph or 2.5 g Ridomil per Liter of water",
+      "spray_interval_days": "5 to 7 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Copper Oxychloride + Raw Cow Milk (1:10 dilution)",
+      "name_hi": "कॉपर ऑक्सीक्लोराइड + कच्चा गाय का दूध (1:10 घोल)",
+      "dosage_per_liter": "2.0 g Copper Oxychloride per Liter",
+      "notes_en": "Acts as a protective contact shield against zoospores.",
+      "notes_hi": "फफूंद के बीजाणुओं को फैलने से रोकने वाला सुरक्षात्मक कवच बनाता है।"
+    },
+    "prevention_en": [
+      "Never plant tomatoes immediately adjacent to potato fields.",
+      "Immediately rogue out and destroy severely diseased plants."
+    ],
+    "prevention_hi": [
+      "आलू के खेत के ठीक बगल में टमाटर न लगाएं।",
+      "गंभीर रूप से ग्रसित पौधों को तुरंत उखाड़कर जमीन में दबा दें।"
+    ]
+  },
+  "Tomato_Leaf_Mold": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Leaf Mold",
+    "disease_hi": "पत्ती फफूंद रोग",
+    "is_healthy": false,
+    "severity": "Moderate",
+    "pathogen_type": "Fungal (Passalora fulva)",
+    "symptoms_en": "Pale green or yellowish spots on upper leaf surfaces, olive-green to grayish velvety mold on the underside.",
+    "symptoms_hi": "पत्ती की ऊपरी सतह पर पीले धब्बे और निचली सतह पर जैतून जैसे हरे-मटमैले मखमली फफूंद के गुच्छे।",
+    "chemical_treatment": {
+      "name_en": "Chlorothalonil 75% WP or Azoxystrobin",
+      "name_hi": "क्लोरोथैलोनिल 75% WP या एज़ोक्सीस्ट्रोबिन",
+      "dosage_per_liter": "2.0 g Chlorothalonil per Liter of water",
+      "spray_interval_days": "7 to 10 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Potassium Bicarbonate spray (0.3% w/v)",
+      "name_hi": "पोटेशियम बाइकार्बोनेट घोल (0.3%)",
+      "dosage_per_liter": "3.0 g Potassium Bicarbonate + 2 ml Horticultural Oil per Liter",
+      "notes_en": "Changes leaf surface pH inhibiting fungal hyphae.",
+      "notes_hi": "पत्ती के pH को बदलकर फफूंद को समाप्त करता है।"
+    },
+    "prevention_en": [
+      "Increase greenhouse ventilation to reduce relative humidity below 85%.",
+      "Space plants generously to promote rapid air movement."
+    ],
+    "prevention_hi": [
+      "पॉलीहाउस या ग्रीनहाउस में हवा का संचार बढ़ाकर नमी 85% से कम रखें।",
+      "पौधों के बीच पर्याप्त फासला रखें।"
+    ]
+  },
+  "Tomato_Septoria_leaf_spot": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Septoria Leaf Spot",
+    "disease_hi": "सेप्टोरिया पत्ती धब्बा रोग",
+    "is_healthy": false,
+    "severity": "Moderate",
+    "pathogen_type": "Fungal (Septoria lycopersici)",
+    "symptoms_en": "Numerous circular spots (1-3 mm) with grayish-white centers and distinctive dark brown borders, containing tiny black specks (pycnidia).",
+    "symptoms_hi": "पत्तियों पर छोटे गोल धब्बे (1-3 मिमी) जिनके केंद्र में सफेदी और किनारों पर गहरा भूरा घेरा होता है।",
+    "chemical_treatment": {
+      "name_en": "Mancozeb 75% WP or Chlorothalonil 75% WP",
+      "name_hi": "मैंकोजेब 75% WP या क्लोरोथैलोनिल 75% WP",
+      "dosage_per_liter": "2.5 g per Liter of water",
+      "spray_interval_days": "7 to 10 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Copper Hydroxide + Bio-fungicide (Trichoderma)",
+      "name_hi": "कॉपर हाइड्रोक्साइड + ट्राइकोडर्मा",
+      "dosage_per_liter": "2.0 g Copper Hydroxide per Liter",
+      "notes_en": "Ensure complete canopy coverage including undersides.",
+      "notes_hi": "पत्तियों के निचले हिस्से सहित पूरे पौधे पर छिड़काव करें।"
+    },
+    "prevention_en": [
+      "Remove diseased lower leaves as soon as first spots appear.",
+      "Avoid touching healthy plants after handling infected leaves."
+    ],
+    "prevention_hi": [
+      "शुरुआती धब्बे दिखते ही निचली ग्रसित पत्तियों को तोड़कर हटा दें।",
+      "बीमार पौधों को छूने के बाद स्वस्थ पौधों को न छुएं।"
+    ]
+  },
+  "Tomato_Spider_mites_Two_spotted_spider_mite": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Two-Spotted Spider Mite",
+    "disease_hi": "लाल मकड़ी / दो-धब्बेदार मकड़ी कीट",
+    "is_healthy": false,
+    "severity": "Moderate",
+    "pathogen_type": "Pest / Acarina (Tetranychus urticae)",
+    "symptoms_en": "Fine yellow speckling / stippling on leaves, severe bronzing, and delicate silk webbing under leaves and growing tips.",
+    "symptoms_hi": "पत्तियों पर बारीक पीले बिंदु, पत्तियों का तांबे जैसा रंग होना और पत्तों के नीचे बारीक मकड़ी का जाला।",
+    "chemical_treatment": {
+      "name_en": "Abamectin 1.9% EC or Spiromesifen 22.9% SC (Oberon)",
+      "name_hi": "एबामेक्टिन 1.9% EC या स्पाइरोमेसिफेन 22.9% SC (ओबेरॉन)",
+      "dosage_per_liter": "0.5 ml Abamectin or 1.0 ml Spiromesifen per Liter of water",
+      "spray_interval_days": "10 to 14 days",
+      "phi_days": 3
+    },
+    "organic_treatment": {
+      "name_en": "Neem Oil (10,000 ppm) + Potassium salts of fatty acids",
+      "name_hi": "नीम का तेल (10,000 ppm) + जैविक कीटनाशक साबुन घोल",
+      "dosage_per_liter": "5 ml Neem Oil + 2 ml liquid soap per Liter",
+      "notes_en": "Suffocates mites and disrupts reproduction cycles.",
+      "notes_hi": "मकड़ियों के अंडों और वयस्क कीटों को नष्ट करता है।"
+    },
+    "prevention_en": [
+      "Regularly spray mist water under leaves during hot dry weather.",
+      "Eliminate weeds around the field boundary that host overwintering mites."
+    ],
+    "prevention_hi": [
+      "गर्म व शुष्क मौसम में पत्तियों के नीचे हल्का पानी छिड़कें।",
+      "खेत की मेड़ों से खरपतवार नष्ट करें जहां मकड़ियां पनपती हैं।"
+    ]
+  },
+  "Tomato__Target_Spot": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Target Spot",
+    "disease_hi": "टारगेट स्पॉट रोग",
+    "is_healthy": false,
+    "severity": "Moderate",
+    "pathogen_type": "Fungal (Corynespora cassiicola)",
+    "symptoms_en": "Small circular brown lesions with light brown centers and dark concentric rings resembling archery targets.",
+    "symptoms_hi": "पत्तियों पर गोल भूरे धब्बे जिनके केंद्र हल्के और किनारे गहरे छल्लेदार होते हैं (निशाने जैसा)।",
+    "chemical_treatment": {
+      "name_en": "Azoxystrobin + Difenoconazole (Amistar Top)",
+      "name_hi": "एज़ोक्सीस्ट्रोबिन + डाइफेनोकोनाज़ोल (एमिस्टार टॉप)",
+      "dosage_per_liter": "1.0 ml per Liter of water",
+      "spray_interval_days": "10 to 12 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Bio-fungicide Bacillus amyloliquefaciens + Neem extract",
+      "name_hi": "बैसिलस एमाइलोलिक्विफेशियंस + नीम का अर्क",
+      "dosage_per_liter": "3 g Bio-agent + 4 ml Neem Oil per Liter",
+      "notes_en": "Protects new flushes of leaves from spore germination.",
+      "notes_hi": "नई पत्तियों को फफूंद के संक्रमण से सुरक्षित रखता है।"
+    },
+    "prevention_en": [
+      "Ensure wide row spacing to accelerate canopy drying.",
+      "Clean pruning tools with 70% alcohol between rows."
+    ],
+    "prevention_hi": [
+      "कतारों के बीच पर्याप्त दूरी रखें ताकि पत्तियां जल्दी सूखें।",
+      "कटाई-छंटाई के औजारों को सैनिटाइज करें।"
+    ]
+  },
+  "Tomato__Tomato_mosaic_virus": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Tomato Mosaic Virus",
+    "disease_hi": "टमाटर मोज़ेक वायरस",
+    "is_healthy": false,
+    "severity": "High",
+    "pathogen_type": "Viral (ToMV)",
+    "symptoms_en": "Mottled light and dark green mosaic patterns on leaves, stunted distorted growth, 'shoestring' leaflet deformation.",
+    "symptoms_hi": "पत्तियों पर हल्के व गहरे हरे रंग के मोज़ेक जैसे चितकबरे धब्बे, पौधे का बौना होना और पत्तों का मुड़ना।",
+    "chemical_treatment": {
+      "name_en": "No chemical cure for plant viruses. Prevent vector/mechanical spread.",
+      "name_hi": "वायरस के लिए कोई रासायनिक दवा नहीं होती। प्रसार को रोकें।",
+      "dosage_per_liter": "N/A",
+      "spray_interval_days": "N/A",
+      "phi_days": 0
+    },
+    "organic_treatment": {
+      "name_en": "Foliar skim milk spray (10% v/v) or Trisodium Phosphate wash",
+      "name_hi": "मलाई रहित दूध (10% घोल) का छिड़काव",
+      "dosage_per_liter": "100 ml Skim milk per Liter of water",
+      "notes_en": "Milk proteins inactivate virions on leaf contact surfaces.",
+      "notes_hi": "दूध के प्रोटीन पत्तों पर वायरस के कणों को निष्क्रिय कर देते हैं।"
+    },
+    "prevention_en": [
+      "Workers must wash hands with soap before touching plants (especially tobacco users).",
+      "Immediately uproot and incinerate infected plants."
+    ],
+    "prevention_hi": [
+      "खेत में काम करते समय हाथ साबुन से धोएं (विशेषकर बीड़ी-तंबाकू सेवन से बचें)।",
+      "संक्रमित पौधों को तुरंत उखाड़कर जला दें।"
+    ]
+  },
+  "Tomato__Tomato_YellowLeaf__Curl_Virus": {
+    "crop_en": "Tomato",
+    "crop_hi": "टमाटर",
+    "disease_en": "Tomato Yellow Leaf Curl Virus (TYLCV)",
+    "disease_hi": "टमाटर पीला पत्ती मरोड़ रोग",
+    "is_healthy": false,
+    "severity": "High",
+    "pathogen_type": "Viral (Begomovirus transmitted by Whiteflies)",
+    "symptoms_en": "Severe upward leaf curling, yellowing of leaf margins, severe plant stunting, flower drop, no fruit set.",
+    "symptoms_hi": "पत्तियों का ऊपर की ओर मुड़ना (मरोड़िया रोग), पत्तों के किनारों का पीला पड़ना, पौधे का रुक जाना और फूलों का गिरना।",
+    "chemical_treatment": {
+      "name_en": "Control Whitefly Vector: Acetamiprid 20% SP or Thiamethoxam 25% WG",
+      "name_hi": "सफेद मक्खी नियंत्रण: एसिटामिप्रिड 20% SP या थायमेथोक्सम 25% WG",
+      "dosage_per_liter": "0.5 g Acetamiprid or 0.3 g Thiamethoxam per Liter of water",
+      "spray_interval_days": "10 to 14 days",
+      "phi_days": 5
+    },
+    "organic_treatment": {
+      "name_en": "Yellow Sticky Traps (15 traps/acre) + Verticillium lecanii bio-agent",
+      "name_hi": "पीले चिपचिपे ट्रैप (15 ट्रैप प्रति एकड़) + वर्टिसिलियम लेकानी जैविक फफूंद",
+      "dosage_per_liter": "5.0 g Verticillium lecanii + 4 ml Neem Oil per Liter",
+      "notes_en": "Mass traps whitefly adults and infects nymphs naturally.",
+      "notes_hi": "सफेद मक्खी को आकर्षित कर चिपका लेता है और कीड़े की रोकथाम करता है।"
+    },
+    "prevention_en": [
+      "Install 40-50 mesh insect netting in nurseries.",
+      "Grow border crops like maize or sorghum as physical windbreak barriers against whiteflies."
+    ],
+    "prevention_hi": [
+      "नर्सरी में 40-50 मेश की कीटरोधी जाली का प्रयोग करें।",
+      "खेत के चारों ओर मक्का या ज्वार की 2 कतारें लगाएं ताकि सफेद मक्खी न आ सके।"
+    ]
+  }
+}

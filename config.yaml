@@ -1,0 +1,62 @@
+# ==============================================================================
+# AgriVision Agent - Master Machine Learning & Dataset Configuration
+# ==============================================================================
+
+dataset:
+  # Paths
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  
+  # Image parameters
+  image_size: [224, 224]
+  channels: 3
+  
+  # Dataset Splitting (70% Train, 15% Validation, 15% Test)
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+  random_seed: 42
+  
+  # Development Mode / Active Subset
+  # In development mode, uses a small representative sample subset (e.g. 3 classes)
+  use_full_dataset: true
+  
+  # 15 Classes from Kaggle PlantVillage Dataset
+  selected_classes:
+    - "Pepper__bell___Bacterial_spot"
+    - "Pepper__bell___healthy"
+    - "Potato___Early_blight"
+    - "Potato___healthy"
+    - "Potato___Late_blight"
+    - "Tomato_Bacterial_spot"
+    - "Tomato_Early_blight"
+    - "Tomato_healthy"
+    - "Tomato_Late_blight"
+    - "Tomato_Leaf_Mold"
+    - "Tomato_Septoria_leaf_spot"
+    - "Tomato_Spider_mites_Two_spotted_spider_mite"
+    - "Tomato__Target_Spot"
+    - "Tomato__Tomato_mosaic_virus"
+    - "Tomato__Tomato_YellowLeaf__Curl_Virus"
+    
+  # Realistic Data Augmentation parameters (applied only to training split)
+  augmentation:
+    rotation_range_degrees: 20
+    horizontal_flip: true
+    vertical_flip: false      # Leaves rarely flip vertically in natural field inspection
+    zoom_range: [0.85, 1.15]
+    width_shift_range: 0.10   # Translation (+/- 10%)
+    height_shift_range: 0.10  # Translation (+/- 10%)
+    brightness_range: [0.85, 1.15] # Natural daylight variation
+
+model:
+  architecture: "MobileNetV2"  # Options: MobileNetV2, EfficientNetB0, CustomCNN
+  batch_size: 16
+  epochs: 10
+  learning_rate: 0.0001
+  fine_tune_layers: 20
+  dropout_rate: 0.35
+  l2_regularization: 0.0001
+  saved_model_path: "models/saved_models/crop_disease_model.keras"
+  class_indices_path: "models/saved_models/class_indices.json"
+
