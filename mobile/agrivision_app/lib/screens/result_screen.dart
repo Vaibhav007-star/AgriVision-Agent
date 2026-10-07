@@ -9,10 +9,10 @@ class ResultScreen extends StatefulWidget {
   final bool isHindi;
 
   const ResultScreen({
-    Key? key,
+    super.key,
     required this.result,
     required this.isHindi,
-  }) : super(key: key);
+  });
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
@@ -313,7 +313,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                       _buildDosageStat(
                         Icons.backpack_rounded,
                         hi ? '15L पंप' : '15L Tanks',
-                        '${dosage.knapsackTanks15L.toStringAsFixed(1)}',
+                        dosage.knapsackTanks15L.toStringAsFixed(1),
                       ),
                       const SizedBox(width: 8),
                       _buildDosageStat(

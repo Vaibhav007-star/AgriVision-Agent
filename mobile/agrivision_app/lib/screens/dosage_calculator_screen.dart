@@ -5,7 +5,7 @@ import '../services/dosage_service.dart';
 class DosageCalculatorScreen extends StatefulWidget {
   final bool isHindi;
 
-  const DosageCalculatorScreen({Key? key, required this.isHindi}) : super(key: key);
+  const DosageCalculatorScreen({super.key, required this.isHindi});
 
   @override
   State<DosageCalculatorScreen> createState() => _DosageCalculatorScreenState();

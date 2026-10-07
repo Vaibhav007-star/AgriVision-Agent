@@ -8,7 +8,7 @@ void main() {
 }
 
 class AgriVisionMobileApp extends StatefulWidget {
-  const AgriVisionMobileApp({Key? key}) : super(key: key);
+  const AgriVisionMobileApp({super.key});
 
   @override
   State<AgriVisionMobileApp> createState() => _AgriVisionMobileAppState();

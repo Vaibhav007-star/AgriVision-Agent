@@ -11,10 +11,10 @@ class HomeScreen extends StatefulWidget {
   final VoidCallback onToggleLanguage;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.isHindi,
     required this.onToggleLanguage,
-  }) : super(key: key);
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -308,8 +308,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFE8F5E9),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFE8F5E9),
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(
@@ -357,8 +357,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFE8F5E9),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFE8F5E9),
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(

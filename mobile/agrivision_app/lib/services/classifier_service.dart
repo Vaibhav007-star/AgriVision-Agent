@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
@@ -39,7 +39,7 @@ class ClassifierService {
 
       _isInitialized = true;
     } catch (e) {
-      print('Error initializing ClassifierService: $e');
+      debugPrint('Error initializing ClassifierService: $e');
       rethrow;
     }
   }
@@ -69,7 +69,7 @@ class ClassifierService {
     int pixelIndex = 0;
     int foliagePixels = 0;
     int skinPixels = 0;
-    final int totalPixels = 224 * 224;
+    const int totalPixels = 224 * 224;
 
     for (int y = 0; y < 224; y++) {
       for (int x = 0; x < 224; x++) {
