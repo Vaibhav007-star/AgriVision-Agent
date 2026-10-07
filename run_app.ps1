@@ -14,8 +14,11 @@ if (-not (Test-Path $PythonExe)) {
     exit 1
 }
 
-# Open browser to local web portal
-Start-Process "http://localhost:8000"
+# Open browser to local web portal after server starts up
+Start-Job -ScriptBlock {
+    Start-Sleep -Seconds 2
+    Start-Process "http://127.0.0.1:8000"
+} | Out-Null
 
 # Execute server with UTF-8 encoding
 & $PythonExe (Join-Path $ScriptDir "app\server.py")
