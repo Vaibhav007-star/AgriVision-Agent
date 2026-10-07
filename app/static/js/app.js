@@ -473,29 +473,53 @@ async function executeDiagnosis() {
     const diagConf = document.getElementById('diag-conf-pct');
     const diagBadge = document.getElementById('diag-conf-badge');
 
-    if (diagCrop) diagCrop.innerText = `Crop: ${data.crop}`;
-    if (diagCond) diagCond.innerText = `${data.crop} — ${data.disease}`;
-    if (diagAdvice) diagAdvice.innerText = data.advisory_message;
-    if (diagConf) diagConf.innerText = `${data.confidence_percentage}%`;
-    if (diagBadge) diagBadge.innerText = `${data.confidence_level} Certainty`;
+    if (data.is_leaf === false) {
+      if (diagCrop) diagCrop.innerText = 'Input: Non-Plant / Human Subject';
+      if (diagCond) diagCond.innerText = '⚠️ No Crop Leaf Detected';
+      if (diagAdvice) diagAdvice.innerText = data.advisory_message;
+      if (diagConf) diagConf.innerText = '0.0%';
+      if (diagBadge) {
+        diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        diagBadge.innerText = 'Rejected (Non-Leaf)';
+      }
+    } else {
+      if (diagCrop) diagCrop.innerText = `Crop: ${data.crop}`;
+      if (diagCond) diagCond.innerText = `${data.crop} — ${data.disease}`;
+      if (diagAdvice) diagAdvice.innerText = data.advisory_message;
+      if (diagConf) diagConf.innerText = `${data.confidence_percentage}%`;
+      if (diagBadge) {
+        diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-lime-500/20 text-lime-300 border border-lime-500/40';
+        diagBadge.innerText = `${data.confidence_level} Certainty`;
+      }
+    }
 
     // Top-3 Distribution
     const top3Container = document.getElementById('top3-container');
-    if (top3Container && data.top_predictions) {
-      top3Container.innerHTML = '<div class="text-[11px] font-semibold text-slate-400 mb-1">Top-3 Predicted Conditions:</div>';
-      data.top_predictions.forEach((p) => {
-        top3Container.innerHTML += `
-          <div class="space-y-1">
-            <div class="flex justify-between text-[11px] text-slate-300">
-              <span>${p.disease} (${p.crop})</span>
-              <span class="font-bold text-white">${p.confidence_pct}</span>
-            </div>
-            <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div class="h-full bg-lime-400 rounded-full" style="width: ${p.confidence * 100}%;"></div>
-            </div>
+    if (top3Container) {
+      if (data.is_leaf === false) {
+        top3Container.innerHTML = `
+          <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
+            <div class="font-bold flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4"></i> Out-of-Distribution Guardrail Triggered</div>
+            <p class="text-slate-300">The scanned image does not contain agricultural crop foliage. To prevent harmful pesticide recommendations, disease classification and chemical dosages have been halted.</p>
           </div>
         `;
-      });
+        if (window.lucide) window.lucide.createIcons();
+      } else if (data.top_predictions) {
+        top3Container.innerHTML = '<div class="text-[11px] font-semibold text-slate-400 mb-1">Top-3 Predicted Conditions:</div>';
+        data.top_predictions.forEach((p) => {
+          top3Container.innerHTML += `
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] text-slate-300">
+                <span>${p.disease} (${p.crop})</span>
+                <span class="font-bold text-white">${p.confidence_pct}</span>
+              </div>
+              <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-full bg-lime-400 rounded-full" style="width: ${p.confidence * 100}%;"></div>
+              </div>
+            </div>
+          `;
+        });
+      }
     }
 
     // Populate Dosage & Report
@@ -503,9 +527,12 @@ async function executeDiagnosis() {
     latestDiagnosticData = data;
     populatePrintableReport(data);
 
-    if (data.dosage_plan) {
-      const chemReq = document.getElementById('chem-req-val');
-      const orgReq = document.getElementById('organic-req-val');
+    const chemReq = document.getElementById('chem-req-val');
+    const orgReq = document.getElementById('organic-req-val');
+    if (data.is_leaf === false) {
+      if (chemReq) chemReq.innerText = '0 g (Disabled)';
+      if (orgReq) orgReq.innerText = '0 ml (Disabled)';
+    } else if (data.dosage_plan) {
       if (chemReq) chemReq.innerText = data.dosage_plan.chemical_required || 'N/A';
       if (orgReq) orgReq.innerText = data.dosage_plan.organic_required || 'N/A';
       updateDosageMath(parseFloat(slider ? slider.value : 1.5));
@@ -562,6 +589,23 @@ function switchRxTab(tab) {
   const content = document.getElementById('rx-content');
   if (!content) return;
   content.innerHTML = '';
+
+  if (latestDiagnosticData && latestDiagnosticData.is_leaf === false) {
+    if (tab === 'bio') {
+      if (tabs[0]) tabs[0].className = 'rx-tab text-amber-400 border-b-2 border-amber-400 pb-2';
+      content.innerHTML = '<p class="text-amber-300 font-medium">⚠️ Biological controls are not applicable for non-plant or human subjects. Please upload an agricultural crop leaf photo.</p>';
+    } else if (tab === 'chem') {
+      if (tabs[1]) tabs[1].className = 'rx-tab text-rose-400 border-b-2 border-rose-400 pb-2';
+      content.innerHTML = '<div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 space-y-1"><p class="font-bold">🛑 Chemical Treatments Strictly Disabled</p><p class="text-xs text-slate-300">Never spray agricultural fungicides or pesticides on humans, animals, or non-plant objects. Treatment formulations are strictly locked until a valid crop leaf is scanned.</p></div>';
+    } else if (tab === 'prev') {
+      if (tabs[2]) tabs[2].className = 'rx-tab text-lime-400 border-b-2 border-lime-400 pb-2';
+      content.innerHTML = '<div class="text-slate-300 space-y-1.5 text-xs"><p>&bull; <strong>Photograph Affected Leaves:</strong> Capture close-up, sharp photos under natural daylight.</p><p>&bull; <strong>Proper Framing:</strong> Ensure the plant leaf occupies at least 25% of the camera frame.</p><p>&bull; <strong>Supported Crops:</strong> Tomato, Potato, Bell Pepper, Apple, Corn.</p></div>';
+    } else if (tab === 'hindi') {
+      if (tabs[3]) tabs[3].className = 'rx-tab text-rose-400 border-b-2 border-rose-400 pb-2';
+      content.innerHTML = '<p class="text-rose-300 font-medium">🛑 गैर-पौधा चेतावनी: छवि में पौधे की पत्ती नहीं पाई गई (मानव या गैर-पौधा वस्तु)। किसी भी गैर-पौधे पर रासायनिक कीटनाशकों का छिड़काव न करें। कृपया फसल की पत्ती की स्पष्ट तस्वीर अपलोड करें।</p>';
+    }
+    return;
+  }
 
   if (tab === 'bio') {
     if (tabs[0]) tabs[0].className = 'rx-tab text-lime-400 border-b-2 border-lime-400 pb-2';

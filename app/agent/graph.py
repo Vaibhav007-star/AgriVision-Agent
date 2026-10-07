@@ -129,7 +129,9 @@ def run_agent_workflow(
     crop_stage: str = "Vegetative Growth",
     language: str = "en",
     user_question: Optional[str] = None,
-    image_path: Optional[str] = None
+    image_path: Optional[str] = None,
+    is_leaf: bool = True,
+    leaf_validation: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Executes the compiled multi-node LangGraph state machine.
@@ -140,11 +142,13 @@ def run_agent_workflow(
         
     initial_state: AgentState = {
         "image_path": image_path,
+        "is_leaf": is_leaf,
+        "leaf_validation": leaf_validation,
         "crop": crop,
         "disease": disease,
         "confidence": confidence,
-        "confidence_level": "High" if confidence >= 0.80 else ("Moderate" if confidence >= 0.60 else "Low"),
-        "is_confident": confidence >= 0.60,
+        "confidence_level": "Rejected" if not is_leaf else ("High" if confidence >= 0.80 else ("Moderate" if confidence >= 0.60 else "Low")),
+        "is_confident": is_leaf and (confidence >= 0.60),
         "crop_stage": crop_stage,
         "location": location,
         "field_acres": field_acres,

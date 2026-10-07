@@ -11,6 +11,8 @@ class AgentState(TypedDict):
     """
     # Visual & Identification Inputs
     image_path: Optional[str]
+    is_leaf: Optional[bool]
+    leaf_validation: Optional[Dict[str, Any]]
     crop: str
     disease: str
     confidence: float

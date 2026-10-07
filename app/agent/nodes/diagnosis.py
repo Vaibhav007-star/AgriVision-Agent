@@ -16,20 +16,30 @@ def diagnosis_node(state: AgentState) -> Dict[str, Any]:
     crop = state.get("crop", "Tomato")
     disease = state.get("disease", "Early Blight")
     
+    is_leaf = state.get("is_leaf", True)
     threshold = 0.60
-    is_confident = conf >= threshold
+    is_confident = is_leaf and (conf >= threshold)
     
-    if is_confident:
+    if not is_leaf:
+        conf_level = "Rejected"
+        is_confident = False
+        clarification_needed = True
+        steps.append("🛑 [Diagnosis Node] Non-leaf image detected. Bypassing agronomic RAG & halting chemical pesticide formulation.")
+        crop_info = {}
+        disease_info = {}
+    elif is_confident:
         conf_level = "High" if conf >= 0.80 else "Moderate"
         steps.append(f"✅ [Diagnosis Node] Confidence check passed: {conf*100:.1f}% >= {threshold*100:.0f}% threshold ({conf_level} certainty).")
         clarification_needed = False
+        crop_info = get_crop_info(crop)
+        disease_info = get_disease_info(crop, disease)
     else:
         conf_level = "Low"
+        is_confident = False
         steps.append(f"⚠️ [Diagnosis Node] Low confidence: {conf*100:.1f}% < {threshold*100:.0f}%. Flagging clarification needed.")
         clarification_needed = True
-        
-    crop_info = get_crop_info(crop)
-    disease_info = get_disease_info(crop, disease)
+        crop_info = get_crop_info(crop)
+        disease_info = get_disease_info(crop, disease)
     
     return {
         "confidence_level": conf_level,

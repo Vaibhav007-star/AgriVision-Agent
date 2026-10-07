@@ -22,7 +22,8 @@ from src.config import config
 from src.utils.image_processing import (
     load_and_validate_image,
     preprocess_for_model,
-    generate_gradcam_overlay
+    generate_gradcam_overlay,
+    validate_leaf_image
 )
 from src.utils.dataset import load_class_indices
 from src.models.model_builder import build_transfer_learning_model
@@ -68,6 +69,27 @@ class CropDiseaseClassifier:
         confidence validation, and optional Grad-CAM overlay.
         """
         pil_image = load_and_validate_image(image_input)
+        
+        # Botanical & Out-of-Distribution Leaf Guardrail
+        leaf_check = validate_leaf_image(pil_image)
+        if not leaf_check["is_leaf"]:
+            return {
+                "is_leaf": False,
+                "crop": "Non-Plant Object",
+                "disease": "No Plant Leaf Detected",
+                "class_name": "Non_Leaf",
+                "confidence": 0.0,
+                "confidence_pct": "0.0%",
+                "is_confident": False,
+                "is_healthy": False,
+                "severity_level": "N/A",
+                "pathogen_type": "N/A",
+                "top3_predictions": [],
+                "gradcam_overlay": None,
+                "advisory_message": leaf_check["message"],
+                "leaf_validation": leaf_check
+            }
+            
         input_tensor = preprocess_for_model(pil_image, target_size=(224, 224), normalization="mobilenet")
         
         # Forward pass
@@ -116,6 +138,8 @@ class CropDiseaseClassifier:
                 gradcam_overlay = None
                 
         return {
+            "is_leaf": True,
+            "leaf_validation": leaf_check,
             "predicted_index": predicted_idx,
             "class_name": class_meta["class_name"],
             "crop": class_meta["crop"],

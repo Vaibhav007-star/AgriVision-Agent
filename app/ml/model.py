@@ -40,8 +40,12 @@ Data Flow Pipeline:
 """
 
 from typing import Tuple, Dict, Any, Optional
-import tensorflow as tf
-from tensorflow.keras import layers, models, applications, regularizers
+try:
+    import tensorflow as tf
+    from tensorflow.keras import layers, models, applications, regularizers
+except Exception:
+    tf = None
+    layers = models = applications = regularizers = None
 
 
 def build_custom_cnn(

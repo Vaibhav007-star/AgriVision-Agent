@@ -60,3 +60,6 @@ def preprocess_for_inference(
     batch_tensor = np.expand_dims(norm_tensor, axis=0)
     return batch_tensor, resized
 
+
+from src.utils.image_processing import validate_leaf_image
+

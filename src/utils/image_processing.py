@@ -197,3 +197,117 @@ def generate_gradcam_overlay(original_image: Image.Image, heatmap_2d: np.ndarray
     superimposed = np.uint8(img_np * (1 - alpha) + heatmap_color_rgb * alpha)
     return Image.fromarray(superimposed)
 
+
+def validate_leaf_image(
+    image: Image.Image,
+    min_foliage_ratio: float = 10.0,
+    min_texture_var: float = 8.0,
+    skin_threshold_ratio: float = 12.0
+) -> Dict[str, Any]:
+    """
+    Botanical & Out-of-Distribution (OOD) Guardrail:
+    Validates whether the input photograph contains genuine agricultural crop leaf foliage.
+    Detects and rejects non-plant objects, human faces/skin, animals, and blank backgrounds.
+    
+    Returns:
+        Dict with keys:
+            - is_leaf: bool (True if valid crop leaf, False if rejected)
+            - reason: str ('valid_leaf', 'human_or_skin_detected', 'non_plant_object', 'blank_or_uniform_surface')
+            - foliage_percentage: float (percentage of plant foliage pixels)
+            - skin_percentage: float (percentage of human skin pixels)
+            - mean_gli: float (Green Leaf Index)
+            - texture_variance: float (Laplacian edge texture)
+            - message: str (English user explanation)
+            - message_hi: str (Hindi user explanation)
+    """
+    img_np = np.array(image.convert("RGB"))
+    h_orig, w_orig = img_np.shape[:2]
+    total_pixels = max(1, h_orig * w_orig)
+    
+    r = img_np[:, :, 0].astype(float)
+    g = img_np[:, :, 1].astype(float)
+    b = img_np[:, :, 2].astype(float)
+    
+    # 1. Texture Check (Laplacian Variance): Detect blank walls, solid colors, digital icons
+    gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
+    texture_var = float(cv2.Laplacian(gray, cv2.CV_64F).var())
+    if texture_var < min_texture_var:
+        return {
+            "is_leaf": False,
+            "reason": "blank_or_uniform_surface",
+            "foliage_percentage": 0.0,
+            "skin_percentage": 0.0,
+            "mean_gli": 0.0,
+            "texture_variance": round(texture_var, 2),
+            "message": "The uploaded image appears to be a blank or uniform surface without leaf biological texture.",
+            "message_hi": "अपलोड की गई तस्वीर एक सादी सतह है जिसमें पौधे की पत्ती की कोई जैविक बनावट नहीं है।"
+        }
+        
+    # 2. Human Skin Chrominance & Color Detection (YCbCr + HSV + RGB)
+    y = 0.299 * r + 0.587 * g + 0.114 * b
+    cr = (r - y) * 0.713 + 128
+    cb = (b - y) * 0.564 + 128
+    hsv = cv2.cvtColor(img_np, cv2.COLOR_RGB2HSV)
+    h = hsv[:, :, 0]
+    s = hsv[:, :, 1]
+    v = hsv[:, :, 2]
+    
+    skin_mask = (
+        (r > 75) & (g > 35) & (b > 18) &
+        (r > g) & (r > b) & ((r - g) >= 8) &
+        (cr >= 130) & (cr <= 178) & (cb >= 75) & (cb <= 130) &
+        (((h <= 18) | (h >= 168)) & (s >= 20) & (s <= 200) & (v >= 45))
+    )
+    skin_pct = float(np.sum(skin_mask) / total_pixels * 100)
+    
+    # 3. Botanical Plant Foliage Detection (Green, Lime, Yellow-Green, Chlorotic/Blighted Tissue)
+    green_foliage = (h >= 24) & (h <= 98) & (s >= 18) & (v >= 20)
+    chlorosis_spots = (h >= 19) & (h < 24) & (s >= 20) & (v >= 25) & (g >= b)
+    green_dom = (g > r * 0.88) & (g > b * 1.02) & (g > 30)
+    
+    foliage_mask = green_foliage | chlorosis_spots | green_dom
+    foliage_pct = float(np.sum(foliage_mask) / total_pixels * 100)
+    
+    # 4. Green Leaf Index (GLI)
+    denom = 2 * g + r + b
+    denom[denom == 0] = 1e-5
+    gli = (2 * g - r - b) / denom
+    mean_gli = float(np.mean(gli))
+    
+    # Rule A: Human skin dominant over foliage
+    if skin_pct > skin_threshold_ratio and skin_pct > foliage_pct * 0.5:
+        return {
+            "is_leaf": False,
+            "reason": "human_or_skin_detected",
+            "foliage_percentage": round(foliage_pct, 1),
+            "skin_percentage": round(skin_pct, 1),
+            "mean_gli": round(mean_gli, 3),
+            "texture_variance": round(texture_var, 2),
+            "message": "Human subject detected. AgriVision Agent is designed strictly for agricultural crop leaf pathology, not human diagnostics. No crop disease or pesticide treatment will be prescribed.",
+            "message_hi": "मानव चेहरा या त्वचा पहचानी गई है। एग्रीविज़न एजेंट केवल फसलों (टमाटर, आलू, मिर्च, सेब आदि) की पत्तियों के रोग निदान के लिए बनाया गया है। किसी गैर-पौधे के लिए कोई कीटनाशक उपचार नहीं दिया जाएगा।"
+        }
+        
+    # Rule B: Insufficient botanical foliage coverage (cars, furniture, animals, rooms, blue objects)
+    if foliage_pct < min_foliage_ratio or (foliage_pct < 18.0 and mean_gli < -0.05):
+        return {
+            "is_leaf": False,
+            "reason": "non_plant_object",
+            "foliage_percentage": round(foliage_pct, 1),
+            "skin_percentage": round(skin_pct, 1),
+            "mean_gli": round(mean_gli, 3),
+            "texture_variance": round(texture_var, 2),
+            "message": "No crop leaf detected (insufficient plant foliage in image). Please upload a clear close-up photograph of an affected crop leaf to receive diagnosis and treatment.",
+            "message_hi": "पौधे की पत्ती नहीं पाई गई (छवि में पत्तों का क्षेत्र बहुत कम है)। कृपया सही रोग निदान और उपचार के लिए पौधे की पत्ती की स्पष्ट तस्वीर अपलोड करें।"
+        }
+        
+    return {
+        "is_leaf": True,
+        "reason": "valid_leaf",
+        "foliage_percentage": round(foliage_pct, 1),
+        "skin_percentage": round(skin_pct, 1),
+        "mean_gli": round(mean_gli, 3),
+        "texture_variance": round(texture_var, 2),
+        "message": "Valid crop leaf foliage successfully detected.",
+        "message_hi": "पौधे की पत्ती सफलतापूर्वक पहचानी गई।"
+    }
+

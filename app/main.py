@@ -179,45 +179,50 @@ def render_disease_detection():
             tab_pred, tab_cam, tab_cv, tab_mask = st.tabs(["🧠 CNN Diagnosis", "🔥 Grad-CAM Attention", "✨ CLAHE & Indices", "🍃 Foliage Segmentation"])
             
             with tab_pred:
-                crop_name = prediction["crop"]
-                disease_name = prediction["disease"]
-                is_healthy = prediction["is_healthy"]
-                conf_pct = prediction["confidence_percentage"]
-                
-                status_bg = "#dcfce7" if is_healthy else "#fee2e2"
-                status_color = "#166534" if is_healthy else "#991b1b"
-                
-                st.markdown(f"""
-                <div style="background-color: {status_bg}; padding: 1.2rem; border-radius: 10px; margin-bottom: 1rem; border-left: 5px solid {status_color};">
-                    <h3 style="margin:0; color: {status_color};">
-                        {crop_name} — {disease_name}
-                    </h3>
-                    <div style="margin-top: 0.5rem; display: flex; gap: 8px;">
-                        <span class="{'badge-healthy' if is_healthy else 'badge-diseased'}">
-                            {'HEALTHY CROP' if is_healthy else 'PATHOGEN DETECTED'}
-                        </span>
-                        <span class="badge-pill">Severity: {prediction['severity_level']}</span>
-                        <span class="badge-pill">Type: {prediction['pathogen_type']}</span>
+                is_leaf = prediction.get("is_leaf", True)
+                if not is_leaf:
+                    st.error(f"🛑 **Non-Crop Leaf Detected (Rejected):** {prediction.get('advisory_message', 'Input image does not contain plant foliage.')}")
+                    st.warning("⚠️ **Safety Guardrail:** Agricultural fungicides and chemical dosages are strictly disabled for non-plant and human images. Please upload a clear photograph of a plant leaf.")
+                else:
+                    crop_name = prediction["crop"]
+                    disease_name = prediction["disease"]
+                    is_healthy = prediction["is_healthy"]
+                    conf_pct = prediction["confidence_percentage"]
+                    
+                    status_bg = "#dcfce7" if is_healthy else "#fee2e2"
+                    status_color = "#166534" if is_healthy else "#991b1b"
+                    
+                    st.markdown(f"""
+                    <div style="background-color: {status_bg}; padding: 1.2rem; border-radius: 10px; margin-bottom: 1rem; border-left: 5px solid {status_color};">
+                        <h3 style="margin:0; color: {status_color};">
+                            {crop_name} — {disease_name}
+                        </h3>
+                        <div style="margin-top: 0.5rem; display: flex; gap: 8px;">
+                            <span class="{'badge-healthy' if is_healthy else 'badge-diseased'}">
+                                {'HEALTHY CROP' if is_healthy else 'PATHOGEN DETECTED'}
+                            </span>
+                            <span class="badge-pill">Severity: {prediction['severity_level']}</span>
+                            <span class="badge-pill">Type: {prediction['pathogen_type']}</span>
+                        </div>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                st.markdown(f"**Model Confidence:** `{conf_pct}%`")
-                st.progress(conf_pct / 100.0)
-                
-                if not prediction["is_confident"]:
-                    st.warning(f"⚠️ Low confidence prediction (< {prediction['confidence_threshold']*100}% threshold). Advisory agent will request leaf re-capture.")
-                
-                st.markdown("##### 📊 Top-3 Probable Predictions:")
-                top3_df = pd.DataFrame(prediction["top3_predictions"])[["full_name", "confidence_pct"]]
-                top3_df.columns = ["Crop & Disease Class", "Probability"]
-                st.table(top3_df)
-                
-                if st.button("🤖 Send to AI Agent for Autonomous Action Plan", type="primary"):
-                    save_scan(
-                        crop_name=crop_name,
-                        condition=disease_name,
-                        is_healthy=is_healthy,
+                    """, unsafe_allow_html=True)
+                    
+                    st.markdown(f"**Model Confidence:** `{conf_pct}%`")
+                    st.progress(conf_pct / 100.0)
+                    
+                    if not prediction["is_confident"]:
+                        st.warning(f"⚠️ Low confidence prediction (< {prediction['confidence_threshold']*100}% threshold). Advisory agent will request leaf re-capture.")
+                    
+                    st.markdown("##### 📊 Top-3 Probable Predictions:")
+                    top3_df = pd.DataFrame(prediction["top3_predictions"])[["full_name", "confidence_pct"]]
+                    top3_df.columns = ["Crop & Disease Class", "Probability"]
+                    st.table(top3_df)
+                    
+                    if st.button("🤖 Send to AI Agent for Autonomous Action Plan", type="primary"):
+                        save_scan(
+                            crop_name=crop_name,
+                            condition=disease_name,
+                            is_healthy=is_healthy,
                         confidence=prediction["confidence"],
                         top3_predictions=prediction["top3_predictions"],
                         ai_diagnosis=f"Detected {crop_name} {disease_name} with {conf_pct}% confidence.",

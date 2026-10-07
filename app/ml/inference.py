@@ -7,10 +7,13 @@ from pathlib import Path
 import json
 import numpy as np
 from PIL import Image
-import tensorflow as tf
+try:
+    import tensorflow as tf
+except Exception:
+    tf = None
 
 from app.ml.preprocessing import load_and_validate_image, preprocess_for_inference
-from src.utils.image_processing import generate_gradcam_overlay
+from src.utils.image_processing import generate_gradcam_overlay, validate_leaf_image
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -23,7 +26,7 @@ def predict_crop_disease(
 ) -> Dict[str, Any]:
     """
     Executes inference pipeline:
-    Validate -> Resize (224x224) -> Normalize ([-1, 1]) -> Model Predict -> Top-3 -> Confidence Gate -> Grad-CAM.
+    Leaf Validation -> Resize (224x224) -> Normalize ([-1, 1]) -> Model Predict -> Top-3 -> Confidence Gate -> Grad-CAM.
     """
     if model_path is None:
         model_path = str(BASE_DIR / "models" / "saved_models" / "crop_disease_model.keras")
@@ -38,6 +41,27 @@ def predict_crop_disease(
     raw_img = load_and_validate_image(image_input)
     batch_tensor, resized_img = preprocess_for_inference(raw_img)
     
+    # 0. Botanical & Out-of-Distribution Leaf Guardrail
+    leaf_validation = validate_leaf_image(raw_img)
+    if not leaf_validation["is_leaf"]:
+        return {
+            "is_leaf": False,
+            "crop": "Non-Plant Object",
+            "disease": "No Plant Leaf Detected",
+            "is_healthy": False,
+            "confidence": 0.0,
+            "confidence_percentage": 0.0,
+            "confidence_level": "Rejected",
+            "is_confident": False,
+            "clarification_needed": True,
+            "advisory_message": leaf_validation["message"],
+            "advisory_message_hi": leaf_validation["message_hi"],
+            "top_predictions": [],
+            "gradcam_overlay": None,
+            "processed_image": resized_img,
+            "leaf_validation": leaf_validation
+        }
+    
     # Load class indices
     class_indices = {}
     if Path(class_indices_path).exists():
@@ -47,10 +71,16 @@ def predict_crop_disease(
             
     # Load model and predict
     model = None
-    if Path(model_path).exists():
-        model = tf.keras.models.load_model(model_path)
-        preds = model.predict(batch_tensor, verbose=0)[0]
-    else:
+    preds = None
+    if tf is not None and Path(model_path).exists():
+        try:
+            model = tf.keras.models.load_model(model_path)
+            preds = model.predict(batch_tensor, verbose=0)[0]
+        except Exception:
+            model = None
+            preds = None
+
+    if preds is None:
         num_c = len(class_indices) or 3
         preds = np.ones(num_c) / num_c
         
@@ -111,6 +141,8 @@ def predict_crop_disease(
             cam_overlay = None
             
     return {
+        "is_leaf": True,
+        "leaf_validation": leaf_validation,
         "crop": best["crop"],
         "disease": best["disease"],
         "is_healthy": best["is_healthy"],

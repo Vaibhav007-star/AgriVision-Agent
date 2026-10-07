@@ -12,7 +12,10 @@ try:
 except (ImportError, Exception):
     faiss = None
 
-from sentence_transformers import SentenceTransformer
+try:
+    from sentence_transformers import SentenceTransformer
+except Exception:
+    SentenceTransformer = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
@@ -71,7 +74,13 @@ class FAISSVectorStore:
             except Exception:
                 self.embeddings = None
             
-        self.embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        if SentenceTransformer is not None:
+            try:
+                self.embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+            except Exception:
+                self.embedding_model = None
+        else:
+            self.embedding_model = None
         
     def similarity_search(
         self,
@@ -83,24 +92,38 @@ class FAISSVectorStore:
         """
         Computes cosine similarity search over vector store chunks.
         """
-        if (self.index is None and self.embeddings is None) or self.embedding_model is None:
+        if (self.index is None and self.embeddings is None and not self.metadata):
             self._load_or_build()
             
-        query_vec = self.embedding_model.encode([query], normalize_embeddings=True)
-        query_vec = np.array(query_vec, dtype=np.float32)
-        
-        if self.index is not None:
-            raw_scores, raw_indices = self.index.search(query_vec, min(top_k * 3, self.index.ntotal))
-            scores = raw_scores[0]
-            indices = raw_indices[0]
+        if self.embedding_model is not None:
+            query_vec = self.embedding_model.encode([query], normalize_embeddings=True)
+            query_vec = np.array(query_vec, dtype=np.float32)
+            
+            if self.index is not None:
+                raw_scores, raw_indices = self.index.search(query_vec, min(top_k * 3, self.index.ntotal))
+                scores = raw_scores[0]
+                indices = raw_indices[0]
+            else:
+                if self.embeddings is None and self.metadata:
+                    texts = [c.get("clean_text", c.get("text", "")) for c in self.metadata]
+                    self.embeddings = np.array(self.embedding_model.encode(texts, normalize_embeddings=True), dtype=np.float32)
+                sims = np.dot(query_vec, self.embeddings.T)[0]
+                ranked = np.argsort(sims)[::-1][:min(top_k * 3, len(sims))]
+                scores = sims[ranked]
+                indices = ranked
         else:
-            if self.embeddings is None and self.metadata:
-                texts = [c.get("clean_text", c.get("text", "")) for c in self.metadata]
-                self.embeddings = np.array(self.embedding_model.encode(texts, normalize_embeddings=True), dtype=np.float32)
-            sims = np.dot(query_vec, self.embeddings.T)[0]
-            ranked = np.argsort(sims)[::-1][:min(top_k * 3, len(sims))]
-            scores = sims[ranked]
-            indices = ranked
+            # Lexical term frequency fallback when deep embeddings are blocked
+            q_terms = [t.lower() for t in query.split() if len(t) > 2]
+            scored = []
+            for idx, c in enumerate(self.metadata):
+                txt = (c.get("clean_text", "") + " " + c.get("crop", "") + " " + c.get("disease", "")).lower()
+                matches = sum(1 for term in q_terms if term in txt)
+                score = matches / (len(q_terms) or 1)
+                if score > 0.0:
+                    scored.append((score, idx))
+            scored.sort(reverse=True, key=lambda x: x[0])
+            scores = [s[0] for s in scored[:top_k * 3]]
+            indices = [s[1] for s in scored[:top_k * 3]]
         
         results = []
         for score, idx in zip(scores, indices):

@@ -217,8 +217,10 @@ async def diagnose_leaf(
     clahe_image = apply_clahe(pil_image)
     seg_result = segment_leaf_mask(pil_image)
     
-    # 2. Deep Learning Inference & Grad-CAM
+    # 2. Deep Learning Inference & Botanical OOD Guardrail
     inference_result = predict_crop_disease(pil_image, compute_gradcam=True)
+    is_leaf = inference_result.get("is_leaf", True)
+    leaf_val = inference_result.get("leaf_validation", {})
     
     crop = inference_result["crop"]
     disease = inference_result["disease"]
@@ -232,16 +234,28 @@ async def diagnose_leaf(
         field_acres=field_acres,
         location=location,
         crop_stage=crop_stage,
-        language=language
+        language=language,
+        is_leaf=is_leaf,
+        leaf_validation=leaf_val
     )
     
     from app.agent.tools.dosage_tool import calculate_spray_dosage
 
-    final_prescription = agent_result.get("final_prescription", {})
     weather_data = agent_result.get("weather", {})
-    dosage_plan = agent_result.get("dosage_plan", {})
-    if not dosage_plan:
-        dosage_plan = calculate_spray_dosage(crop, disease, field_acres=field_acres)
+    
+    # If not a leaf, STRICTLY suppress all chemical/biological fungicide & knapsack dosages
+    if not is_leaf:
+        final_prescription = None
+        dosage_plan = None
+        treatment_str = "Halted: Input image is NOT a crop leaf (Human or non-plant object detected)."
+        prevention_str = "Upload a genuine leaf photo from Tomato, Potato, Pepper, Apple, or Corn crops."
+    else:
+        final_prescription = agent_result.get("final_prescription", {})
+        dosage_plan = agent_result.get("dosage_plan", {})
+        if not dosage_plan:
+            dosage_plan = calculate_spray_dosage(crop, disease, field_acres=field_acres)
+        treatment_str = "; ".join(final_prescription.get("chemical_controls", [])) if final_prescription else ""
+        prevention_str = "; ".join(final_prescription.get("cultural_prevention", [])) if final_prescription else ""
     
     # 4. Save Record to SQLite
     prediction_id = save_prediction(
@@ -251,9 +265,9 @@ async def diagnose_leaf(
         crop_stage=crop_stage,
         language=language,
         recommendation=inference_result.get("advisory_message", ""),
-        weather_context=f"{location} (RH: {weather_data.get('humidity_pct', 75)}%)",
-        treatment="; ".join(final_prescription.get("chemical_controls", [])),
-        prevention="; ".join(final_prescription.get("cultural_prevention", [])),
+        weather_context=f"{location} (RH: {weather_data.get('humidity_pct', 75)}%)" if is_leaf else "N/A",
+        treatment=treatment_str,
+        prevention=prevention_str,
         top3_predictions=inference_result.get("top_predictions", [])
     )
     
@@ -265,6 +279,8 @@ async def diagnose_leaf(
     
     return {
         "success": True,
+        "is_leaf": is_leaf,
+        "leaf_validation": leaf_val,
         "prediction_id": prediction_id,
         "crop": crop,
         "disease": disease,
@@ -275,8 +291,8 @@ async def diagnose_leaf(
         "is_confident": inference_result["is_confident"],
         "advisory_message": inference_result["advisory_message"],
         "top_predictions": inference_result["top_predictions"],
-        "lesion_percentage": seg_result["lesion_percentage"],
-        "weather": weather_data,
+        "lesion_percentage": seg_result["lesion_percentage"] if is_leaf else 0.0,
+        "weather": weather_data if is_leaf else {},
         "dosage_plan": dosage_plan,
         "prescription": final_prescription,
         "reasoning_steps": agent_result.get("reasoning_steps", []),
