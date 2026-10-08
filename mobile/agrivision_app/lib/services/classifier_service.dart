@@ -71,6 +71,7 @@ class ClassifierService {
     int skinPixels = 0;
     int centerSkinPixels = 0;
     int centerFoliagePixels = 0;
+    int centerWhitePixels = 0;
     const int totalPixels = 224 * 224;
     const double centerTotalPixels = 135.0 * 135.0; // Central ~60% region (44..179)
 
@@ -95,13 +96,23 @@ class ClassifierService {
             r > g && r > b && (r - b) >= 12 && (r - g) >= 6 &&
             cr >= 132 && cr <= 182 && cb >= 75 && cb <= 135 && (cr - cb) >= 20);
 
+        // Achromatic white (white shirts, white dog fur, paper)
+        final num maxVal = [r, g, b].reduce((curr, next) => curr > next ? curr : next);
+        final num minVal = [r, g, b].reduce((curr, next) => curr < next ? curr : next);
+        final double satVal = maxVal == 0 ? 0.0 : (maxVal - minVal) / maxVal;
+        final bool isWhiteAchromatic = (satVal < 0.18 && maxVal > 165);
+
         if (isSkinPixel) {
           skinPixels++;
           if (isCenter) centerSkinPixels++;
         }
 
-        // Botanical foliage check (Strictly excluding human skin)
-        final bool isFoliagePixel = !isSkinPixel && (
+        if (isWhiteAchromatic && isCenter) {
+          centerWhitePixels++;
+        }
+
+        // Botanical foliage check (Strictly excluding human skin and white objects)
+        final bool isFoliagePixel = !isSkinPixel && !isWhiteAchromatic && (
             (g > r * 0.92 && g > b * 1.05 && g > 30) ||
             (g > 55 && g > r * 0.90 && g > b)
         );
@@ -117,28 +128,41 @@ class ClassifierService {
     final double skinRatio = skinPixels / totalPixels;
     final double centerSkinRatio = centerSkinPixels / centerTotalPixels;
     final double centerFoliageRatio = centerFoliagePixels / centerTotalPixels;
+    final double centerWhiteRatio = centerWhitePixels / centerTotalPixels;
 
-    // Hardened human subject rejection (rejects selfies/portraits regardless of background clothing or walls)
+    // Hardened guardrail rules
     final bool isHuman = (centerSkinRatio >= 0.12 && centerFoliageRatio < 0.65) ||
         (skinRatio >= 0.14) ||
         (centerSkinRatio >= 0.20);
-    final bool isNonLeaf = isHuman || foliageRatio < 0.10;
+    final bool isAnimalOrClothing = (centerWhiteRatio >= 0.12 && centerFoliageRatio < 0.75);
+    final bool isLandscapeOrLawn = (centerFoliageRatio < 0.60);
+    final bool isNonLeaf = isHuman || isAnimalOrClothing || isLandscapeOrLawn || foliageRatio < 0.10;
 
     if (isNonLeaf) {
+      String reasonEn = "No crop leaf detected. Please upload a close-up photo of an authentic crop leaf.";
+      String reasonHi = "छवि में पौधे के पत्तों के लक्षण नहीं मिले। कृपया पौधे की पत्ती की स्पष्ट तस्वीर लें।";
+
+      if (isHuman) {
+        reasonEn = "Human subject detected. AgriVision is strictly designed for crop leaf pathology, not human medical diagnostics.";
+        reasonHi = "मानव त्वचा या चेहरा पहचाना गया। यह ऐप केवल फसल की पत्तियों के रोग निदान के लिए है।";
+      } else if (isAnimalOrClothing) {
+        reasonEn = "Animal or synthetic clothing subject detected (dog/pet or apparel). AgriVision tests only authentic agricultural crop leaves.";
+        reasonHi = "पालतू जानवर या कपड़े पहचाने गए हैं। एग्रीविज़न केवल समर्थित फसलों की पत्तियों का परीक्षण करता है।";
+      } else if (isLandscapeOrLawn) {
+        reasonEn = "Landscape scene or lawn turf detected. Please photograph a close-up crop leaf blade (Tomato, Potato, Pepper, etc.).";
+        reasonHi = "परिदृश्य या घास का मैदान पहचाना गया। कृपया फसल की पत्ती की क्लोज-अप तस्वीर लें।";
+      }
+
       final nonLeafDetail = DiseaseDetail(
-        cropEn: "Non-Plant Subject",
-        cropHi: "गैर-पौधा छवि",
+        cropEn: "Non-Plant / OOD Subject",
+        cropHi: "गैर-फसल छवि",
         diseaseEn: "No Crop Leaf Detected",
         diseaseHi: "पत्ती की पहचान नहीं हुई",
         isHealthy: false,
         severity: "Rejected",
         pathogenType: "Non-Botanical Input",
-        symptomsEn: isHuman
-            ? "Human subject detected. AgriVision is strictly designed for crop leaf pathology, not human medical diagnostics."
-            : "No crop leaf detected (insufficient foliage in image). Please upload a close-up photo of a plant leaf.",
-        symptomsHi: isHuman
-            ? "मानव त्वचा या चेहरा पहचाना गया। यह ऐप केवल फसल की पत्तियों के रोग निदान के लिए है।"
-            : "छवि में पौधे के पत्तों के लक्षण नहीं मिले। कृपया पौधे की पत्ती की स्पष्ट तस्वीर लें।",
+        symptomsEn: reasonEn,
+        symptomsHi: reasonHi,
         chemicalTreatment: TreatmentInfo(
           nameEn: "Disabled (Do not spray chemicals on humans or non-plants)",
           nameHi: "अक्षम (मानव या गैर-पौधों पर कीटनाशक न छिड़कें)",

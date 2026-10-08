@@ -22,11 +22,13 @@ def predict_crop_disease(
     image_input: Union[str, Path, Image.Image, np.ndarray],
     model_path: Optional[str] = None,
     class_indices_path: Optional[str] = None,
-    compute_gradcam: bool = True
+    compute_gradcam: bool = True,
+    target_crop: str = "auto"
 ) -> Dict[str, Any]:
     """
     Executes inference pipeline:
-    Leaf Validation -> Resize (224x224) -> Normalize ([-1, 1]) -> Model Predict -> Top-3 -> Confidence Gate -> Grad-CAM.
+    Leaf Validation -> Resize (224x224) -> Normalize ([-1, 1]) -> Model Predict -> Top-3 -> Confidence Gate -> Target Crop Consistency -> Grad-CAM.
+    Only evaluates authentic project crops (Tomato, Potato, Pepper, Apple, Corn).
     """
     if model_path is None:
         model_path = str(BASE_DIR / "models" / "saved_models" / "crop_disease_model.keras")
@@ -55,7 +57,7 @@ def predict_crop_disease(
             "is_confident": False,
             "clarification_needed": True,
             "advisory_message": leaf_validation["message"],
-            "advisory_message_hi": leaf_validation["message_hi"],
+            "advisory_message_hi": leaf_validation.get("message_hi", "पौधे की पत्ती नहीं पाई गई।"),
             "top_predictions": [],
             "gradcam_overlay": None,
             "processed_image": resized_img,
@@ -109,22 +111,64 @@ def predict_crop_disease(
     best = top_predictions[0]
     best_conf = best["confidence"]
     
-    # Confidence Level
-    if best_conf >= 0.80:
+    # Target Crop Consistency Check:
+    # If the user selected a specific project crop (e.g., "Tomato", "Potato"), verify image matches
+    if target_crop and target_crop.lower() != "auto":
+        norm_target = target_crop.strip().lower()
+        pred_crop = best["crop"].strip().lower()
+        # Check if predicted crop matches target
+        crop_matches = (norm_target in pred_crop) or (pred_crop in norm_target)
+        if not crop_matches:
+            return {
+                "is_leaf": False,
+                "crop": f"Non-{target_crop} Subject",
+                "disease": "Target Crop Mismatch",
+                "is_healthy": False,
+                "confidence": 0.0,
+                "confidence_percentage": round(best_conf * 100, 1),
+                "confidence_level": "Rejected",
+                "is_confident": False,
+                "clarification_needed": True,
+                "advisory_message": f"Target crop mismatch: You specified '{target_crop}', but the image does not match {target_crop} foliage (predicted: '{best['crop']}'). AgriVision only tests the specific selected crop.",
+                "advisory_message_hi": f"लक्षित फसल बेमेल: आपने '{target_crop}' चुना था, लेकिन पत्ती {target_crop} से मेल नहीं खाती।",
+                "top_predictions": [],
+                "gradcam_overlay": None,
+                "processed_image": resized_img,
+                "leaf_validation": leaf_validation
+            }
+
+    # Strict OOD Softmax Confidence Gate:
+    # If confidence is below 70%, the image is Out-of-Distribution (animal, landscape, or non-project plant)
+    if best_conf < 0.70:
+        return {
+            "is_leaf": False,
+            "crop": "Non-Project / OOD Subject",
+            "disease": "Uncertain (Out-of-Distribution)",
+            "is_healthy": False,
+            "confidence": 0.0,
+            "confidence_percentage": round(best_conf * 100, 1),
+            "confidence_level": "Rejected",
+            "is_confident": False,
+            "clarification_needed": True,
+            "advisory_message": f"Image classification confidence ({best_conf*100:.1f}%) is too low or out-of-distribution. AgriVision is strictly trained on project crops (Tomato, Potato, Pepper, Apple, Corn). Please test only authentic project crop leaves.",
+            "advisory_message_hi": "छवि वर्गीकरण की सटीकता कम है या यह समर्थित परियोजना फसलों से संबंधित नहीं है। कृपया केवल समर्थित फसलों की स्पष्ट पत्ती अपलोड करें।",
+            "top_predictions": [],
+            "gradcam_overlay": None,
+            "processed_image": resized_img,
+            "leaf_validation": leaf_validation
+        }
+    
+    # Confidence Level for genuine in-distribution leaves
+    if best_conf >= 0.85:
         conf_level = "High"
         is_confident = True
         clarification_needed = False
         advice = "Diagnosis confidence is high. Treatment recommendations are ready."
-    elif best_conf >= 0.60:
+    else:
         conf_level = "Moderate"
         is_confident = True
         clarification_needed = False
         advice = "Diagnosis confidence is moderate. Cross-verification with visual symptoms is recommended."
-    else:
-        conf_level = "Low"
-        is_confident = False
-        clarification_needed = True
-        advice = "Image confidence is low. Please upload a clearer image showing the affected leaf under natural lighting."
         
     # Grad-CAM
     cam_overlay = None

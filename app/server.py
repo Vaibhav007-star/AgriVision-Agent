@@ -174,7 +174,8 @@ async def diagnose_leaf(
     field_acres: float = Form(1.5),
     crop_stage: str = Form("Vegetative Growth"),
     location: str = Form("Karnal, Haryana"),
-    language: str = Form("en")
+    language: str = Form("en"),
+    target_crop: str = Form("auto")
 ) -> Dict[str, Any]:
     """
     Complete end-to-end diagnostic pipeline:
@@ -226,8 +227,8 @@ async def diagnose_leaf(
     seg_result = segment_leaf_mask(pil_image)
     
     # 2. Deep Learning Inference & Botanical OOD Guardrail
-    inference_result = predict_crop_disease(pil_image, compute_gradcam=True)
-    is_leaf = inference_result.get("is_leaf", True)
+    inference_result = predict_crop_disease(pil_image, compute_gradcam=True, target_crop=target_crop)
+    is_leaf = inference_result.get("is_leaf", True) and (inference_result.get("confidence_level") != "Rejected")
     leaf_val = inference_result.get("leaf_validation", {})
     
     crop = inference_result["crop"]
@@ -255,8 +256,8 @@ async def diagnose_leaf(
     if not is_leaf:
         final_prescription = None
         dosage_plan = None
-        treatment_str = "Halted: Input image is NOT a crop leaf (Human or non-plant object detected)."
-        prevention_str = "Upload a genuine leaf photo from Tomato, Potato, Pepper, Apple, or Corn crops."
+        treatment_str = f"Halted: Input rejected as {crop}. {inference_result.get('advisory_message', '')}"
+        prevention_str = "Upload a genuine close-up leaf photo from supported project crops: Tomato, Potato, Pepper, Apple, Corn."
     else:
         final_prescription = agent_result.get("final_prescription", {})
         dosage_plan = agent_result.get("dosage_plan", {})

@@ -414,6 +414,27 @@
                 <input type="range" id="acres-slider" min="0.25" max="10.0" step="0.25" value="1.5" class="w-full accent-lime-500 cursor-pointer">
               </div>
 
+              <!-- Target Crop Selector (Strict Project Plant Filtering) -->
+              <div>
+                <label class="block text-slate-300 text-xs mb-1 font-semibold flex items-center justify-between">
+                  <span>Target Crop (लक्षित फसल)</span>
+                  <span class="text-[10px] text-lime-400 font-mono">Strict Project Filter</span>
+                </label>
+                <select id="target-crop-select" class="w-full bg-[#0b130e] border border-lime-500/40 rounded-lg px-3 py-2 text-xs sm:text-sm text-lime-300 font-medium focus:border-lime-400 outline-none">
+                  <option value="auto" selected>🌿 Auto-Detect Project Crop (स्वचालित पहचान)</option>
+                  <option value="Tomato">🍅 Tomato (टमाटर)</option>
+                  <option value="Potato">🥔 Potato (आलू)</option>
+                  <option value="Pepper Bell">🫑 Pepper Bell / Capsicum (शिमला मिर्च)</option>
+                  <option value="Apple">🍎 Apple (सेब)</option>
+                  <option value="Corn">🌽 Corn / Maize (मक्का)</option>
+                  <option value="Wheat">🌾 Wheat / Gehun (गेहूं)</option>
+                  <option value="Mustard">🌼 Mustard / Sarson (सरसों)</option>
+                  <option value="Cotton">🌱 Cotton / Kapas (कपास)</option>
+                  <option value="Rice">🌾 Rice / Paddy (धान)</option>
+                </select>
+                <p class="text-[10px] text-slate-400 mt-1">Guarantees testing only on project training crops. Rejects animals, landscapes, humans, and non-plants.</p>
+              </div>
+
               <div class="grid grid-cols-2 gap-3 text-xs">
                 <div>
                   <label class="block text-slate-400 mb-1">Growth Stage</label>

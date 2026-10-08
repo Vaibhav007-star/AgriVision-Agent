@@ -426,11 +426,13 @@ async function executeDiagnosis() {
   const slider = document.getElementById('acres-slider');
   const stage = document.getElementById('stage-select');
   const loc = document.getElementById('location-input');
+  const targetCropSelect = document.getElementById('target-crop-select');
 
   formData.append('field_acres', slider ? slider.value : '1.5');
   formData.append('crop_stage', stage ? stage.value : 'Vegetative Growth');
   formData.append('location', loc ? loc.value : 'Karnal, Haryana');
   formData.append('language', currentLanguage);
+  formData.append('target_crop', targetCropSelect ? targetCropSelect.value : 'auto');
 
   try {
     const res = await fetch('/api/diagnose', {
@@ -473,15 +475,16 @@ async function executeDiagnosis() {
     const diagAdvice = document.getElementById('diag-advice');
     const diagConf = document.getElementById('diag-conf-pct');
     const diagBadge = document.getElementById('diag-conf-badge');
+    const isRejected = (data.is_leaf === false) || (data.confidence_level === 'Rejected');
 
-    if (data.is_leaf === false) {
-      if (diagCrop) diagCrop.innerText = 'Input: Non-Plant / Human Subject';
-      if (diagCond) diagCond.innerText = '⚠️ No Crop Leaf Detected';
+    if (isRejected) {
+      if (diagCrop) diagCrop.innerText = `Subject: ${data.crop || 'Non-Project / OOD Subject'}`;
+      if (diagCond) diagCond.innerText = `🚫 ${data.disease || 'No Supported Crop Leaf Detected'}`;
       if (diagAdvice) diagAdvice.innerText = data.advisory_message;
       if (diagConf) diagConf.innerText = '0.0%';
       if (diagBadge) {
         diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
-        diagBadge.innerText = 'Rejected (Non-Leaf)';
+        diagBadge.innerText = 'Rejected (Non-Crop / OOD)';
       }
     } else {
       if (diagCrop) diagCrop.innerText = `Crop: ${data.crop}`;
@@ -497,11 +500,11 @@ async function executeDiagnosis() {
     // Top-3 Distribution
     const top3Container = document.getElementById('top3-container');
     if (top3Container) {
-      if (data.is_leaf === false) {
+      if (isRejected) {
         top3Container.innerHTML = `
           <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
-            <div class="font-bold flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4"></i> Out-of-Distribution Guardrail Triggered</div>
-            <p class="text-slate-300">The scanned image does not contain agricultural crop foliage. To prevent harmful pesticide recommendations, disease classification and chemical dosages have been halted.</p>
+            <div class="font-bold flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4"></i> Guardrail Triggered: Supported Crops Only</div>
+            <p class="text-slate-300">${data.advisory_message || 'This image does not contain a close-up leaf of authorized project crops (Tomato, Potato, Pepper, Apple, Corn). Disease diagnosis and chemical spray plans are halted to prevent misapplication.'}</p>
           </div>
         `;
         if (window.lucide) window.lucide.createIcons();

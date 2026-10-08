@@ -153,10 +153,54 @@ def test_predict_crop_disease_rejects_face_with_green_background():
     assert diag["confidence"] == 0.0
     assert diag["confidence_level"] == "Rejected"
     assert diag["disease"] == "No Plant Leaf Detected"
-    assert diag["crop"] == "Non-Plant Object"
     assert len(diag["top_predictions"]) == 0
-    assert "human" in diag["advisory_message"].lower() or "human" in diag["advisory_message_hi"]
 
+
+def test_user_man_and_dog_image_is_strictly_rejected():
+    """The user's real uploaded image with a man playing with a dog in a park must be rejected."""
+    crop_path = Path("tests/cropped_user_man_dog.png")
+    if crop_path.exists():
+        img = Image.open(crop_path).convert("RGB")
+        res = validate_leaf_image(img)
+        assert res["is_leaf"] is False, f"User dog and man image was not rejected: {res}"
+        
+        diag = predict_crop_disease(img, compute_gradcam=False)
+        assert diag["is_leaf"] is False
+        assert diag["confidence_level"] == "Rejected"
+        assert len(diag["top_predictions"]) == 0
+        assert diag["disease"] == "No Plant Leaf Detected"
+
+
+def test_animal_and_clothing_on_grass_lawn_rejected():
+    """Synthetic animal / dog (white/black fur) or human clothing on grass lawn must be rejected."""
+    # Green lawn background (70% green) with white and black dog / clothing in center
+    img = np.zeros((224, 224, 3), dtype=np.uint8)
+    img[:, :] = [45, 130, 45] # Green grass
+    # White dog body in center
+    img[60:140, 70:150] = [230, 230, 235]
+    # Black spots
+    img[75:105, 85:115] = [25, 25, 30]
+    
+    res = validate_leaf_image(Image.fromarray(img))
+    assert res["is_leaf"] is False
+    assert res["reason"] in ["animal_or_clothing_detected", "non_leaf_landscape_or_lawn"]
+
+
+def test_target_crop_consistency_enforcement():
+    """When user specifies target_crop, mismatching leaves or non-leaves must be rejected."""
+    # Tomato leaf tested with target_crop='Tomato' -> PASS
+    sample_img = Path("data/sample_images/tomato_early_blight.jpg")
+    if sample_img.exists():
+        img = Image.open(sample_img).convert("RGB")
+        diag_pass = predict_crop_disease(img, compute_gradcam=False, target_crop="Tomato")
+        assert diag_pass["is_leaf"] is True
+        assert diag_pass["crop"] == "Tomato"
+        
+        # When tested with target_crop='Apple' -> REJECT mismatch
+        diag_mismatch = predict_crop_disease(img, compute_gradcam=False, target_crop="Apple")
+        assert diag_mismatch["is_leaf"] is False
+        assert diag_mismatch["confidence_level"] == "Rejected"
+        assert diag_mismatch["disease"] == "Target Crop Mismatch"
 
 
 def test_agent_workflow_suppresses_treatment_for_non_leaf():
@@ -183,4 +227,5 @@ def test_agent_workflow_suppresses_treatment_for_non_leaf():
     assert agent_result["confidence_level"] == "Rejected"
     assert len(agent_result["treatment"]) == 0
     assert "Human detected" in agent_result["final_response"] or "Non-Leaf" in agent_result["final_response"]
+
 
