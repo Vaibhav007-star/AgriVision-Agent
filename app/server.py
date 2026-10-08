@@ -52,6 +52,8 @@ from app.rag.vectorstore import get_vector_store
 from app.rag.retriever import retrieve_pathology_context
 from src.utils.image_processing import segment_leaf_mask, compute_digital_lcc
 from src.utils.dataset import get_available_samples
+from app.services.predictive_pathology import calculate_disease_outbreak_risk, evaluate_climate_spray_window
+from app.services.mandi_market import get_mandi_intelligence, MANDI_DATABASE
 
 app = FastAPI(
     title="AgriVision Agent — Precision Agricultural Intelligence",
@@ -278,6 +280,31 @@ async def diagnose_leaf(
     # 5. Digital IRRI Leaf Color Chart (LCC) Nitrogen Analysis
     lcc_result = compute_digital_lcc(pil_image) if is_leaf else None
 
+    # 6. Predictive Pathology & Climate-Smart Safe Spray Window
+    weather_dict = weather_data if isinstance(weather_data, dict) else {}
+    temp_c = float(weather_dict.get("temperature_c", 26.5))
+    humidity_val = int(weather_dict.get("humidity_pct", 75))
+    rain_prob = int(weather_dict.get("rain_probability_pct", 35))
+    wind_kmh = float(weather_dict.get("wind_speed_kmh", 10.5))
+
+    predictive_risk = calculate_disease_outbreak_risk(
+        crop=crop,
+        disease=disease,
+        temperature_c=temp_c,
+        humidity_pct=humidity_val,
+        rain_prob_pct=rain_prob
+    ) if is_leaf else None
+
+    spray_window = evaluate_climate_spray_window(
+        temperature_c=temp_c,
+        humidity_pct=humidity_val,
+        rain_prob_pct=rain_prob,
+        wind_speed_kmh=wind_kmh
+    ) if is_leaf else None
+
+    # 7. Mandi (APMC) Market Intelligence & Crop Economics
+    mandi_data = get_mandi_intelligence(crop, acreage=field_acres) if is_leaf else None
+
     return {
         "success": True,
         "is_leaf": is_leaf,
@@ -297,6 +324,9 @@ async def diagnose_leaf(
         "dosage_plan": dosage_plan,
         "prescription": final_prescription,
         "lcc": lcc_result,
+        "predictive_pathology": predictive_risk,
+        "spray_window": spray_window,
+        "mandi_market": mandi_data,
         "reasoning_steps": agent_result.get("reasoning_steps", []),
         "images": {
             "original": orig_b64,
@@ -305,6 +335,14 @@ async def diagnose_leaf(
             "foliage_mask": mask_b64
         }
     }
+
+
+@app.get("/api/market-rates")
+async def market_rates_endpoint(crop: str = "Tomato", acres: float = 1.5):
+    """
+    Returns live APMC Mandi commodity rates, arbitrage comparison, and farm economic projections.
+    """
+    return get_mandi_intelligence(crop, acreage=acres)
 
 
 @app.post("/api/chat")

@@ -591,6 +591,88 @@ async function executeDiagnosis() {
       }
     }
 
+    // Populate Climate Spray Card & Predictive Pathology (Pillar 1 & 2)
+    const sprayBadge = document.getElementById('spray-verdict-badge');
+    const sprayVerdictText = document.getElementById('spray-verdict-text');
+    const sprayWindowTime = document.getElementById('spray-window-time');
+    const outbreakRiskText = document.getElementById('outbreak-risk-text');
+    const outbreakRiskBar = document.getElementById('outbreak-risk-bar');
+    const rainGuardStatus = document.getElementById('rain-guard-status');
+    const windDriftStatus = document.getElementById('wind-drift-status');
+    const prevActionText = document.getElementById('preventive-action-text');
+
+    if (data.is_leaf && data.spray_window && data.predictive_pathology) {
+      const sw = data.spray_window;
+      const pp = data.predictive_pathology;
+      const isHi = (typeof currentLang !== 'undefined' && currentLang === 'hi');
+
+      if (sprayBadge) {
+        sprayBadge.innerText = isHi ? sw.verdict_hi : sw.verdict;
+        sprayBadge.style.borderColor = sw.verdict_color;
+        sprayBadge.style.color = sw.verdict_color;
+      }
+      if (sprayVerdictText) {
+        sprayVerdictText.innerText = isHi ? sw.verdict_hi : sw.verdict;
+        sprayVerdictText.style.color = sw.verdict_color;
+      }
+      if (sprayWindowTime) sprayWindowTime.innerText = isHi ? sw.recommended_window_hi : sw.recommended_window;
+
+      if (outbreakRiskText) {
+        outbreakRiskText.innerText = `${isHi ? pp.risk_tier_hi : pp.risk_tier} (${pp.outbreak_risk_pct}%)`;
+        outbreakRiskText.style.color = pp.indicator_color;
+      }
+      if (outbreakRiskBar) {
+        outbreakRiskBar.style.width = `${pp.outbreak_risk_pct}%`;
+        outbreakRiskBar.style.backgroundColor = pp.indicator_color;
+      }
+
+      if (rainGuardStatus) {
+        if (sw.rain_probability_pct >= 65) {
+          rainGuardStatus.innerText = `⛔ Rain in ~${sw.hours_to_rain_estimate}h`;
+          rainGuardStatus.className = 'font-bold text-rose-400';
+        } else {
+          rainGuardStatus.innerText = `Safe (${sw.rain_probability_pct}%)`;
+          rainGuardStatus.className = 'font-bold text-emerald-400';
+        }
+      }
+
+      if (windDriftStatus) {
+        if (sw.wind_speed_kmh > 15.0) {
+          windDriftStatus.innerText = `⚠️ ${sw.wind_speed_kmh} km/h (Drift Risk)`;
+          windDriftStatus.className = 'font-bold text-amber-400';
+        } else {
+          windDriftStatus.innerText = `${sw.wind_speed_kmh} km/h (Safe)`;
+          windDriftStatus.className = 'font-bold text-emerald-400';
+        }
+      }
+
+      if (prevActionText) prevActionText.innerText = isHi ? pp.preventive_action_hi : pp.preventive_action;
+    }
+
+    // Populate Mandi (APMC) Market Intelligence & Farm Economics (Pillar 6)
+    const mandiBadge = document.getElementById('mandi-trend-badge');
+    const mandiLocalRate = document.getElementById('mandi-local-rate');
+    const mandiLocalName = document.getElementById('mandi-local-name');
+    const mandiBestRate = document.getElementById('mandi-best-rate');
+    const mandiBestName = document.getElementById('mandi-best-name');
+    const mandiNetProfit = document.getElementById('mandi-net-profit');
+    const mandiRoi = document.getElementById('mandi-roi');
+    const mandiTimingText = document.getElementById('mandi-timing-text');
+
+    if (data.is_leaf && data.mandi_market) {
+      const mm = data.mandi_market;
+      const isHi = (typeof currentLang !== 'undefined' && currentLang === 'hi');
+
+      if (mandiLocalRate) mandiLocalRate.innerText = `₹${mm.local_price_qtl.toLocaleString('en-IN')} / Qtl`;
+      if (mandiLocalName) mandiLocalName.innerText = `${mm.local_mandi} • ₹${mm.local_price_kg}/kg`;
+      if (mandiBestRate) mandiBestRate.innerText = `₹${mm.best_price_qtl.toLocaleString('en-IN')} / Qtl`;
+      if (mandiBestName) mandiBestName.innerText = isHi ? mm.arbitrage_advice_hi : mm.arbitrage_advice;
+
+      if (mandiNetProfit) mandiNetProfit.innerText = `₹${mm.economics.projected_net_profit_inr.toLocaleString('en-IN')}`;
+      if (mandiRoi) mandiRoi.innerText = `${mm.acreage} Acres • ${mm.economics.roi_percentage}% Est. ROI`;
+      if (mandiTimingText) mandiTimingText.innerText = isHi ? mm.market_timing_hi : mm.market_timing;
+    }
+
     // Default Tab
     switchRxTab('bio');
 
@@ -1163,4 +1245,73 @@ function initPWA() {
     }
   });
 }
+
+// ============================================================================
+// 14. Pillar 5: Voice-First Vernacular Indian Speech Recognition Engine
+// ============================================================================
+let speechRecognitionInstance = null;
+let isRecognizingSpeech = false;
+
+function toggleSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = document.getElementById('voice-input-btn');
+  const chatInput = document.getElementById('chat-input');
+
+  if (!SpeechRecognition) {
+    alert('🎙️ Browser Notice: Web Speech Recognition is supported on Google Chrome, Microsoft Edge, and modern Android browsers. Please type your query in Hindi or English.');
+    return;
+  }
+
+  if (isRecognizingSpeech && speechRecognitionInstance) {
+    speechRecognitionInstance.stop();
+    return;
+  }
+
+  try {
+    speechRecognitionInstance = new SpeechRecognition();
+    speechRecognitionInstance.continuous = false;
+    speechRecognitionInstance.interimResults = true;
+    speechRecognitionInstance.lang = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'hi-IN' : 'en-IN';
+
+    speechRecognitionInstance.onstart = () => {
+      isRecognizingSpeech = true;
+      if (micBtn) {
+        micBtn.className = 'w-9 h-9 rounded-xl bg-rose-500/30 text-rose-300 border border-rose-500/50 flex items-center justify-center shrink-0 animate-pulse ring-2 ring-rose-400';
+      }
+      if (chatInput) {
+        chatInput.placeholder = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'सुन रहा हूँ... बोलिए...' : 'Listening... Speak your question...';
+      }
+    };
+
+    speechRecognitionInstance.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        transcript += event.results[i][0].transcript;
+      }
+      if (chatInput) {
+        chatInput.value = transcript;
+      }
+    };
+
+    speechRecognitionInstance.onerror = (event) => {
+      console.warn('[AgriVision Voice] Speech recognition event:', event.error);
+    };
+
+    speechRecognitionInstance.onend = () => {
+      isRecognizingSpeech = false;
+      if (micBtn) {
+        micBtn.className = 'w-9 h-9 rounded-xl bg-white/10 hover:bg-lime-500/20 text-lime-400 border border-white/10 flex items-center justify-center shrink-0 transition-all';
+      }
+      if (chatInput) {
+        chatInput.placeholder = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'सवाल लिखें या बोलें (हिंदी / English)...' : 'Type question (English or हिंदी)...';
+      }
+    };
+
+    speechRecognitionInstance.start();
+  } catch (err) {
+    console.error('Failed to start speech recognition:', err);
+    isRecognizingSpeech = false;
+  }
+}
+
 

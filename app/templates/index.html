@@ -673,6 +673,117 @@
               </div>
             </div>
 
+            <!-- ========================================================================= -->
+            <!-- PILLAR 1 & 2: CLIMATE-SMART SPRAY WINDOW & PREDICTIVE PATHOLOGY RISK       -->
+            <!-- ========================================================================= -->
+            <div id="climate-spray-card" class="zenze-card p-5 border-amber-500/20 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                  <i data-lucide="cloud-rain" class="w-4 h-4 text-amber-400"></i>
+                  Climate-Smart Spray Safety Window & 48h Outbreak Risk
+                </span>
+                <span id="spray-verdict-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                  Safe to Spray
+                </span>
+              </div>
+
+              <!-- Metrics Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <!-- Spray Verdict Box -->
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5 space-y-1">
+                  <div class="text-[10px] text-slate-400">Pesticide Spray Safety Verdict</div>
+                  <div id="spray-verdict-text" class="text-sm font-bold text-emerald-400">SAFE TO SPRAY</div>
+                  <div id="spray-window-time" class="text-[10px] text-slate-300">Optimal Morning Window: 06:00 - 09:30 AM</div>
+                </div>
+
+                <!-- 48-Hour Spore Germination Risk -->
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5 space-y-1">
+                  <div class="text-[10px] text-slate-400">48h Spore Outbreak Risk</div>
+                  <div class="flex items-center justify-between">
+                    <span id="outbreak-risk-text" class="text-sm font-bold text-amber-400">Elevated (55%)</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono">Wallin Model</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mt-1">
+                    <div id="outbreak-risk-bar" class="h-full bg-amber-400 rounded-full" style="width: 55%;"></div>
+                  </div>
+                </div>
+
+                <!-- Environmental Guards -->
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5 space-y-1">
+                  <div class="text-[10px] text-slate-400">Weather Guardrails</div>
+                  <div class="flex items-center justify-between text-[11px] text-slate-300">
+                    <span>Rain Wash-Off:</span>
+                    <span id="rain-guard-status" class="font-bold text-emerald-400">Safe (> 4 hrs)</span>
+                  </div>
+                  <div class="flex items-center justify-between text-[11px] text-slate-300">
+                    <span>Wind Drift:</span>
+                    <span id="wind-drift-status" class="font-bold text-emerald-400">11.5 km/h (Calm)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preventive Bio-Control Advisory -->
+              <div class="p-3 rounded-xl bg-amber-950/30 border border-amber-500/20 text-xs space-y-1">
+                <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                  <span>Pre-Infection Biocontrol Advisory (Prevent Spore Germination):</span>
+                </div>
+                <p id="preventive-action-text" class="text-slate-300">
+                  Scout lower canopy leaves every 24 hours. Apply preventive bio-fungicide (Trichoderma viride @ 5g/L) before rain to prevent spore germination.
+                </p>
+              </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- PILLAR 6: MANDI (APMC) MARKET INTELLIGENCE & FARM ECONOMICS                 -->
+            <!-- ========================================================================= -->
+            <div id="mandi-market-card" class="zenze-card p-5 border-cyan-500/20 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                  <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i>
+                  Mandi (APMC) Market Intelligence & Crop Economics
+                </span>
+                <span id="mandi-trend-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                  📈 Bullish (+6.5%)
+                </span>
+              </div>
+
+              <!-- Price Arbitrage & Comparison Row -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <!-- Local Mandi Price -->
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5 space-y-1">
+                  <div class="text-[10px] text-slate-400">Local APMC Mandi Rate</div>
+                  <div id="mandi-local-rate" class="text-lg font-black text-white">&#8377;1,650 / Qtl</div>
+                  <div id="mandi-local-name" class="text-[10px] text-cyan-400">Bhopal (Karond) &bull; &#8377;16.5 / kg</div>
+                </div>
+
+                <!-- Best Regional Mandi (Arbitrage) -->
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5 space-y-1">
+                  <div class="text-[10px] text-slate-400">Highest Regional Mandi</div>
+                  <div id="mandi-best-rate" class="text-lg font-black text-emerald-400">&#8377;2,100 / Qtl</div>
+                  <div id="mandi-best-name" class="text-[10px] text-emerald-300">Indore (+&#8377;450 / Qtl Higher Profit!)</div>
+                </div>
+
+                <!-- Farm Net Profit Projection -->
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5 space-y-1">
+                  <div class="text-[10px] text-slate-400">Projected Net Crop Profit</div>
+                  <div id="mandi-net-profit" class="text-lg font-black text-lime-400">&#8377;2,79,000</div>
+                  <div id="mandi-roi" class="text-[10px] text-lime-300">1.5 Acres &bull; 413% Estimated ROI</div>
+                </div>
+              </div>
+
+              <!-- Market Timing Advice -->
+              <div class="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/20 text-xs space-y-1">
+                <div class="font-bold text-cyan-400 flex items-center gap-1.5">
+                  <i data-lucide="badge-percent" class="w-3.5 h-3.5"></i>
+                  <span>Market Timing Advisory:</span>
+                </div>
+                <p id="mandi-timing-text" class="text-slate-300">
+                  Bullish market trend (+12.0%). Arrivals are tight. Favorable window for staggered harvesting and marketing at district APMC.
+                </p>
+              </div>
+            </div>
+
             <!-- Grounded Action Plan Tabs -->
             <div class="zenze-card p-5">
               <div class="flex border-b border-white/10 gap-4 text-xs font-semibold overflow-x-auto whitespace-nowrap">
@@ -1013,6 +1124,9 @@
     <!-- Input Form -->
     <form id="chat-form" onsubmit="submitChat(event)" class="p-3 bg-black/40 border-t border-white/10 flex gap-2">
       <input type="text" id="chat-input" placeholder="Type question (English or हिंदी)..." class="flex-1 bg-[#0b130e] border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-lime-500 outline-none">
+      <button type="button" id="voice-input-btn" onclick="toggleSpeechRecognition()" title="Speak in Hindi/English / बोलकर पूछें 🎙️" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-lime-500/20 text-lime-400 border border-white/10 flex items-center justify-center shrink-0 transition-all">
+        <i data-lucide="mic" class="w-4 h-4"></i>
+      </button>
       <button type="submit" class="w-9 h-9 rounded-xl bg-lime-500 hover:bg-lime-400 text-black flex items-center justify-center shrink-0">
         <i data-lucide="send" class="w-4 h-4"></i>
       </button>
