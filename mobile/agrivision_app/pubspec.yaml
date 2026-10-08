@@ -28,3 +28,4 @@ flutter:
     - assets/crop_disease_model.tflite
     - assets/labels.txt
     - assets/disease_database.json
+    - assets/haryana_offline_blocks.json

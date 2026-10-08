@@ -336,4 +336,45 @@ To resolve out-of-distribution errors and support all major Haryana crops, a ded
 - **Class Map Saved:** `models/haryana_models/haryana_class_map.json`.
 - **Inference Latency:** ~11 ms per frame on NVIDIA RTX 3050 GPU.
 
+---
+
+## 9. Haryana Offline-First Block Agronomy, Micro-Dialects & CCS HAU Solutions
+
+To empower marginal and smallholder farmers across rural Haryana without requiring cellular data connectivity, AgriVision incorporates a dedicated **100% Offline-First Micro-Regional Agronomy Database**.
+
+### A. Technical Architecture
+1. **On-Device SQLite Engine (`data/agrivision.db`):**
+   - Table `haryana_offline_agronomy` persists all 30 representative administrative blocks across all 22 districts.
+   - Zero network overhead; queries run synchronously in sub-millisecond latency.
+2. **Embedded Mobile JSON Bundle (`mobile/agrivision_app/assets/haryana_offline_blocks.json`):**
+   - Packaged directly into the Flutter APK/AAB bundle.
+   - Read offline via `rootBundle.loadString` through `OfflineAgronomyService`.
+3. **FastAPI Edge Services (`app/server.py`):**
+   - REST endpoints `/api/haryana/offline-blocks`, `/api/haryana/offline-blocks/{district}/{block}`, and `/api/haryana/offline-triage` serve cached agronomy payloads.
+
+### B. Micro-Regional Dialect Distribution
+The system maps indigenous linguistic accents to bridge the digital divide and support vernacular text-to-speech audio playback:
+
+| Regional Zone | Linguistic Dialect | Districts & Blocks Covered |
+| :--- | :--- | :--- |
+| **North-East Belt** | **Puadhi** | Ambala (Naraingarh, Barara), Yamunanagar (Bilaspur, Jagadhri), Panchkula (Raipur Rani), Kurukshetra (Shahabad) |
+| **Khadar / Yamuna Belt** | **Bangru / Khadar Haryanvi** | Karnal (Gharaunda, Assandh), Panipat (Samalkha), Sonipat (Gohana), Kaithal (Guhla) |
+| **Central Plains** | **Deshwali Haryanvi** | Rohtak (Sampla, Meham), Jhajjar (Bahadurgarh, Beri), Jind (Safidon, Narwana) |
+| **Western Cotton Belt** | **Bagri** | Sirsa (Sirsa, Ellenabad, Dabwali), Fatehabad (Tohana), Hisar (Adampur, Hansi), Bhiwani (Siwani, Tosham) |
+| **Southern Ahirwal Belt** | **Ahirwati (Raathi)** | Mahendragarh (Narnaul), Rewari (Bawal, Kosli), Charkhi Dadri (Badhra), Gurugram (Pataudi) |
+| **Mewat Micro-Region** | **Mewati** | Nuh (Nuh, Taoru, Ferozepur Jhirka, Punahana) |
+| **Braj Fringe** | **Braj** | Palwal (Hodal, Hathin), Faridabad fringe |
+
+### C. Vernacular Crop Taxonomy & Linear Diagnostic Chains
+Crop nomenclature combines familiar local terminology (*Dhan*, *Gehu*, *Sarson*, *Gwar*, *Kapas*, *Makka*, *Aloo*, *Tamatar*) with scientific taxonomy. Each block features an offline decision tree:
+- **Example (Karnal - Rice Bacterial Blight):**
+  `Leaf tips turn water-soaked -> Lesions turn yellow-white with wavy margins along veins -> Bacterial ooze droplets visible in early morning -> Leaves wilt and dry (Kresek symptom)`
+- **CCS HAU Hisar Approved Prescription:**
+  `Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre`
+
+- **Example (Sirsa - Cotton Pink Bollworm):**
+  `Rosetted flowers that fail to open properly -> Young developing bolls show tiny brown entry holes -> Bolls open prematurely with stained lint and destroyed seeds`
+- **CCS HAU Hisar Approved Prescription:**
+  `Emamectin Benzoate 5% SG @ 100 g or Spinetoram 11.7% SC @ 170 ml in 200 L water per acre at ETL (>8 moths/trap/night)`
+
 

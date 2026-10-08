@@ -129,3 +129,98 @@ def get_chat_turns(session_id: str = "default_session", limit: int = 50) -> List
         """, (session_id, limit))
         return [dict(row) for row in cursor.fetchall()]
 
+
+# ---------------------------------------------------------------------------
+# Haryana Offline Agronomy & Localized Diagnostic Records CRUD
+# ---------------------------------------------------------------------------
+
+def _deserialize_block_row(row: Any) -> Dict[str, Any]:
+    """Helper to convert SQLite row with JSON fields into structured Python dict."""
+    row_dict = dict(row)
+    for field, key in [
+        ("primary_crops_json", "primary_crops"),
+        ("top_3_diseases_json", "top_3_diseases"),
+        ("symptom_checklist_json", "symptom_checklist"),
+        ("approved_pesticide_solution_json", "approved_pesticide_solution"),
+    ]:
+        raw_val = row_dict.pop(field, None)
+        if raw_val:
+            try:
+                row_dict[key] = json.loads(raw_val)
+            except Exception:
+                row_dict[key] = raw_val
+        else:
+            row_dict[key] = [] if "list" in key or "crops" in key or "diseases" in key else {}
+    return row_dict
+
+
+def get_offline_agronomy_blocks(
+    district: Optional[str] = None,
+    dialect: Optional[str] = None,
+    crop: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """
+    Fetches offline agronomy blocks from SQLite with optional filtering
+    by district, primary dialect, or primary crop.
+    """
+    init_db()
+    query = "SELECT * FROM haryana_offline_agronomy WHERE 1=1"
+    params: List[Any] = []
+
+    if district:
+        query += " AND LOWER(district) = LOWER(?)"
+        params.append(district.strip())
+
+    if dialect:
+        query += " AND LOWER(primary_dialect) LIKE LOWER(?)"
+        params.append(f"%{dialect.strip()}%")
+
+    if crop:
+        query += " AND LOWER(primary_crops_json) LIKE LOWER(?)"
+        params.append(f"%{crop.strip()}%")
+
+    query += " ORDER BY district ASC, block_name ASC"
+
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+        return [_deserialize_block_row(r) for r in rows]
+
+
+def get_offline_agronomy_by_block(district: str, block_name: str) -> Optional[Dict[str, Any]]:
+    """Fetches diagnostic and advisory profile for a specific administrative block."""
+    init_db()
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT * FROM haryana_offline_agronomy 
+            WHERE LOWER(district) = LOWER(?) AND (LOWER(block_name) = LOWER(?) OR LOWER(block_name) LIKE LOWER(?))
+            LIMIT 1
+        """, (district.strip(), block_name.strip(), f"%{block_name.strip()}%"))
+        row = cursor.fetchone()
+        return _deserialize_block_row(row) if row else None
+
+
+def get_all_districts_agronomy() -> List[str]:
+    """Returns a distinct sorted list of all 22 Haryana districts registered in the agronomy database."""
+    init_db()
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT district FROM haryana_offline_agronomy ORDER BY district ASC")
+        return [r[0] for r in cursor.fetchall()]
+
+
+def get_all_dialects_agronomy() -> List[str]:
+    """Returns a distinct sorted list of local linguistic dialects in Haryana."""
+    init_db()
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT primary_dialect FROM haryana_offline_agronomy ORDER BY primary_dialect ASC")
+        return [r[0] for r in cursor.fetchall()]
+
+
+def search_offline_agronomy_by_crop(crop_query: str) -> List[Dict[str, Any]]:
+    """Searches Haryana blocks where the given crop is primarily cultivated."""
+    return get_offline_agronomy_blocks(crop=crop_query)
+

@@ -57,7 +57,68 @@ def init_db(db_path: Path = DB_PATH) -> None:
             )
         """)
         
+        # 3. Haryana Block-Wise Offline Agronomy & Localized Solutions Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS haryana_offline_agronomy (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                district TEXT NOT NULL,
+                block_name TEXT NOT NULL,
+                primary_dialect TEXT NOT NULL,
+                primary_crops_json TEXT NOT NULL,
+                top_3_diseases_json TEXT NOT NULL,
+                symptom_checklist_json TEXT NOT NULL,
+                approved_pesticide_solution_json TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(district, block_name)
+            )
+        """)
+        
         conn.commit()
+
+    # Seed Haryana block agronomy if needed
+    seed_haryana_offline_agronomy(db_path=db_path)
+
+
+def seed_haryana_offline_agronomy(db_path: Path = DB_PATH) -> int:
+    """
+    Seeds Haryana block agronomy records into the local SQLite database.
+    Uses INSERT OR REPLACE to keep regional agronomy recommendations up-to-date.
+    """
+    import json
+    try:
+        from src.data.haryana_block_agronomy import HARYANA_BLOCK_AGRONOMY
+    except ImportError:
+        try:
+            from app.data.haryana_block_agronomy import HARYANA_BLOCK_AGRONOMY
+        except ImportError:
+            return 0
+
+    inserted_count = 0
+    with get_db_connection(db_path) as conn:
+        cursor = conn.cursor()
+        for item in HARYANA_BLOCK_AGRONOMY:
+            cursor.execute("""
+                INSERT OR REPLACE INTO haryana_offline_agronomy (
+                    district,
+                    block_name,
+                    primary_dialect,
+                    primary_crops_json,
+                    top_3_diseases_json,
+                    symptom_checklist_json,
+                    approved_pesticide_solution_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                item.get("District_Name", ""),
+                item.get("Block_Name", ""),
+                item.get("Primary_Dialect", ""),
+                json.dumps(item.get("Primary_Crops", []), ensure_ascii=False),
+                json.dumps(item.get("Top_3_Diseases", []), ensure_ascii=False),
+                json.dumps(item.get("Symptom_Checklist_Offline", {}), ensure_ascii=False),
+                json.dumps(item.get("Approved_Pesticide_Solution", {}), ensure_ascii=False),
+            ))
+            inserted_count += 1
+        conn.commit()
+    return inserted_count
 
 
 # Auto-initialize database schema upon module import

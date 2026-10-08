@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/classifier_service.dart';
 import 'result_screen.dart';
 import 'dosage_calculator_screen.dart';
+import 'haryana_offline_advisor_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isHindi;
@@ -436,6 +437,72 @@ class _HomeScreenState extends State<HomeScreen> {
                                   hi
                                       ? 'एकड़/बीघा अनुसार दवा व स्प्रे पंप गणना करें'
                                       : 'Calculate spray volume & tank mixtures per acre',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.grey),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Haryana Offline Block Agronomy Shortcut Card
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HaryanaOfflineAdvisorScreen(
+                            isHindi: widget.isHindi,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFFC8E6C9)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE8F5E9),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.location_city_rounded,
+                              color: Color(0xFF2E7D32),
+                              size: 26,
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  hi ? 'हरियाणा ब्लॉक कृषि सलाहकार (ऑफ़लाइन)' : 'Haryana Block Agronomy (Offline)',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF212121),
+                                  ),
+                                ),
+                                Text(
+                                  hi
+                                      ? 'सभी 22 जिलों के खंड, स्थानीय बोली, लक्षण क्रम व HAU दवा'
+                                      : 'All 22 districts, dialects, symptom chains & HAU dosages',
                                   style: GoogleFonts.poppins(
                                     fontSize: 11,
                                     color: Colors.grey.shade600,

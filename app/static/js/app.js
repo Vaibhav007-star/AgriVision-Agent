@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   populatePrintableReport();
   initPWA();
+  initHaryanaBlockAdvisor();
 });
 
 // ============================================================================
@@ -1311,6 +1312,143 @@ function toggleSpeechRecognition() {
   } catch (err) {
     console.error('Failed to start speech recognition:', err);
     isRecognizingSpeech = false;
+  }
+}
+
+// ============================================================================
+// 12. Haryana Regional Agronomy & Offline Block Advisor
+// ============================================================================
+let haryanaBlocksData = [];
+
+async function initHaryanaBlockAdvisor() {
+  const districtSelect = document.getElementById('haryana-district-select');
+  const blockSelect = document.getElementById('haryana-block-select');
+  if (!districtSelect || !blockSelect) return;
+
+  try {
+    const res = await fetch('/api/haryana/offline-blocks');
+    if (!res.ok) return;
+    const data = await res.json();
+    haryanaBlocksData = data.blocks || [];
+    if (haryanaBlocksData.length === 0) return;
+
+    // Populate Districts
+    const districts = [...new Set(haryanaBlocksData.map(b => b.district))].sort();
+    districtSelect.innerHTML = '';
+    districts.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d;
+      if (d.toLowerCase() === 'karnal') opt.selected = true;
+      districtSelect.appendChild(opt);
+    });
+
+    function updateBlocksForDistrict(districtName) {
+      const filteredBlocks = haryanaBlocksData.filter(b => b.district.toLowerCase() === districtName.toLowerCase());
+      blockSelect.innerHTML = '';
+      filteredBlocks.forEach((b, idx) => {
+        const opt = document.createElement('option');
+        opt.value = b.block_name;
+        opt.textContent = b.block_name;
+        if (idx === 0) opt.selected = true;
+        blockSelect.appendChild(opt);
+      });
+      if (filteredBlocks.length > 0) {
+        renderBlockDetails(filteredBlocks[0]);
+      }
+    }
+
+    function renderBlockDetails(block) {
+      if (!block) return;
+
+      // 1. Dialect
+      const dialectText = document.getElementById('haryana-dialect-text');
+      if (dialectText) {
+        dialectText.textContent = block.primary_dialect || 'Haryanvi';
+      }
+
+      // 2. Primary Crops
+      const cropsContainer = document.getElementById('haryana-crops-container');
+      if (cropsContainer) {
+        cropsContainer.innerHTML = '';
+        (block.primary_crops || []).forEach(crop => {
+          const pill = document.createElement('span');
+          pill.className = 'px-2.5 py-1 rounded-lg bg-lime-500/15 border border-lime-500/30 text-lime-300 text-xs font-semibold flex items-center gap-1';
+          pill.innerHTML = `<span>🌾</span> <span>${crop}</span>`;
+          cropsContainer.appendChild(pill);
+        });
+      }
+
+      // 3. Top Diseases
+      const diseasesContainer = document.getElementById('haryana-diseases-container');
+      if (diseasesContainer) {
+        diseasesContainer.innerHTML = '';
+        (block.top_3_diseases || []).forEach(dis => {
+          const card = document.createElement('div');
+          card.className = 'p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-center gap-2';
+          card.innerHTML = `<span class="text-amber-400">⚠️</span> <span>${dis}</span>`;
+          diseasesContainer.appendChild(card);
+        });
+      }
+
+      // 4. Symptom Checklist Tabs
+      const triageTabs = document.getElementById('haryana-triage-tabs');
+      const symptomChain = document.getElementById('haryana-symptom-chain');
+      const hauSolution = document.getElementById('haryana-hau-solution');
+
+      const checklist = block.symptom_checklist || {};
+      const solutions = block.approved_pesticide_solution || {};
+      const keys = Object.keys(checklist);
+
+      if (triageTabs && keys.length > 0) {
+        triageTabs.innerHTML = '';
+        keys.forEach((k, idx) => {
+          const tabBtn = document.createElement('button');
+          const isSelected = idx === 0;
+          tabBtn.className = `px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+            isSelected
+              ? 'bg-lime-500/30 text-lime-300 border border-lime-500/50'
+              : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+          }`;
+          tabBtn.textContent = k.replace(/_/g, ' ');
+
+          tabBtn.addEventListener('click', () => {
+            Array.from(triageTabs.children).forEach(c => {
+              c.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10';
+            });
+            tabBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all bg-lime-500/30 text-lime-300 border border-lime-500/50';
+            if (symptomChain) symptomChain.textContent = checklist[k] || 'Diagnostic chain not available.';
+            if (hauSolution) hauSolution.textContent = solutions[k] || 'Solution recommendation pending HAU review.';
+          });
+
+          triageTabs.appendChild(tabBtn);
+        });
+
+        // Set initial tab values
+        if (symptomChain) symptomChain.textContent = checklist[keys[0]] || '';
+        if (hauSolution) hauSolution.textContent = solutions[keys[0]] || '';
+      }
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    districtSelect.addEventListener('change', (e) => {
+      updateBlocksForDistrict(e.target.value);
+    });
+
+    blockSelect.addEventListener('change', (e) => {
+      const selectedB = haryanaBlocksData.find(
+        b => b.district.toLowerCase() === districtSelect.value.toLowerCase() && b.block_name === e.target.value
+      );
+      if (selectedB) renderBlockDetails(selectedB);
+    });
+
+    // Initial population
+    updateBlocksForDistrict(districtSelect.value || 'Karnal');
+  } catch (err) {
+    console.warn('[AgriVision Haryana] Error initializing block advisor:', err);
   }
 }
 

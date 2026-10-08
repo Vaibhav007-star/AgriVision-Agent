@@ -47,7 +47,12 @@ from app.database.crud import (
     get_recent_predictions,
     get_prediction_stats,
     save_chat_turn,
-    get_chat_turns
+    get_chat_turns,
+    get_offline_agronomy_blocks,
+    get_offline_agronomy_by_block,
+    get_all_districts_agronomy,
+    get_all_dialects_agronomy,
+    search_offline_agronomy_by_crop
 )
 from app.rag.vectorstore import get_vector_store
 from app.rag.retriever import retrieve_pathology_context
@@ -405,6 +410,139 @@ async def get_curriculum_report_endpoint() -> Dict[str, Any]:
         with open(summary_path, "r") as f:
             return json.load(f)
     return {"message": "Curriculum training summary not found."}
+
+
+# ---------------------------------------------------------------------------
+# Haryana Offline-First Agronomy, Dialect & Micro-Region Advisory Endpoints
+# ---------------------------------------------------------------------------
+
+@app.get("/api/haryana/offline-blocks")
+async def get_offline_blocks_endpoint(
+    district: Optional[str] = None,
+    dialect: Optional[str] = None,
+    crop: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Returns structured block-level agronomy records for Haryana from SQLite,
+    filtered optionally by district, cultural dialect, or primary crop.
+    Optimized for offline sync and client caching.
+    """
+    blocks = get_offline_agronomy_blocks(district=district, dialect=dialect, crop=crop)
+    districts_found = sorted(list(set(b["district"] for b in blocks)))
+    return {
+        "status": "success",
+        "total_blocks": len(blocks),
+        "districts_represented": len(districts_found),
+        "districts": districts_found,
+        "blocks": blocks
+    }
+
+
+@app.get("/api/haryana/offline-blocks/{district}")
+async def get_district_offline_blocks_endpoint(district: str) -> Dict[str, Any]:
+    """
+    Returns all administrative blocks in the specified Haryana district,
+    along with their primary cultural dialects, top crops, and diagnostic decision chains.
+    """
+    blocks = get_offline_agronomy_blocks(district=district)
+    if not blocks:
+        raise HTTPException(status_code=404, detail=f"No offline block records found for district '{district}'.")
+    return {
+        "district": district,
+        "block_count": len(blocks),
+        "blocks": blocks
+    }
+
+
+@app.get("/api/haryana/offline-blocks/{district}/{block}")
+async def get_block_offline_detail_endpoint(district: str, block: str) -> Dict[str, Any]:
+    """
+    Retrieves full offline agronomic profile for an exact administrative block in Haryana,
+    including dialect, primary crops (vernacular terms), top diseases, symptom checklist chains,
+    and CCS HAU approved chemical/bio-pesticide dosages per acre.
+    """
+    detail = get_offline_agronomy_by_block(district=district, block_name=block)
+    if not detail:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"Block '{block}' not found in district '{district}'."
+        )
+    return detail
+
+
+@app.get("/api/haryana/offline-dialects")
+async def get_offline_dialects_endpoint() -> Dict[str, Any]:
+    """
+    Returns the distribution of indigenous linguistic dialects across Haryana blocks
+    (Ahirwati, Bagri, Bangru / Khadar Haryanvi, Deshwali, Mewati, Puadhi, Braj).
+    """
+    dialects = get_all_dialects_agronomy()
+    all_blocks = get_offline_agronomy_blocks()
+    distribution = {}
+    for d in dialects:
+        matching_blocks = [b for b in all_blocks if d.lower() in b["primary_dialect"].lower()]
+        distribution[d] = {
+            "block_count": len(matching_blocks),
+            "districts": sorted(list(set(b["district"] for b in matching_blocks))),
+            "blocks": [f"{b['district']} -> {b['block_name']}" for b in matching_blocks]
+        }
+    return {
+        "total_dialects": len(dialects),
+        "dialects": dialects,
+        "distribution": distribution
+    }
+
+
+@app.get("/api/haryana/offline-triage")
+async def get_offline_triage_endpoint(
+    district: str,
+    block: str,
+    disease_key: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Executes an offline-friendly symptom diagnostic chain lookup for a specific block.
+    Returns the symptom checklist and CCS HAU approved pesticide dosage.
+    """
+    detail = get_offline_agronomy_by_block(district=district, block_name=block)
+    if not detail:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Block '{block}' in district '{district}' not found."
+        )
+
+    symptom_checklist = detail.get("symptom_checklist", {})
+    pesticide_solutions = detail.get("approved_pesticide_solution", {})
+
+    if disease_key:
+        matched_symptom = symptom_checklist.get(disease_key)
+        matched_solution = pesticide_solutions.get(disease_key)
+        if not matched_symptom and not matched_solution:
+            # Fuzzy match keys
+            for k in symptom_checklist:
+                if disease_key.lower() in k.lower():
+                    matched_symptom = symptom_checklist[k]
+                    matched_solution = pesticide_solutions.get(k)
+                    disease_key = k
+                    break
+
+        return {
+            "district": detail["district"],
+            "block": detail["block_name"],
+            "dialect": detail["primary_dialect"],
+            "disease_key": disease_key,
+            "diagnostic_chain": matched_symptom,
+            "approved_hau_solution": matched_solution
+        }
+
+    return {
+        "district": detail["district"],
+        "block": detail["block_name"],
+        "dialect": detail["primary_dialect"],
+        "primary_crops": detail["primary_crops"],
+        "top_3_diseases": detail["top_3_diseases"],
+        "symptom_checklist": symptom_checklist,
+        "approved_pesticide_solutions": pesticide_solutions
+    }
 
 
 @app.post("/api/chat")

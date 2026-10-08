@@ -1,0 +1,752 @@
+[
+  {
+    "District_Name": "Karnal",
+    "Block_Name": "Gharaunda",
+    "Primary_Dialect": "Bangru / Khadar Haryanvi",
+    "Primary_Crops": [
+      "Dhan (Basmati Chawal) / Paddy (Oryza sativa)",
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Tamatar (Bel Tamatar) / Tomato (Solanum lycopersicum)"
+    ],
+    "Top_3_Diseases": [
+      "Rice Bacterial Leaf Blight (Patti Ka Jhulsa - Xanthomonas oryzae)",
+      "Wheat Yellow / Stripe Rust (Peela Ratawa - Puccinia striiformis)",
+      "Tomato Early Blight (Agheti Jhulsa - Alternaria solani)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Rice_Bacterial_Blight": "Leaf tips turn water-soaked -> Lesions turn yellow-white with wavy margins along veins -> Bacterial ooze droplets visible in early morning -> Leaves wilt and dry (Kresek symptom)",
+      "Wheat_Yellow_Rust": "Small yellow chlorotic flecks appear on upper leaf -> Pustules align into parallel yellow stripes along veins -> Yellow powdery urediniospores shed on touch -> Leaves dry up prematurely",
+      "Tomato_Early_Blight": "Dark brown necrotic spots on lower foliage -> Concentric 'target-board' rings develop -> Chlorotic yellow halos surround dark spots -> Defoliation spreads upwards"
+    },
+    "Approved_Pesticide_Solution": {
+      "Rice_Bacterial_Blight": "Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre (CCS HAU Standard)",
+      "Wheat_Yellow_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre at initial stripe appearance",
+      "Tomato_Early_Blight": "Mancozeb 75% WP (Dithane M-45) @ 600-800 g or Chlorothalonil 75% WP (Kavach) @ 400 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Karnal",
+    "Block_Name": "Assandh",
+    "Primary_Dialect": "Bangru",
+    "Primary_Crops": [
+      "Dhan (1121 & 1509 Basmati) / Paddy (Oryza sativa)",
+      "Gehu / Wheat (Triticum aestivum)",
+      "Ganna (Ponda) / Sugarcane (Saccharum officinarum)"
+    ],
+    "Top_3_Diseases": [
+      "Rice Foot Rot / Bakanae (Jhanda Rog - Fusarium fujikuroi)",
+      "Sugarcane Red Rot (Lal Sadand - Colletotrichum falcatum)",
+      "Wheat Loose Smut (Kangua Rog - Ustilago tritici)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Rice_Bakanae": "Infected plants grow conspicuously taller and paler than healthy crop -> Adventitious roots sprout from lower nodes -> Seedlings wither and dry out before grain formation",
+      "Sugarcane_Red_Rot": "Top 3rd and 4th leaves turn pale yellow -> Midrib develops red lesions with ash-colored centers -> Split cane shows red pith with white transverse patches -> Sour alcoholic odor",
+      "Wheat_Loose_Smut": "Ears emerge earlier than healthy plants -> Entire spikelets converted into olive-black powdery spore mass -> Wind blows away spores leaving bare naked rachis"
+    },
+    "Approved_Pesticide_Solution": {
+      "Rice_Bakanae": "Seed treatment: Carbendazim 50% WP @ 2.0 g/kg seed + Streptocycline @ 0.1 g/kg seed. Seedling root dip in Carbendazim (1.0 g/L) for 6 hours before transplanting",
+      "Sugarcane_Red_Rot": "Sett dip in Carbendazim 50% WP @ 2 g/L water for 15 mins. Soil application: Trichoderma viride @ 2.5 kg mixed with 100 kg FYM per acre",
+      "Wheat_Loose_Smut": "Seed treatment prior to sowing: Tebuconazole 2% DS (Raxil) @ 1.0 g per kg seed or Carboxin 37.5% + Thiram 37.5% DS @ 2.5 g per kg seed"
+    }
+  },
+  {
+    "District_Name": "Kurukshetra",
+    "Block_Name": "Shahabad",
+    "Primary_Dialect": "Puadhi / Bangru",
+    "Primary_Crops": [
+      "Aloo (Pukhraj & Chipsona) / Potato (Solanum tuberosum)",
+      "Dhan (Basmati Chawal) / Paddy (Oryza sativa)",
+      "Gehu / Wheat (Triticum aestivum)"
+    ],
+    "Top_3_Diseases": [
+      "Potato Late Blight (Pichheti Jhulsa - Phytophthora infestans)",
+      "Rice False Smut (Jhootha Kandraog - Ustilaginoidea virens)",
+      "Wheat Karnal Bunt (Tilletia indica)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Potato_Late_Blight": "Water-soaked dark purplish lesions on leaf margins -> White downy cottony fungal growth on underside during high humidity -> Rapid rotting of foliage with foul smell -> Brown firm dry rot on tuber skin",
+      "Rice_False_Smut": "Individual grains in panicle swell into large velvety yellowish-green spore balls -> Spore balls turn dark olive-green to blackish-orange -> Chalky grain contamination",
+      "Wheat_Karnal_Bunt": "Part of grain replaced by black powdery mass -> Smells like rotten fish (trimethylamine) -> Glumes spread apart exposing infected black seed tip"
+    },
+    "Approved_Pesticide_Solution": {
+      "Potato_Late_Blight": "Preventive: Mancozeb 75% WP @ 600-800 g/acre. Curative post-infection: Cymoxanil 8% + Mancozeb 64% WP (Curzate M-8) @ 600 g in 200-250 L water per acre",
+      "Rice_False_Smut": "Kresoxim-methyl 44.3% SC @ 200 ml or Copper Hydroxide 53.8% DF (Kocide) @ 500 g in 200 L water per acre at booting stage",
+      "Wheat_Karnal_Bunt": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre at 5-10% earhead emergence stage"
+    }
+  },
+  {
+    "District_Name": "Kurukshetra",
+    "Block_Name": "Pehowa",
+    "Primary_Dialect": "Puadhi / Bangru",
+    "Primary_Crops": [
+      "Dhan (Basmati Rice) / Paddy (Oryza sativa)",
+      "Surajmukhi (Sunflower) / Sunflower (Helianthus annuus)",
+      "Gehu / Wheat (Triticum aestivum)"
+    ],
+    "Top_3_Diseases": [
+      "Rice Sheath Blight (Tana Jhulsa - Rhizoctonia solani)",
+      "Sunflower Alternaria Leaf Blight (Alternaria helianthi)",
+      "Wheat Powdery Mildew (Chhachhiya - Blumeria graminis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Rice_Sheath_Blight": "Greenish-grey oval or irregular spots on leaf sheath near waterline -> Spots enlarge with dark brown borders and pale green centers -> Cobweb-like mycelial growth on stems causing lodging",
+      "Sunflower_Alternaria_Blight": "Circular to irregular dark brown spots with concentric zones on leaves -> Spots coalesce into large necrotic patches -> Premature drying and defoliation of leaves",
+      "Wheat_Powdery_Mildew": "White powdery fungal pustules on lower leaves and stems -> Powdery patches turn dull gray-brown with tiny black fruiting bodies (cleistothecia) -> Leaves turn chlorotic and wither"
+    },
+    "Approved_Pesticide_Solution": {
+      "Rice_Sheath_Blight": "Hexaconazole 5% SC (Contaf) @ 400 ml or Validamycin 3% L (Sheathmar) @ 400 ml in 200 L water directed at plant base",
+      "Sunflower_Alternaria_Blight": "Mancozeb 75% WP @ 600-800 g in 200 L water per acre at 15-day intervals",
+      "Wheat_Powdery_Mildew": "Wettable Sulfur 80% WDG (Sulfex) @ 1.0 kg/acre or Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Ambala",
+    "Block_Name": "Barara",
+    "Primary_Dialect": "Puadhi",
+    "Primary_Crops": [
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Ganna (Ikh) / Sugarcane (Saccharum officinarum)",
+      "Dhan / Paddy (Oryza sativa)"
+    ],
+    "Top_3_Diseases": [
+      "Sugarcane Red Rot (Lal Sadand - Colletotrichum falcatum)",
+      "Rice Brown Spot (Bhoora Dhabba - Bipolaris oryzae)",
+      "Wheat Stripe / Yellow Rust (Puccinia striiformis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Sugarcane_Red_Rot": "Third and fourth leaves from top show marginal yellowing -> Midrib shows red longitudinal lesions with white centers -> Splitting cane reveals red pith with distinct white horizontal bands -> Sour alcoholic fermented odor",
+      "Rice_Brown_Spot": "Small circular to oval sesame-seed shaped brown spots on leaves -> Spots develop grayish centers with reddish-brown margins -> Seedling blight and grain discolouration",
+      "Wheat_Stripe_Rust": "Linear bright-yellow pustules on leaf surface arranged in stripes -> Yellow dust rubs off on fingers -> Foliage dries prematurely"
+    },
+    "Approved_Pesticide_Solution": {
+      "Sugarcane_Red_Rot": "Plant disease-free certified setts. Sett treatment: Carbendazim 50% WP (Bavistin) @ 2 g/L water dip for 15 mins. Soil application: Trichoderma viride bio-agent @ 2.5 kg mixed with 100 kg FYM per acre",
+      "Rice_Brown_Spot": "Mancozeb 75% WP @ 600 g or Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre",
+      "Wheat_Stripe_Rust": "Propiconazole 25% EC @ 200 ml or Tebuconazole 25.9% EC (Folicur) @ 200 ml in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Ambala",
+    "Block_Name": "Naraingarh",
+    "Primary_Dialect": "Puadhi / Pahari fringe",
+    "Primary_Crops": [
+      "Makka (Desi Makka) / Maize (Zea mays)",
+      "Gehu / Wheat (Triticum aestivum)",
+      "Ganna / Sugarcane (Saccharum officinarum)"
+    ],
+    "Top_3_Diseases": [
+      "Maize Northern Leaf Blight (Exserohilum turcicum)",
+      "Maize Fall Armyworm (Lashkari Soondi - Spodoptera frugiperda)",
+      "Wheat Flag Smut (Dhaja Kangua - Urocystis agropyri)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Maize_Northern_Blight": "Long elliptical boat-shaped grayish-green lesions on leaves -> Lesions enlarge up to 15 cm and turn tan with dark borders -> Lower canopy blights and dries",
+      "Maize_Fall_Armyworm": "Ragged shot-hole feeding on leaves in whorl -> Heavy sawdust-like fecal frass accumulation in central whorl -> Deep feeding damage on emerging tassels and ears",
+      "Wheat_Flag_Smut": "Long grayish-black blister stripes run parallel to leaf veins -> Stripes rupture releasing black powdery teliospores -> Leaves twist, curl, and wither into ragged strips"
+    },
+    "Approved_Pesticide_Solution": {
+      "Maize_Northern_Blight": "Azoxystrobin 18.2% + Difenoconazole 11.4% SC (Amistar Top) @ 200 ml or Mancozeb 75% WP @ 600-800 g in 200 L water per acre",
+      "Maize_Fall_Armyworm": "Emamectin Benzoate 5% SG (Proclaim) @ 80 g or Chlorantraniliprole 18.5% SC (Coragen) @ 80 ml directed into whorls using knapsack sprayer",
+      "Wheat_Flag_Smut": "Seed treatment: Carboxin 37.5% + Thiram 37.5% DS (Vitavax Power) @ 2.5 g/kg seed or Tebuconazole 2% DS @ 1.25 g/kg seed"
+    }
+  },
+  {
+    "District_Name": "Yamunanagar",
+    "Block_Name": "Radaur",
+    "Primary_Dialect": "Puadhi / Khadar Haryanvi",
+    "Primary_Crops": [
+      "Ganna (Sugarcane) / Sugarcane (Saccharum officinarum)",
+      "Dhan (Basmati Chawal) / Paddy (Oryza sativa)",
+      "Poplar (Plywood Agroforestry) / Poplar (Populus deltoides)"
+    ],
+    "Top_3_Diseases": [
+      "Sugarcane Smut (Kajiwa Rog - Sporisorium scitamineum)",
+      "Sugarcane Top Borer (Choti Bhedak - Scirpophaga excerptalis)",
+      "Rice Neck Blast (Gardana Rog - Magnaporthe oryzae)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Sugarcane_Smut": "Production of prominent black whip-like unbranched structure from central spindle -> Whip covered by thin silvery membrane -> Membrane ruptures releasing billions of soot-like spores",
+      "Sugarcane_Top_Borer": "Reddish-brown midrib streaks on third/fourth leaf -> Shot-hole punctures on unfolding leaves -> Dead heart formation -> Bunchy top appearance due to side-shoot proliferation",
+      "Rice_Neck_Blast": "Diamond or spindle-shaped lesions with grayish centers and brown borders on leaves -> Panicle node / neck turns black and rots -> Complete panicle breakage with unfilled chaffy grains"
+    },
+    "Approved_Pesticide_Solution": {
+      "Sugarcane_Smut": "Rogue out infected whip canes in gunny bags and burn. Sett treatment: Triadimefon 25% WP (Bayleton) @ 1 g/L water dip for 20 mins before planting",
+      "Sugarcane_Top_Borer": "Chlorantraniliprole 0.4% GR (Ferterra) @ 7.5 kg/acre soil application along cane rows followed by light irrigation",
+      "Rice_Neck_Blast": "Tricyclazole 75% WP (Beam) @ 120-160 g or Isoprothiolane 40% EC (Fuji-One) @ 300 ml in 200 L water per acre at panicle emergence"
+    }
+  },
+  {
+    "District_Name": "Kaithal",
+    "Block_Name": "Guhla (Cheeka)",
+    "Primary_Dialect": "Puadhi / Bangru",
+    "Primary_Crops": [
+      "Dhan (Basmati Rice CSR-30 & 1121) / Paddy (Oryza sativa)",
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Ganna / Sugarcane (Saccharum officinarum)"
+    ],
+    "Top_3_Diseases": [
+      "Rice Bakanae / Foot Rot (Jhanda Rog - Fusarium fujikuroi)",
+      "Rice Bacterial Leaf Blight (BLB - Xanthomonas oryzae)",
+      "Wheat Stripe Rust (Puccinia striiformis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Rice_Bakanae": "Seedlings stretch out taller, thin and chlorotic in nursery or field -> Adventitious roots sprout from stem nodes above soil -> Seedlings wither and dry before flowering",
+      "Rice_Bacterial_Blight": "Yellowish wavy drying begins at leaf tip and advances down margins -> Droplets of bacterial exudate ooze on leaf underside in morning -> Straw-colored bleached foliage",
+      "Wheat_Stripe_Rust": "Parallel yellow powdery pustule stripes along leaf veins -> Heavy rust dust coats clothes -> Foliage desiccates"
+    },
+    "Approved_Pesticide_Solution": {
+      "Rice_Bakanae": "Seed treatment: Carbendazim 50% WP @ 2.0 g/kg seed + Streptocycline @ 0.1 g/kg seed. Seedling root dip in Carbendazim (1.0 g/L) for 6 hours before transplanting",
+      "Rice_Bacterial_Blight": "Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre",
+      "Wheat_Stripe_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre at onset of symptoms"
+    }
+  },
+  {
+    "District_Name": "Sonipat",
+    "Block_Name": "Ganaur",
+    "Primary_Dialect": "Bangru / Deshwali",
+    "Primary_Crops": [
+      "Tamatar / Tomato (Solanum lycopersicum)",
+      "Shimla Mirch / Bell Pepper (Capsicum annuum)",
+      "Baby Corn & Makka / Maize (Zea mays)"
+    ],
+    "Top_3_Diseases": [
+      "Pepper Bacterial Spot (Kala Kutta Rog - Xanthomonas campestris pv. vesicatoria)",
+      "Tomato Leaf Curl Virus (Patti Marod Rog - ToLCV transmitted by Whitefly)",
+      "Tomato Bacterial Wilt (Ukhta Rog - Ralstonia solanacearum)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Pepper_Bacterial_Spot": "Small yellowish-green circular spots on leaves -> Spots turn dark brown-black with water-soaked margins -> Severe leaf shedding leaving bare stems -> Raised rough scabby pustules on fruit",
+      "Tomato_Leaf_Curl": "Severe upward and downward curling and puckering of young leaves -> Leaves become stunted, leathery, and thick -> Node shortening causing bushy dwarf plant -> Complete fruit drop",
+      "Tomato_Bacterial_Wilt": "Rapid wilting of green foliage without prior yellowing -> Plant wilts during midday heat and fails to recover -> Stem cut surface suspended in clean water yields milky white bacterial stream"
+    },
+    "Approved_Pesticide_Solution": {
+      "Pepper_Bacterial_Spot": "Copper Hydroxide 77% WP (Kocide) @ 500 g + Streptocycline @ 6 g in 200 L water per acre at 10-day intervals",
+      "Tomato_Leaf_Curl": "Vector (Whitefly) control: Diafenthiuron 50% WP (Pegasus) @ 250 g or Pyriproxyfen 10% EC @ 400 ml in 200 L water per acre. Install yellow sticky traps (15 traps/acre)",
+      "Tomato_Bacterial_Wilt": "Soil drenching with Copper Oxychloride 50% WP @ 3 g/L + Streptocycline @ 0.2 g/L around root zone. Biological prevention: Trichoderma harzianum @ 2.5 kg/acre in vermicompost"
+    }
+  },
+  {
+    "District_Name": "Sonipat",
+    "Block_Name": "Gohana",
+    "Primary_Dialect": "Bangru / Deshwali",
+    "Primary_Crops": [
+      "Dhan (Basmati) / Paddy (Oryza sativa)",
+      "Gehu / Wheat (Triticum aestivum)",
+      "Ganna / Sugarcane (Saccharum officinarum)"
+    ],
+    "Top_3_Diseases": [
+      "Rice False Smut (Ustilaginoidea virens)",
+      "Sugarcane Early Shoot Borer (Chilo infuscatellus)",
+      "Wheat Yellow Rust (Puccinia striiformis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Rice_False_Smut": "Grain transforms into orange velvety spore ball -> Ball enlarges and turns olive-black powdery -> Panicle discolored",
+      "Sugarcane_Early_Borer": "Central shoot dies forming 'dead heart' in young shoots -> Emits unpleasant smell when pulled -> Pinholes at base",
+      "Wheat_Yellow_Rust": "Stripe-like yellow pustules on leaf blade -> Yellow powder rubs onto cloth/hands -> Desiccation"
+    },
+    "Approved_Pesticide_Solution": {
+      "Rice_False_Smut": "Copper Hydroxide 53.8% DF (Kocide) @ 500 g in 200 L water per acre at panicle emergence",
+      "Sugarcane_Early_Borer": "Fipronil 0.3% GR (Regent) @ 10 kg/acre soil application at planting or Chlorantraniliprole 18.5% SC @ 150 ml/acre drench",
+      "Wheat_Yellow_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Panipat",
+    "Block_Name": "Samalkha",
+    "Primary_Dialect": "Bangru",
+    "Primary_Crops": [
+      "Dhan / Paddy (Oryza sativa)",
+      "Gehu / Wheat (Triticum aestivum)",
+      "Ganna / Sugarcane (Saccharum officinarum)"
+    ],
+    "Top_3_Diseases": [
+      "Sugarcane Top Borer (Scirpophaga excerptalis)",
+      "Rice Stem Rot (Tana Galan - Sclerotium oryzae)",
+      "Wheat Flag Smut (Dhaja Kangua - Urocystis agropyri)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Sugarcane_Top_Borer": "Reddish-brown midrib streaks on third/fourth leaf -> Shot-hole punctures on unfolding leaves -> Dead heart formation -> Bunchy top appearance due to side-shoot proliferation",
+      "Rice_Stem_Rot": "Dark shiny lesions on leaf sheath at water surface -> Sheath rots through and stem hollows -> Lodging of plants with tiny mustard-seed like black sclerotia inside stem cavity",
+      "Wheat_Flag_Smut": "Long grayish-black blister stripes run parallel to leaf veins -> Stripes rupture releasing black powdery teliospores -> Leaves twist, curl, and wither into ragged strips"
+    },
+    "Approved_Pesticide_Solution": {
+      "Sugarcane_Top_Borer": "Chlorantraniliprole 0.4% GR (Ferterra) @ 7.5 kg/acre soil application along cane rows followed by light irrigation",
+      "Rice_Stem_Rot": "Carbendazim 50% WP @ 250 g or Thifluzamide 24% SC (Pulsor) @ 150 ml in 200 L water per acre at waterline",
+      "Wheat_Flag_Smut": "Seed treatment: Carboxin 37.5% + Thiram 37.5% DS (Vitavax Power) @ 2.5 g/kg seed or Tebuconazole 2% DS @ 1.25 g/kg seed"
+    }
+  },
+  {
+    "District_Name": "Rohtak",
+    "Block_Name": "Sampla",
+    "Primary_Dialect": "Deshwali / Bangru",
+    "Primary_Crops": [
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Dhan / Paddy (Oryza sativa)",
+      "Sarson (Pili Sarson) / Mustard (Brassica juncea)"
+    ],
+    "Top_3_Diseases": [
+      "Mustard White Rust (Safed Ratawa - Albugo candida)",
+      "Wheat Stripe Rust (Peela Ratawa - Puccinia striiformis)",
+      "Mustard Alternaria Blight (Bhoora Dhabba - Alternaria brassicae)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mustard_White_Rust": "Prominent creamy white raised blisters on lower leaf surface -> Blisters coalesce -> Inflorescence hyper-trophy with floral parts transformed into swollen 'staghead' structure",
+      "Wheat_Stripe_Rust": "Small yellow pustules form narrow stripes between veins -> Leaves dry up prematurely -> Grains shrivel",
+      "Mustard_Alternaria_Blight": "Small circular brown-black necrotic spots on leaves, stems and pods -> Concentric target-board rings on pods -> Premature pod shattering and seed discolouration"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mustard_White_Rust": "Metalaxyl 8% + Mancozeb 64% WP (Ridomil Gold) @ 500-600 g in 200 L water per acre at initial white blister stage",
+      "Wheat_Stripe_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre",
+      "Mustard_Alternaria_Blight": "Mancozeb 75% WP (Dithane M-45) @ 600-800 g or Iprodione 50% WP (Rovral) @ 400 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Jhajjar",
+    "Block_Name": "Bahadurgarh",
+    "Primary_Dialect": "Deshwali",
+    "Primary_Crops": [
+      "Gehu / Wheat (Triticum aestivum)",
+      "Tamatar / Tomato (Solanum lycopersicum)",
+      "Bajra (Desi Bajra) / Pearl Millet (Pennisetum glaucum)"
+    ],
+    "Top_3_Diseases": [
+      "Tomato Late Blight (Pichheti Jhulsa - Phytophthora infestans)",
+      "Bajra Downy Mildew / Green Ear (Kodia Rog - Sclerospora graminicola)",
+      "Wheat Termites / White Ants (Deemak - Odontotermes obesus)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Tomato_Late_Blight": "Water-soaked dark purplish lesions on foliage -> White downy mold on underside in wet weather -> Rapid fruit browning with firm leathery decay",
+      "Bajra_Green_Ear": "Chlorosis on young leaves forming vivid bleached white streaks -> Downy white fungal coating on leaf underside -> Floral earheads converted into twisted green leafy structures ('green ear')",
+      "Wheat_Termites": "Plants wither in patches across sandy soil -> Easily pull out of soil -> Roots and lower stem completely hollowed and devoured with soil filling"
+    },
+    "Approved_Pesticide_Solution": {
+      "Tomato_Late_Blight": "Cymoxanil 8% + Mancozeb 64% WP (Curzate M-8) @ 600 g or Dimethomorph 50% WP (Acrobat) @ 300 g in 200 L water per acre",
+      "Bajra_Green_Ear": "Seed treatment: Metalaxyl 35% WS (Apron) @ 6.0 g/kg seed. Foliar spray: Metalaxyl-M 4% + Mancozeb 64% WP @ 500 g/acre if symptoms appear in vegetative stage",
+      "Wheat_Termites": "Seed treatment: Chlorpyrifos 20% EC @ 4 ml/kg seed. Standing crop irrigation drench: Fipronil 5% SC @ 800 ml or Chlorpyrifos 20% EC @ 1.2 L with canal irrigation per acre"
+    }
+  },
+  {
+    "District_Name": "Jind",
+    "Block_Name": "Narwana",
+    "Primary_Dialect": "Bangru",
+    "Primary_Crops": [
+      "Gehu / Wheat (Triticum aestivum)",
+      "Dhan / Paddy (Oryza sativa)",
+      "Kapas (Narma) / Cotton (Gossypium hirsutum)"
+    ],
+    "Top_3_Diseases": [
+      "Cotton Whitefly & Leaf Curl Virus (CLCuV)",
+      "Rice Stem Borer (Tana Bhedak - Scirpophaga incertulas)",
+      "Wheat Yellow Rust (Puccinia striiformis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Cotton_Leaf_Curl": "Upward curling and thickening of leaf margins -> Enation (small leaf-like outgrowth) on underside of main veins -> Plant stunted with reduced boll setting",
+      "Rice_Stem_Borer": "Dead central vegetative tiller in seedling stage ('dead heart') -> White empty chaffy panicle at reproductive stage ('white earhead') -> Stem shows caterpillar entry bore hole near base",
+      "Wheat_Yellow_Rust": "Parallel yellow stripes of pustules along veins -> Powder sheds on touch -> Premature maturity"
+    },
+    "Approved_Pesticide_Solution": {
+      "Cotton_Leaf_Curl": "Whitefly vector suppression: Pyriproxyfen 10% EC @ 400 ml or Diafenthiuron 50% WP @ 250 g in 200 L water per acre. Rogue out early infected viral plants",
+      "Rice_Stem_Borer": "Cartap Hydrochloride 4% GR (Padan) @ 7.5 kg/acre or Chlorantraniliprole 0.4% GR (Ferterra) @ 4 kg/acre in standing water",
+      "Wheat_Yellow_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Sirsa",
+    "Block_Name": "Ellenabad",
+    "Primary_Dialect": "Bagri",
+    "Primary_Crops": [
+      "Kapas (Narma / BT Cotton) / Cotton (Gossypium hirsutum)",
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Gwar (Guar Bean) / Cluster Bean (Cyamopsis tetragonoloba)"
+    ],
+    "Top_3_Diseases": [
+      "Cotton Leaf Curl Virus (Patti Marod Rog - CLCuV via Bemisia tabaci)",
+      "Cotton Pink Bollworm (Gulabi Soondi - Pectinophora gossypiella)",
+      "Guar Bacterial Blight (Bacterial Mar - Xanthomonas cyamopsidis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Cotton_CLCuV": "Small veins thicken and turn dark green -> Upward curling of leaf margins -> Leaf-like outgrowths (enations) develop beneath veins -> Extreme plant stunting",
+      "Cotton_Pink_Bollworm": "Rosetted flowers that fail to open properly -> Young developing bolls show tiny brown entry holes -> Bolls open prematurely with stained lint and destroyed seeds",
+      "Guar_Bacterial_Blight": "Water-soaked dark angular spots on leaf lamina -> Black longitudinal streaks on stems -> Petioles rot and collapse causing rapid defoliation"
+    },
+    "Approved_Pesticide_Solution": {
+      "Cotton_CLCuV": "Vector Whitefly control: Flonicamid 50% WG (Ulala) @ 80 g or Afidopyropen 50 g/L DC (Sefina) @ 400 ml in 200 L water per acre",
+      "Cotton_Pink_Bollworm": "Pheromone traps @ 8/acre for monitoring. Spray: Emamectin Benzoate 5% SG @ 100 g or Spinetoram 11.7% SC @ 170 ml in 200 L water per acre at ETL (>8 moths/trap/night)",
+      "Guar_Bacterial_Blight": "Seed treatment: Streptocycline @ 0.25 g/kg seed. Standing crop spray: Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Sirsa",
+    "Block_Name": "Dabwali",
+    "Primary_Dialect": "Bagri / Punjabi",
+    "Primary_Crops": [
+      "Kapas (Cotton) / Cotton (Gossypium hirsutum)",
+      "Sarson (Raya) / Mustard (Brassica juncea)",
+      "Gehu / Wheat (Triticum aestivum)"
+    ],
+    "Top_3_Diseases": [
+      "Cotton Para Wilt / Sudden Wilt (Akasmat Ukhta)",
+      "Mustard Aphids (Mahu / Chepa - Lipaphis erysimi)",
+      "Wheat Brown / Leaf Rust (Puccinia triticina)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Cotton_Para_Wilt": "Sudden drooping of entire foliage within 24-48 hours after heavy rain or canal irrigation -> Leaves wilt while still green -> Root system intact but water transport blocked",
+      "Mustard_Aphids": "Dense colonies of tiny green-yellow insects clustering on tender apical twigs, flowers, and pods -> Insects suck sap causing yellowing and curling -> Plants covered in sticky shiny honeydew and black sooty mold",
+      "Wheat_Brown_Rust": "Small round to oval orange-brown pustules scattered randomly across upper leaf blade -> Pustules do not form stripes -> Leaves turn yellow and dry"
+    },
+    "Approved_Pesticide_Solution": {
+      "Cotton_Para_Wilt": "Drain excess water immediately. Foliar spray: Cobalt Chloride @ 10 ppm (10 mg/L) or 1% Urea + 1% Potassium Nitrate (13-0-45) foliar spray immediately upon symptom onset",
+      "Mustard_Aphids": "Thiamethoxam 25% WG (Actara) @ 50-80 g or Dimethoate 30% EC (Rogor) @ 250-300 ml in 200 L water per acre when aphid index exceeds 1.5-2.0 cm twig colony",
+      "Wheat_Brown_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre at onset of orange-brown pustules"
+    }
+  },
+  {
+    "District_Name": "Sirsa",
+    "Block_Name": "Sirsa",
+    "Primary_Dialect": "Bagri",
+    "Primary_Crops": [
+      "Kapas (BT Cotton) / Cotton (Gossypium hirsutum)",
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Sarson (Mustard) / Mustard (Brassica juncea)"
+    ],
+    "Top_3_Diseases": [
+      "Cotton Whitefly & CLCuV (Bemisia tabaci)",
+      "Cotton Pink Bollworm (Pectinophora gossypiella)",
+      "Mustard White Rust (Albugo candida)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Cotton_Whitefly_CLCuV": "Leaves curl upwards -> Vein thickening on underside -> Foliar enations develop -> Sticky honey-dew with sooty mold",
+      "Cotton_Pink_Bollworm": "Rosetted flowers -> Larvae bore into tender bolls -> Damaged lint and stained locules",
+      "Mustard_White_Rust": "White pustules beneath leaf surface -> Hypertrophy and malformation of floral parts"
+    },
+    "Approved_Pesticide_Solution": {
+      "Cotton_Whitefly_CLCuV": "Flonicamid 50% WG (Ulala) @ 80 g or Pyriproxyfen 10% EC @ 400 ml in 200 L water per acre",
+      "Cotton_Pink_Bollworm": "Emamectin Benzoate 5% SG @ 100 g or Spinetoram 11.7% SC @ 170 ml in 200 L water per acre",
+      "Mustard_White_Rust": "Metalaxyl 8% + Mancozeb 64% WP (Ridomil Gold) @ 500 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Fatehabad",
+    "Block_Name": "Tohana",
+    "Primary_Dialect": "Bagri / Bangru",
+    "Primary_Crops": [
+      "Dhan (Basmati & Parmal) / Paddy (Oryza sativa)",
+      "Kapas (Cotton) / Cotton (Gossypium hirsutum)",
+      "Gehu / Wheat (Triticum aestivum)"
+    ],
+    "Top_3_Diseases": [
+      "Rice Brown Plant Hopper (BPH / Tela - Nilaparvata lugens)",
+      "Cotton Bacterial Blight / Black Arm (Xanthomonas malvacearum)",
+      "Wheat Stripe Rust (Peela Ratawa - Puccinia striiformis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Rice_BPH": "Circular patches of plants dry up rapidly taking a scorched burned appearance ('hopper burn') -> Hoppers congregate at the base of hill just above water level -> Plant collapses",
+      "Cotton_Bacterial_Blight": "Angular water-soaked spots bounded by leaf veins on foliage -> Spots turn blackish-brown -> Elongated black lesions on stems ('black arm') -> Premature boll rotting",
+      "Wheat_Stripe_Rust": "Yellow spore pustules aligned in linear rows on upper leaf blade -> Chlorosis and premature desiccation"
+    },
+    "Approved_Pesticide_Solution": {
+      "Rice_BPH": "Pymetrozine 50% WG (Chess) @ 120 g or Triflemezopyrim 10% SC (Pexalon) @ 94 ml in 200 L water directed at base of plants",
+      "Cotton_Bacterial_Blight": "Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre at initial spot appearance",
+      "Wheat_Stripe_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Hisar",
+    "Block_Name": "Hansi",
+    "Primary_Dialect": "Bangru / Bagri",
+    "Primary_Crops": [
+      "Kapas (Cotton) / Cotton (Gossypium hirsutum)",
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Sarson (Mustard) / Mustard (Brassica juncea)"
+    ],
+    "Top_3_Diseases": [
+      "Cotton Whitefly (Safed Makhi - Bemisia tabaci)",
+      "Mustard Sclerotinia Stem Rot (Tana Galan - Sclerotinia sclerotiorum)",
+      "Wheat Loose Smut (Kangua - Ustilago tritici)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Cotton_Whitefly": "Tiny white winged insects flutter in clouds when plant is shaken -> Chlorotic yellow spots on leaves -> Honeydew secretions turn foliage black with sooty mold -> Spreads leaf curl virus",
+      "Mustard_Sclerotinia_Rot": "Elongated grayish-white bleached lesions on stem base -> Stems become chalky, fragile, and shred easily -> Splitting stem reveals hard black rat-dropping like sclerotial bodies",
+      "Wheat_Loose_Smut": "Emerging ears completely transformed into black powdery smut dust -> Naked stem left behind"
+    },
+    "Approved_Pesticide_Solution": {
+      "Cotton_Whitefly": "Diafenthiuron 50% WP @ 250 g or Pyriproxyfen 10% EC @ 400 ml or Dinotefuran 20% SG (Token) @ 60-80 g in 200 L water per acre",
+      "Mustard_Sclerotinia_Rot": "Carbendazim 50% WP (Bavistin) @ 250 g or Thiophanate Methyl 70% WP (Roko) @ 400 g in 200 L water per acre sprayed at stem base at 50-60 days crop age",
+      "Wheat_Loose_Smut": "Seed treatment: Tebuconazole 2% DS (Raxil) @ 1.0 g per kg seed prior to sowing"
+    }
+  },
+  {
+    "District_Name": "Hisar",
+    "Block_Name": "Adampur",
+    "Primary_Dialect": "Bagri",
+    "Primary_Crops": [
+      "Gwar (Cluster Bean) / Guar (Cyamopsis tetragonoloba)",
+      "Bajra / Pearl Millet (Pennisetum glaucum)",
+      "Chana (Desi Chana) / Chickpea (Cicer arietinum)"
+    ],
+    "Top_3_Diseases": [
+      "Chickpea Wilt (Chana Ukhta - Fusarium oxysporum f. sp. ciceris)",
+      "Chickpea Pod Borer (Lassan Soondi - Helicoverpa armigera)",
+      "Guar Alternaria Leaf Spot (Alternaria cyamopsidis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Chickpea_Wilt": "Sudden drooping of petioles and leaves within 2-3 weeks of sowing or flowering -> Leaves retain dull green color before drying -> Internal xylem vascular tissues show dark brown discoloration upon splitting tap root",
+      "Chickpea_Pod_Borer": "Young larvae feed on tender foliage -> Older caterpillars bore circular holes into developing pods, thrusting anterior half of body inside to devour seeds -> Empty hollow pods",
+      "Guar_Alternaria_Spot": "Dark brown circular spots with concentric rings on leaf blade -> Severe defoliation under warm humid weather"
+    },
+    "Approved_Pesticide_Solution": {
+      "Chickpea_Wilt": "Deep summer plowing. Seed treatment: Trichoderma viride @ 4 g/kg seed + Carbendazim @ 1 g/kg seed. Avoid sowing in infected soil for 3 seasons",
+      "Chickpea_Pod_Borer": "Install 'T' shaped bird perches @ 15/acre and pheromone traps @ 5/acre. Spray: Chlorantraniliprole 18.5% SC (Coragen) @ 60 ml or Emamectin Benzoate 5% SG @ 80 g in 200 L water per acre",
+      "Guar_Alternaria_Spot": "Mancozeb 75% WP @ 600-800 g in 200 L water per acre at first symptom appearance"
+    }
+  },
+  {
+    "District_Name": "Bhiwani",
+    "Block_Name": "Siwani",
+    "Primary_Dialect": "Bagri",
+    "Primary_Crops": [
+      "Bajra / Pearl Millet (Pennisetum glaucum)",
+      "Gwar (Guar) / Cluster Bean (Cyamopsis tetragonoloba)",
+      "Sarson / Mustard (Brassica juncea)"
+    ],
+    "Top_3_Diseases": [
+      "Bajra Blast (Dhabba Rog - Pyricularia grisea)",
+      "Bajra Ergot (Gondia Rog - Claviceps fusiformis)",
+      "Mustard Downy Mildew (Tulaasita - Hyaloperonospora brassicae)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Bajra_Blast": "Diamond or spindle-shaped gray-centered necrotic spots on leaves -> Spots coalesce burning large foliage areas -> Poor panicle development",
+      "Bajra_Ergot": "Pinkish honey-like viscous droplet exudation ('honeydew') from infected florets in earhead -> Droplets dry into hard dark brown/black horn-shaped sclerotial bodies protruding from spikelets -> Toxic to livestock",
+      "Mustard_Downy_Mildew": "Yellow angular chlorotic patches on upper leaf surface -> Downy grayish-white fungal growth on lower surface -> Leaves curl, wither and drop"
+    },
+    "Approved_Pesticide_Solution": {
+      "Bajra_Blast": "Zineb 75% WP @ 600 g or Tricyclazole 75% WP @ 120 g in 200 L water per acre",
+      "Bajra_Ergot": "Steep seed in 10% salt brine solution (float off sclerotia) followed by 2 clean water rinses. Spray: Mancozeb 75% WP @ 600 g/acre at boot emergence",
+      "Mustard_Downy_Mildew": "Metalaxyl 8% + Mancozeb 64% WP (Ridomil Gold) @ 500 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Charkhi Dadri",
+    "Block_Name": "Badhra",
+    "Primary_Dialect": "Bangru / Ahirwati fringe",
+    "Primary_Crops": [
+      "Bajra (Hybrid Bajra) / Pearl Millet (Pennisetum glaucum)",
+      "Sarson / Mustard (Brassica juncea)",
+      "Gwar / Cluster Bean (Cyamopsis tetragonoloba)"
+    ],
+    "Top_3_Diseases": [
+      "Mustard Painted Bug (Chitkabri Kidi - Bagrada hilaris)",
+      "Bajra Downy Mildew (Green Ear - Sclerospora graminicola)",
+      "Mustard White Rust (Albugo candida)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mustard_Painted_Bug": "Small shield-shaped black bugs with bright yellow/orange markings attack young seedlings -> Suck sap causing wilting and bleaching -> Seedling dries and dies completely",
+      "Bajra_Downy_Mildew": "Chlorotic white-yellow leaf streaks -> Leaf underside covered in white down -> Earhead turns into leafy bunch",
+      "Mustard_White_Rust": "White raised blisters on leaf underside -> Swollen distorted flower heads ('staghead')"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mustard_Painted_Bug": "Malathion 5% dust @ 10 kg/acre dusted on seedlings in early morning or Dimethoate 30% EC (Rogor) @ 250 ml in 200 L water per acre",
+      "Bajra_Downy_Mildew": "Seed treatment: Metalaxyl 35% WS @ 6 g/kg seed prior to sowing",
+      "Mustard_White_Rust": "Metalaxyl 8% + Mancozeb 64% WP @ 500 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Mahendragarh",
+    "Block_Name": "Narnaul",
+    "Primary_Dialect": "Ahirwati (Raathi)",
+    "Primary_Crops": [
+      "Sarson (Pili Sarson / Raya) / Mustard (Brassica juncea)",
+      "Bajra / Pearl Millet (Pennisetum glaucum)",
+      "Chana (Desi Chana) / Chickpea (Cicer arietinum)"
+    ],
+    "Top_3_Diseases": [
+      "Mustard Aphid (Mahu / Chepa - Lipaphis erysimi)",
+      "Mustard Orobanche Root Parasite (Gulli Danda / Margoja - Orobanche aegyptiaca)",
+      "Chickpea Ascochyta Blight (Ascochyta rabiei)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mustard_Aphid": "Billions of tiny yellow-green sap-sucking insects mass on flowering tips and pods -> Plant stunting, leaf curling, pod distortion -> Sooty mold covers plants",
+      "Mustard_Orobanche": "Fleshy purple-brown parasitic flowering shoots emerge around mustard base -> Attached directly to mustard root system -> Mustard turns yellow, wilts, and yields crash",
+      "Chickpea_Ascochyta": "Small circular brown spots with distinct concentric rings on leaves and pods -> Spots coalesce forming dark sunken stem cankers -> Stems break at canker points causing crop lodging"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mustard_Aphid": "Thiamethoxam 25% WG (Actara) @ 50-80 g or Dimethoate 30% EC @ 250 ml in 200 L water per acre. Spray during evening hours to protect pollinators",
+      "Mustard_Orobanche": "Crop rotation with non-hosts (wheat/barley). Directed post-emergence spray: Glyphosate 41% SL @ 25-30 ml/acre in 200 L water at 30 & 50-55 DAS using flood-jet nozzle (HAU standard)",
+      "Chickpea_Ascochyta": "Seed treatment: Carbendazim 12% + Mancozeb 63% WP (SAAF) @ 2.5 g/kg seed. Foliar spray: Chlorothalonil 75% WP @ 400 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Rewari",
+    "Block_Name": "Bawal",
+    "Primary_Dialect": "Ahirwati",
+    "Primary_Crops": [
+      "Sarson / Mustard (Brassica juncea)",
+      "Bajra / Pearl Millet (Pennisetum glaucum)",
+      "Gehu / Wheat (Triticum aestivum)"
+    ],
+    "Top_3_Diseases": [
+      "Mustard White Rust & Staghead (Albugo candida)",
+      "Mustard Powdery Mildew (Erysiphe cruciferarum)",
+      "Wheat Termites (Odontotermes obesus)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mustard_White_Rust": "Chalky white blisters beneath leaves -> Inflorescences swell into thick twisted sterile green spires ('staghead')",
+      "Mustard_Powdery_Mildew": "White talcum-powder like dusting spreads across upper leaf surface, stems, and siliquae -> Foliage chlorosis and early drying",
+      "Wheat_Termites": "Wilted seedlings pull out easily from sandy fields -> Roots hollowed and filled with dry mud particles"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mustard_White_Rust": "Metalaxyl 8% + Mancozeb 64% WP (Ridomil Gold) @ 500 g in 200 L water per acre",
+      "Mustard_Powdery_Mildew": "Wettable Sulfur 80% WDG @ 1.0 kg/acre or Dinocap 48% EC (Karathane) @ 150 ml in 200 L water per acre",
+      "Wheat_Termites": "Seed treatment: Fipronil 5% SC @ 5 ml/kg seed or Chlorpyrifos 20% EC @ 4 ml/kg seed before sowing"
+    }
+  },
+  {
+    "District_Name": "Nuh",
+    "Block_Name": "Taoru",
+    "Primary_Dialect": "Mewati",
+    "Primary_Crops": [
+      "Sarson / Mustard (Brassica juncea)",
+      "Bajra / Pearl Millet (Pennisetum glaucum)",
+      "Pyaj & Sabzi / Onion & Vegetables (Allium cepa)"
+    ],
+    "Top_3_Diseases": [
+      "Onion Purple Blotch (Baingani Dhabba - Alternaria porri)",
+      "Mustard Aphids (Mahu - Lipaphis erysimi)",
+      "Onion Thrips (Pili Kidi - Thrips tabaci)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Onion_Purple_Blotch": "Small water-soaked sunken lesions on leaves -> Lesions turn purplish with yellow borders -> Lesions girdle leaves causing stem collapse",
+      "Mustard_Aphids": "Dense colonies suck sap from flowering shoots -> Heavy honeydew and sooty mold -> Yield reduction",
+      "Onion_Thrips": "Minute silvery-white specks and blotches on leaves -> Leaf tips curl and turn brown ('white blast') -> Severe bulb size reduction"
+    },
+    "Approved_Pesticide_Solution": {
+      "Onion_Purple_Blotch": "Mancozeb 75% WP @ 600 g or Difenoconazole 25% EC (Score) @ 150 ml in 200 L water per acre with 50 ml sticker",
+      "Mustard_Aphids": "Thiamethoxam 25% WG (Actara) @ 60 g in 200 L water per acre",
+      "Onion_Thrips": "Fipronil 5% SC (Regent) @ 400 ml or Spinetoram 11.7% SC @ 150 ml in 200 L water per acre with agricultural sticker"
+    }
+  },
+  {
+    "District_Name": "Nuh",
+    "Block_Name": "Nuh",
+    "Primary_Dialect": "Mewati",
+    "Primary_Crops": [
+      "Sarson (Mustard) / Mustard (Brassica juncea)",
+      "Bajra / Pearl Millet (Pennisetum glaucum)",
+      "Tamatar & Pyaj / Tomato & Onion (Solanum lycopersicum & Allium cepa)"
+    ],
+    "Top_3_Diseases": [
+      "Mustard Alternaria Blight (Alternaria brassicae)",
+      "Bajra Green Ear / Downy Mildew (Sclerospora graminicola)",
+      "Tomato Leaf Curl Virus (ToLCV via Whitefly)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mustard_Alternaria_Blight": "Concentric target-board brown circular spots on leaves -> Black lesions on siliquae (pods) -> Premature pod shattering",
+      "Bajra_Green_Ear": "Chlorotic streaks on upper leaves -> Floral parts transform into leafy twisted masses -> No grain formation",
+      "Tomato_Leaf_Curl": "Leaves curl inwards and upwards -> Severe stunting and bushy stunted growth -> Failure of flower setting"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mustard_Alternaria_Blight": "Mancozeb 75% WP @ 600-800 g or Iprodione 50% WP (Rovral) @ 400 g in 200 L water per acre",
+      "Bajra_Green_Ear": "Seed treatment with Metalaxyl 35% WS @ 6 g/kg seed; rogue out infected downy mildew plants",
+      "Tomato_Leaf_Curl": "Vector whitefly spray: Diafenthiuron 50% WP (Pegasus) @ 250 g or Cyantraniliprole 10.26% OD @ 360 ml per acre"
+    }
+  },
+  {
+    "District_Name": "Palwal",
+    "Block_Name": "Hodal",
+    "Primary_Dialect": "Braj / Mewati fringe",
+    "Primary_Crops": [
+      "Gehu / Wheat (Triticum aestivum)",
+      "Aloo / Potato (Solanum tuberosum)",
+      "Dhan / Paddy (Oryza sativa)"
+    ],
+    "Top_3_Diseases": [
+      "Potato Early Blight (Alternaria solani)",
+      "Potato Black Scurf (Rhizoctonia solani)",
+      "Wheat Stripe Rust (Puccinia striiformis)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Potato_Early_Blight": "Concentric dark brown target rings on lower foliage -> Leaves turn yellow around spots -> Defoliation",
+      "Potato_Black_Scurf": "Hard dark brown to black crusty dirt-like sclerotia adhering tightly to tuber surface (does not wash off) -> Stem cankers near ground level",
+      "Wheat_Stripe_Rust": "Bright yellow pustule stripes along leaf blade -> Chlorosis and shrivelled grain"
+    },
+    "Approved_Pesticide_Solution": {
+      "Potato_Early_Blight": "Mancozeb 75% WP @ 600-800 g or Chlorothalonil 75% WP @ 400 g in 200 L water per acre",
+      "Potato_Black_Scurf": "Tuber treatment before cold storage/planting: Moncut 20% SC (Flutolanil) @ 2.5 ml/L water spray or Carbendazim 50% WP @ 2.5 g/L dip for 10 mins",
+      "Wheat_Stripe_Rust": "Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Faridabad",
+    "Block_Name": "Ballabgarh",
+    "Primary_Dialect": "Khadar Haryanvi / Braj",
+    "Primary_Crops": [
+      "Gehu / Wheat (Triticum aestivum)",
+      "Tamatar & Gobhi / Tomato & Cauliflower (Solanum lycopersicum & Brassica oleracea)",
+      "Sarson / Mustard (Brassica juncea)"
+    ],
+    "Top_3_Diseases": [
+      "Cauliflower Black Rot (Kali Sadand - Xanthomonas campestris)",
+      "Tomato Leaf Curl Virus (ToLCV)",
+      "Mustard Alternaria Leaf Spot (Alternaria brassicae)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Cauliflower_Black_Rot": "Yellow V-shaped chlorotic lesions starting at leaf margins with point toward vein -> Veins turn black within lesion -> Soft rotting of curd head with offensive odor",
+      "Tomato_Leaf_Curl": "Leaves puckered, curled upward, stunted and leathery -> Severely dwarfed bush",
+      "Mustard_Alternaria": "Concentric circular brown spots on leaves and pods -> Premature pod shattering"
+    },
+    "Approved_Pesticide_Solution": {
+      "Cauliflower_Black_Rot": "Seed treatment: Hot water treatment at 50°C for 30 mins or Streptocycline @ 0.1 g/L dip. Foliar spray: Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre",
+      "Tomato_Leaf_Curl": "Vector whitefly control: Diafenthiuron 50% WP @ 250 g in 200 L water per acre",
+      "Mustard_Alternaria": "Mancozeb 75% WP @ 600-800 g in 200 L water per acre"
+    }
+  },
+  {
+    "District_Name": "Gurugram",
+    "Block_Name": "Pataudi",
+    "Primary_Dialect": "Ahirwati / Bangru",
+    "Primary_Crops": [
+      "Gehu (Kanak) / Wheat (Triticum aestivum)",
+      "Sarson (Mustard) / Mustard (Brassica juncea)",
+      "Bajra / Pearl Millet (Pennisetum glaucum)"
+    ],
+    "Top_3_Diseases": [
+      "Mustard White Rust (Albugo candida)",
+      "Bajra Downy Mildew / Green Ear (Sclerospora graminicola)",
+      "Wheat Loose Smut (Ustilago tritici)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mustard_White_Rust": "White pustules beneath leaves -> Inflorescences distorted into stagheads",
+      "Bajra_Green_Ear": "Bleached leaf stripes -> White mold on leaf underside -> Earhead transforms into leafy mass",
+      "Wheat_Loose_Smut": "Spike emerges early -> Grains replaced by loose black soot"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mustard_White_Rust": "Metalaxyl 8% + Mancozeb 64% WP @ 500 g in 200 L water per acre",
+      "Bajra_Green_Ear": "Seed treatment: Metalaxyl 35% WS @ 6.0 g/kg seed",
+      "Wheat_Loose_Smut": "Seed treatment: Tebuconazole 2% DS @ 1.0 g per kg seed prior to sowing"
+    }
+  },
+  {
+    "District_Name": "Panchkula",
+    "Block_Name": "Raipur Rani",
+    "Primary_Dialect": "Puadhi / Pahari fringe",
+    "Primary_Crops": [
+      "Makka (Maize) / Maize (Zea mays)",
+      "Gehu (Wheat) / Wheat (Triticum aestivum)",
+      "Aam (Mango Orchards) / Mango (Mangifera indica)"
+    ],
+    "Top_3_Diseases": [
+      "Mango Malformation (Aam Ka Guchha Rog - Fusarium mangiferae)",
+      "Mango Powdery Mildew (Kojhi Rog - Oidium mangiferae)",
+      "Maize Northern Leaf Blight (Exserohilum turcicum)"
+    ],
+    "Symptom_Checklist_Offline": {
+      "Mango_Malformation": "Floral panicles transform into compact, crowded, bunchy heads of sterile flowers -> Flower stalks thicken and crowd -> No fruit setting",
+      "Mango_Powdery_Mildew": "White powdery fungal coating on flower buds, panicles, and young leaves -> Infected flowers fail to open and drop off -> Young marble-sized fruits drop prematurely",
+      "Maize_Northern_Blight": "Long elliptical tan lesions on lower leaves -> Upward spreading blight"
+    },
+    "Approved_Pesticide_Solution": {
+      "Mango_Malformation": "Prune out malformed panicles along with 3 nodes of healthy branch and burn. Spray NAA (Planofix) @ 200 ppm (2 ml/4.5 L water) in first week of October (HAU recommendation)",
+      "Mango_Powdery_Mildew": "Wettable Sulfur 80% WDG @ 1.25 kg in 500 L water or Hexaconazole 5% SC @ 500 ml in 500 L water per acre (applied at panicle emergence)",
+      "Maize_Northern_Blight": "Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 200 ml in 200 L water per acre"
+    }
+  }
+]
