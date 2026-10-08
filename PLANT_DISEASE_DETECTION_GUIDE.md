@@ -139,7 +139,17 @@ The neural network is trained on 15 classes across **3 crop species**:
 - **Spatial Geometry is Essential:** What separates diseases is the *spatial lesion pattern* (concentric rings, angular vein-bounded lesions, circular halos), which only Convolutional Neural Networks (CNNs) can extract.
 - **Feature Redundancy in CNNs:** MobileNetV2's first convolutional layers already learn color opponency filters automatically.
 
-### D. Comparative Evaluation Matrix (For Academic & Project Discussions)
+### D. Calibrated IRRI Leaf Color Chart (5-Panel Standards)
+
+| LCC Panel | Color Name | Hex & RGB | Nitrogen Status | Urea Dosage | Agronomic & Pest Impact |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| **Panel 1** | Pale Yellow-Green | `#BACA72`<br>RGB(186, 202, 114) | **Severe Deficit** | 25–30 kg/Acre | Poor chlorophyll; stunted tillering; low yield. |
+| **Panel 2** | Yellowish-Green | `#98BA55`<br>RGB(152, 186, 85) | **Moderate Deficit** | 20 kg/Acre | Sub-optimal nitrogen; delayed vegetative growth. |
+| **Panel 3** | Light / Balanced Green | `#73A03E`<br>RGB(115, 160, 62) | **Critical Threshold** | 10–15 kg/Acre (if lagging) | Standard agronomic baseline for vegetables/cereals. |
+| **Panel 4** | Deep Vibrant Green | `#4D802C`<br>RGB(77, 128, 44) | **Optimal Nutrition** | **0 kg Urea (Halt)** | Peak photosynthetic efficiency; save fertilizer cost! |
+| **Panel 5** | Dark Forest Green | `#2D5F1E`<br>RGB(45, 95, 30) | **Toxic Nitrogen Excess** | **DO NOT APPLY NITROGEN** | Hyper-succulent leaves attract Blight and Aphids. |
+
+### E. Comparative Evaluation Matrix (For Academic & Project Discussions)
 
 | Approach | Primary Strength | Key Technical Limitation | Academic Verdict |
 | :--- | :--- | :--- | :---: |
@@ -150,7 +160,18 @@ The neural network is trained on 15 classes across **3 crop species**:
 
 ---
 
-## 5. Code Instructions & Usage Examples
+## 5. Strategic 6-Pillar Agritech Expansion Blueprint
+
+1. **Pillar 1: Predictive Pathology & Disease Outbreak Alert:** Uses ambient relative humidity ($>85\%$) and temperature ($20-24^\circ\text{C}$) to alert farmers 48 hours *before* fungal germination occurs, allowing preventive biocontrol (*Trichoderma*).
+2. **Pillar 2: Climate-Smart Spraying Guard:** Connects live weather forecasts to halt pesticide sprays if rainfall is predicted within 3 hours (wash-off prevention) or if wind speed exceeds $15\text{ km/h}$ (drift prevention).
+3. **Pillar 3: Digital IRRI LCC & Fertilizer Optimization:** Calibrated camera greenness matching to schedule Urea application precisely, eliminating excessive Nitrogen runoff and pest attraction.
+4. **Pillar 4: Precision Knapsack Tank Math & Food Safety:** Converts technical active ingredient rates into exact capfuls per standard 15-Liter knapsack pump, with strict Pre-Harvest Interval (PHI) compliance.
+5. **Pillar 5: Voice-First Vernacular Agronomist:** Native voice interactions in Hindi, Marathi, Telugu, Punjabi, Kannada, and Bengali.
+6. **Pillar 6: Mandi Market Intelligence & Crop Economics:** Real-time APMC Mandi commodity tracking across nearby markets to optimize harvest and selling timing.
+
+---
+
+## 6. Code Instructions & Usage Examples
 
 ### A. Python Code: Running Single-Image Diagnosis
 Save and run this script from the project root:
