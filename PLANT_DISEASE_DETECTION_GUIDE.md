@@ -167,7 +167,7 @@ The neural network is trained on 15 classes across **3 crop species**:
 3. **Pillar 3: Digital IRRI LCC & Fertilizer Optimization:** Calibrated camera greenness matching to schedule Urea application precisely, eliminating excessive Nitrogen runoff and pest attraction.
 4. **Pillar 4: Precision Knapsack Tank Math & Food Safety:** Converts technical active ingredient rates into exact capfuls per standard 15-Liter knapsack pump, with strict Pre-Harvest Interval (PHI) compliance.
 5. **Pillar 5: Voice-First Vernacular Agronomist:** Native voice interactions in Hindi, Marathi, Telugu, Punjabi, Kannada, and Bengali.
-6. **Pillar 6: Mandi Market Intelligence & Crop Economics:** Real-time APMC Mandi commodity tracking across nearby markets to optimize harvest and selling timing.
+6. **Pillar 6: Mandi Market Intelligence & Crop Economics (Haryana State Specialization):** Real-time APMC Mandi commodity tracking specialized exclusively for Haryana state (Karnal, Sonipat, Kurukshetra, Ambala, Yamunanagar, Rohtak, Sirsa, Kaithal) to provide precise local pricing, district price arbitrage comparisons, and farm-gate profit projections.
 
 ---
 

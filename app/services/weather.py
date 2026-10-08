@@ -7,7 +7,7 @@ from typing import Dict, Any
 from app.agent.tools.weather_tool import get_weather_data
 
 
-def get_field_weather(location: str = "Bhopal, India") -> Dict[str, Any]:
+def get_field_weather(location: str = "Karnal, Haryana") -> Dict[str, Any]:
     """Retrieves real-time environmental context for the target field location."""
     return get_weather_data(location)
 

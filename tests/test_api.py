@@ -33,9 +33,10 @@ class TestWebApiEndpoints(unittest.TestCase):
             self.assertIn("thumbnail", sample)
             
     def test_get_weather_api(self):
-        response = client.get("/api/weather?location=Bhopal,%20India")
+        response = client.get("/api/weather")
         self.assertEqual(response.status_code, 200)
         data = response.json()
+        self.assertEqual(data["location"], "Karnal, Haryana")
         self.assertIn("temperature_c", data)
         self.assertIn("humidity_pct", data)
         self.assertIn("spore_germination_risk", data)
@@ -68,6 +69,20 @@ class TestWebApiEndpoints(unittest.TestCase):
         self.assertEqual(data["role"], "assistant")
         self.assertIn("content", data)
         self.assertGreater(len(data["content"]), 10)
+
+    def test_get_mandi_rates_haryana_only(self):
+        """Verifies that all returned APMC mandis are strictly from Haryana state."""
+        crops = ["Tomato", "Potato", "Pepper Bell", "Wheat"]
+        for c in crops:
+            response = client.get(f"/api/market-rates?crop={c}&acres=2.0")
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertIn("markets_table", data)
+            self.assertGreater(len(data["markets_table"]), 0)
+            for m in data["markets_table"]:
+                self.assertEqual(m["state"], "Haryana", f"Market {m['mandi']} is not in Haryana!")
+            states = set(m["state"] for m in data["markets_table"])
+            self.assertEqual(states, {"Haryana"})
         
     def test_post_diagnose_sample_api(self):
         response = client.post(
@@ -76,7 +91,7 @@ class TestWebApiEndpoints(unittest.TestCase):
                 "sample_id": "tomato_early_blight",
                 "field_acres": 2.0,
                 "crop_stage": "Flowering Stage",
-                "location": "Bhopal, India",
+                "location": "Karnal, Haryana",
                 "language": "en"
             }
         )
@@ -88,9 +103,12 @@ class TestWebApiEndpoints(unittest.TestCase):
         self.assertIn("confidence", data)
         self.assertIn("images", data)
         self.assertIn("original", data["images"])
+        self.assertIn("foliage_mask", data["images"])
         self.assertIn("dosage_plan", data)
         self.assertIn("prescription", data)
         self.assertEqual(data["dosage_plan"]["water_volume_liters"], 400.0)
+        self.assertIn("mandi_market", data)
+        self.assertEqual(data["mandi_market"]["markets_table"][0]["state"], "Haryana")
 
 
 if __name__ == "__main__":

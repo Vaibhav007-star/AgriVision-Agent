@@ -208,3 +208,4 @@ def evaluate_climate_spray_window(
         "recommended_window": recommended_window,
         "recommended_window_hi": recommended_window_hi
     }
+

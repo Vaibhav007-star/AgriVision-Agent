@@ -156,7 +156,7 @@ async def list_benchmark_samples() -> Dict[str, Any]:
 
 
 @app.get("/api/weather")
-async def get_weather(location: str = "Bhopal, India") -> Dict[str, Any]:
+async def get_weather(location: str = "Karnal, Haryana") -> Dict[str, Any]:
     """Returns microclimate environmental context and fungal spore risk."""
     return get_weather_data(location)
 
@@ -167,7 +167,7 @@ async def diagnose_leaf(
     sample_id: Optional[str] = Form(None),
     field_acres: float = Form(1.5),
     crop_stage: str = Form("Vegetative Growth"),
-    location: str = Form("Bhopal, India"),
+    location: str = Form("Karnal, Haryana"),
     language: str = Form("en")
 ) -> Dict[str, Any]:
     """
@@ -277,6 +277,7 @@ async def diagnose_leaf(
     orig_b64 = pil_to_base64(pil_image, format="JPEG")
     clahe_b64 = pil_to_base64(clahe_image, format="JPEG")
     gradcam_b64 = pil_to_base64(inference_result["gradcam_overlay"], format="JPEG") if inference_result.get("gradcam_overlay") else None
+    mask_b64 = pil_to_base64(seg_result["segmented_image"], format="JPEG") if (seg_result and seg_result.get("segmented_image")) else None
     # 5. Digital IRRI Leaf Color Chart (LCC) Nitrogen Analysis
     lcc_result = compute_digital_lcc(pil_image) if is_leaf else None
 

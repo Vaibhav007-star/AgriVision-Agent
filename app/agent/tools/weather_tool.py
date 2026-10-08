@@ -8,7 +8,7 @@ from typing import Dict, Any
 import random
 
 
-def get_weather_data(location: str = "Bhopal, India") -> Dict[str, Any]:
+def get_weather_data(location: str = "Karnal, Haryana") -> Dict[str, Any]:
     """
     Returns microclimate weather data and computes the fungal spore germination index.
     """

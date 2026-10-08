@@ -41,6 +41,17 @@ class TestAppServices(unittest.TestCase):
         stt_res = speech_to_text(None)
         self.assertIn("success", stt_res)
 
+    def test_mandi_haryana_markets(self):
+        from app.services.mandi_market import get_mandi_intelligence
+        crops = ["Tomato", "Potato", "Pepper Bell", "Wheat"]
+        for crop in crops:
+            res = get_mandi_intelligence(crop, acreage=1.5)
+            self.assertIn("markets_table", res)
+            for m in res["markets_table"]:
+                self.assertEqual(m["state"], "Haryana", f"Market {m['mandi']} is not in Haryana")
+            self.assertIn("economics", res)
+            self.assertGreater(res["economics"]["gross_revenue_inr"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -71,7 +71,7 @@ class RAGConfig:
 class ExternalServicesConfig:
     """External Tools / APIs Configuration."""
     WEATHER_API_KEY: str = os.getenv("WEATHER_API_KEY", "")
-    DEFAULT_LOCATION: str = os.getenv("DEFAULT_LOCATION", "New Delhi, India")
+    DEFAULT_LOCATION: str = os.getenv("DEFAULT_LOCATION", "Karnal, Haryana")
     DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'data' / 'agrivision.db'}")
 
 

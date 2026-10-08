@@ -125,7 +125,7 @@ def run_agent_workflow(
     disease: str,
     confidence: float,
     field_acres: float = 1.0,
-    location: str = "Bhopal, India",
+    location: str = "Karnal, Haryana",
     crop_stage: str = "Vegetative Growth",
     language: str = "en",
     user_question: Optional[str] = None,

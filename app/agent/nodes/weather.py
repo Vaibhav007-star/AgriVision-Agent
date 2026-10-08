@@ -11,7 +11,7 @@ from app.agent.tools.weather_tool import get_weather_data
 def weather_node(state: AgentState) -> Dict[str, Any]:
     """Executes the microclimate weather tool and updates environmental risk in state."""
     steps = state.get("reasoning_steps", []).copy()
-    location = state.get("location", "Bhopal, India")
+    location = state.get("location", "Karnal, Haryana")
     
     weather_data = get_weather_data(location)
     spore_risk = weather_data.get("spore_germination_risk", "Moderate")

@@ -353,7 +353,7 @@ function selectSample(id, thumbUrl, activeBtn) {
 
 async function initWeather() {
   try {
-    const res = await fetch('/api/weather?location=Bhopal,%20India');
+    const res = await fetch('/api/weather?location=Karnal,%20Haryana');
     const data = await res.json();
     const tempSpan = document.getElementById('hero-temp-val');
     const sporeSpan = document.getElementById('hero-spore-val');
@@ -428,7 +428,7 @@ async function executeDiagnosis() {
 
   formData.append('field_acres', slider ? slider.value : '1.5');
   formData.append('crop_stage', stage ? stage.value : 'Vegetative Growth');
-  formData.append('location', loc ? loc.value : 'Bhopal, India');
+  formData.append('location', loc ? loc.value : 'Karnal, Haryana');
   formData.append('language', currentLanguage);
 
   try {
@@ -1009,7 +1009,7 @@ function populatePrintableReport(data = null) {
 
   const acresVal = slider ? `${slider.value} Acres` : '1.5 Acres';
   const stageVal = stage ? stage.value : 'Vegetative Growth';
-  const locVal = loc && loc.value ? loc.value : 'Bhopal, India';
+  const locVal = loc && loc.value ? loc.value : 'Karnal, Haryana';
 
   const repCrop = document.getElementById('rep-crop');
   const repLocation = document.getElementById('rep-location');

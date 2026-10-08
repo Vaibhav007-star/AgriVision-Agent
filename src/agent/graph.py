@@ -141,7 +141,7 @@ def retrieve_knowledge_node(state: AgriVisionState) -> Dict[str, Any]:
 
 def analyze_weather_node(state: AgriVisionState) -> Dict[str, Any]:
     """Node 4: Evaluates ambient temperature, humidity, and spore germination risk."""
-    location = state.get("location", "New Delhi, India")
+    location = state.get("location", "Karnal, Haryana")
     weather = get_weather_data(location)
     
     step_log = f"Weather Tool: {weather['location']} (Temp: {weather['temperature_c']}°C, Humidity: {weather['humidity_pct']}%, Spore Risk: {weather['spore_germination_risk']})."
@@ -272,7 +272,7 @@ def run_agent_workflow(
     disease: str,
     confidence: float = 0.95,
     field_acres: float = 1.0,
-    location: str = "New Delhi, India",
+    location: str = "Karnal, Haryana",
     language: str = "en"
 ) -> Dict[str, Any]:
     """
