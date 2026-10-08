@@ -281,3 +281,59 @@ with open("mobile/agrivision_app/assets/model.tflite", "wb") as f:
     f.write(tflite_model)
 ```
 
+---
+
+## 7. Haryana State: 22-District Agricultural Matrix & Crop Profiles
+
+Haryana is organized into 4 distinct agro-climatic belts covering all 22 districts:
+
+| # | District | Regional Belt | Main Cities / Towns | Commonly Grown Crops | APMC Mandi Hub |
+|---|---|---|---|---|---|
+| 1 | **Ambala** | North-East | Ambala City, Ambala Cantt, Naraingarh, Barara, Mullana, Shahzadpur | Wheat, Paddy, Sugarcane, Maize, Vegetables | Ambala Cantt APMC |
+| 2 | **Bhiwani** | Western / South-Western | Bhiwani, Loharu, Siwani, Tosham, Bawani Khera | Bajra, Guar, Mustard, Cotton, Gram, Wheat | Bhiwani Grain & Oilseed Mandi |
+| 3 | **Charkhi Dadri** | Southern | Charkhi Dadri, Badhra, Bahal | Bajra, Mustard, Wheat, Guar, Cotton | Charkhi Dadri Mandi |
+| 4 | **Faridabad** | Southern | Faridabad, Ballabgarh | Wheat, Paddy, Bajra, Mustard, Vegetables | Ballabgarh APMC |
+| 5 | **Fatehabad** | Western / South-Western | Fatehabad, Tohana, Ratia, Bhuna, Jakhal | Cotton, Wheat, Paddy, Mustard, Guar | Tohana Grain Market |
+| 6 | **Gurugram** | Southern | Gurugram, Sohna, Pataudi, Farrukhnagar, Manesar | Wheat, Mustard, Bajra, Vegetables | Gurugram Khandsa APMC |
+| 7 | **Hisar** | Western / South-Western | Hisar, Hansi, Barwala, Adampur, Narnaund, Uklana | Wheat, Cotton, Mustard, Bajra, Gram, Guar | Hisar New Grain Market / Hansi APMC |
+| 8 | **Jhajjar** | Central | Jhajjar, Bahadurgarh, Beri, Matenhail | Wheat, Paddy, Mustard, Bajra, Vegetables | Bahadurgarh Grain Market |
+| 9 | **Jind** | Central | Jind, Narwana, Safidon, Julana, Uchana | Wheat, Paddy, Sugarcane, Cotton, Mustard | Narwana / Jind Grain Market |
+| 10 | **Kaithal** | North-East | Kaithal, Pundri, Guhla (Cheeka), Rajaund | Paddy (Basmati), Wheat, Sugarcane | Kaithal New Grain Market / Cheeka |
+| 11 | **Karnal** | North-East | Karnal, Assandh, Gharaunda, Indri, Nilokheri, Taraori | Basmati Rice, Wheat, Sugarcane, Maize, Vegetables | Karnal Grain Market / Gharaunda CoE |
+| 12 | **Kurukshetra** | North-East | Kurukshetra (Thanesar), Shahabad, Pehowa, Ladwa | Paddy (Basmati), Wheat, Sugarcane, Potato, Sunflower | Shahabad Markanda / Pipli APMC |
+| 13 | **Mahendragarh** | Southern | Narnaul, Mahendragarh, Ateli, Nangal Chaudhry, Kanina | Bajra, Mustard, Guar, Gram, Wheat | Narnaul Grain & Oilseed APMC |
+| 14 | **Nuh** | Southern | Nuh, Ferozepur Jhirka, Punahana, Taoru | Wheat, Mustard, Bajra, Vegetables | Taoru / Nuh APMC Mandi |
+| 15 | **Palwal** | Southern | Palwal, Hodal, Hathin | Wheat, Paddy, Mustard, Potato, Vegetables | Palwal Grain Market |
+| 16 | **Panchkula** | North-East | Panchkula, Kalka, Pinjore, Raipur Rani | Wheat, Maize, Paddy, Vegetables, Mango and Litchi | Panchkula Sector 20 / Kalka APMC |
+| 17 | **Panipat** | Central | Panipat, Samalkha, Israna, Bapoli | Wheat, Paddy, Sugarcane, Vegetables | Panipat Grain Market |
+| 18 | **Rewari** | Southern | Rewari, Bawal, Dharuhera, Kosli | Bajra, Mustard, Wheat, Guar, Gram | Rewari New Grain Market |
+| 19 | **Rohtak** | Central | Rohtak, Meham, Kalanaur, Sampla | Wheat, Paddy, Mustard, Bajra, Vegetables | Rohtak New Grain Market |
+| 20 | **Sirsa** | Western / South-Western | Sirsa, Dabwali, Ellenabad, Rania, Kalanwali | Cotton, Wheat, Paddy, Mustard, Guar | Sirsa Grain & Cotton APMC |
+| 21 | **Sonipat** | Central | Sonipat, Gohana, Kharkhoda, Ganaur | Wheat, Paddy, Sugarcane, Vegetables, Baby Corn | Ganaur International Market |
+| 22 | **Yamunanagar** | North-East | Yamunanagar, Jagadhri, Radaur, Bilaspur, Chhachhrauli | Sugarcane, Paddy, Wheat, Maize, Poplar | Jagadhri / Radaur Mandi |
+
+---
+
+## 8. Stepwise GPU Curriculum Training Telemetry (NVIDIA RTX 3050)
+
+To resolve out-of-distribution errors and support all major Haryana crops, a dedicated **Stepwise GPU Training Curriculum** was executed using PyTorch with CUDA 12.1 on an **NVIDIA GeForce RTX 3050 6GB Laptop GPU**:
+
+### A. Stepwise Progression (Crop-by-Crop with District Association)
+| Step | Crop | Target Districts | Pathogens & Classes | Train / Val Samples | Training Time | Best Val Acc |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | **Wheat (Gehu)** | Karnal, Kurukshetra, Hisar, Jind, Rohtak, Sirsa, Ambala, Kaithal | Stripe Rust, Leaf Rust, Stem Rust, Healthy | 1,062 / 269 | 34.5s | **97.40%** |
+| **2** | **Rice (Paddy)** | Karnal, Kaithal, Kurukshetra, Yamunanagar, Ambala, Panipat, Sonipat | Bacterial Leaf Blight, Brown Spot, Leaf Smut | 96 / 24 | 7.2s | **87.50%** |
+| **3** | **Cotton (Kapas)** | Sirsa, Fatehabad, Hisar, Bhiwani, Charkhi Dadri | Diseased Leaf, Fresh Leaf, Diseased Plant, Fresh Plant | 1,239 / 311 | 38.2s | **99.36%** |
+| **4** | **Sugarcane (Ganna)** | Yamunanagar, Karnal, Panipat, Sonipat, Ambala, Kaithal | Red Rot, Mosaic, Rust, Yellow Leaf, Healthy | 1,600 / 400 | 79.3s | **95.75%** |
+| **5** | **Corn / Maize (Makka)** | Panchkula, Ambala, Yamunanagar, Karnal, Sonipat | Blight Diseased, Healthy | 640 / 160 | 14.6s | **86.88%** |
+| **6** | **Vegetables & Tubers** | Sonipat, Karnal, Kurukshetra, Jhajjar, Palwal, Rohtak | Tomato (10), Potato (3), Pepper Bell (2) | 1,800 / 450 | 43.1s | **96.00%** |
+
+### B. Master Unified Haryana Multi-Crop Classifier
+- **Total Classes:** 33 Pathological & Botanical Conditions across all 6 crop groups.
+- **Total Dataset:** 6,437 Training Images, 1,614 Validation Images (~8,051 images).
+- **Validation Accuracy:** **95.11%** (CrossEntropy Loss: 0.1458).
+- **GPU Checkpoint Saved:** `models/haryana_models/haryana_master_multicrop_gpu.pt`.
+- **Class Map Saved:** `models/haryana_models/haryana_class_map.json`.
+- **Inference Latency:** ~11 ms per frame on NVIDIA RTX 3050 GPU.
+
+

@@ -1,0 +1,157 @@
+{
+  "title": "AgriVision Agent: Haryana District-Wise Stepwise GPU Training Report",
+  "timestamp": "2026-10-08 10:09:09",
+  "hardware": {
+    "gpu_device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "cuda_version": "12.1",
+    "pytorch_version": "2.5.1+cu121"
+  },
+  "total_duration_sec": 221.7,
+  "steps_completed": [
+    {
+      "step": 1,
+      "crop": "wheat",
+      "crop_name": "Wheat (Gehu)",
+      "classes": [
+        "Wheat___healthy",
+        "Wheat___leaf_rust",
+        "Wheat___stem_rust",
+        "Wheat___stripe_rust"
+      ],
+      "districts": [
+        "Karnal",
+        "Kurukshetra",
+        "Hisar",
+        "Jind",
+        "Rohtak",
+        "Sirsa",
+        "Ambala",
+        "Kaithal",
+        "Fatehabad",
+        "Panipat"
+      ],
+      "best_val_acc": 97.39776951672863,
+      "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step1_wheat_model.pt",
+      "duration_sec": 34.5
+    },
+    {
+      "step": 2,
+      "crop": "rice",
+      "crop_name": "Rice / Paddy (Basmati & Non-Basmati)",
+      "classes": [
+        "Rice___bacterial_blight",
+        "Rice___brown_spot",
+        "Rice___leaf_smut"
+      ],
+      "districts": [
+        "Karnal",
+        "Kaithal",
+        "Kurukshetra",
+        "Yamunanagar",
+        "Ambala",
+        "Panipat",
+        "Sonipat"
+      ],
+      "best_val_acc": 87.5,
+      "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step2_rice_model.pt",
+      "duration_sec": 7.2
+    },
+    {
+      "step": 3,
+      "crop": "cotton",
+      "crop_name": "Cotton (Kapas / Narma)",
+      "classes": [
+        "Cotton___diseased_leaf",
+        "Cotton___diseased_plant",
+        "Cotton___healthy_leaf",
+        "Cotton___healthy_plant"
+      ],
+      "districts": [
+        "Sirsa",
+        "Fatehabad",
+        "Hisar",
+        "Bhiwani",
+        "Charkhi Dadri"
+      ],
+      "best_val_acc": 99.35691318327974,
+      "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step3_cotton_model.pt",
+      "duration_sec": 38.2
+    },
+    {
+      "step": 4,
+      "crop": "sugarcane",
+      "crop_name": "Sugarcane (Ganna)",
+      "classes": [
+        "Sugarcane___healthy",
+        "Sugarcane___mosaic",
+        "Sugarcane___red_rot",
+        "Sugarcane___rust",
+        "Sugarcane___yellow_leaf"
+      ],
+      "districts": [
+        "Yamunanagar",
+        "Karnal",
+        "Panipat",
+        "Sonipat",
+        "Ambala",
+        "Kaithal"
+      ],
+      "best_val_acc": 95.75,
+      "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step4_sugarcane_model.pt",
+      "duration_sec": 79.3
+    },
+    {
+      "step": 5,
+      "crop": "corn",
+      "crop_name": "Corn / Maize (Makka & Baby Corn)",
+      "classes": [
+        "Corn___blight_diseased",
+        "Corn___healthy"
+      ],
+      "districts": [
+        "Panchkula",
+        "Ambala",
+        "Yamunanagar",
+        "Karnal",
+        "Sonipat"
+      ],
+      "best_val_acc": 86.875,
+      "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step5_corn_model.pt",
+      "duration_sec": 14.6
+    },
+    {
+      "step": 6,
+      "crop": "vegetables",
+      "crop_name": "Vegetables & Tubers (Tomato, Potato, Pepper)",
+      "classes": [
+        "Pepper__bell___Bacterial_spot",
+        "Pepper__bell___healthy",
+        "Potato___Early_blight",
+        "Potato___Late_blight",
+        "Potato___healthy",
+        "Tomato_Bacterial_spot",
+        "Tomato_Early_blight",
+        "Tomato_Late_blight",
+        "Tomato_Leaf_Mold",
+        "Tomato_Septoria_leaf_spot",
+        "Tomato_Spider_mites_Two_spotted_spider_mite",
+        "Tomato__Target_Spot",
+        "Tomato__Tomato_YellowLeaf__Curl_Virus",
+        "Tomato__Tomato_mosaic_virus",
+        "Tomato_healthy"
+      ],
+      "districts": [
+        "Sonipat",
+        "Karnal",
+        "Kurukshetra",
+        "Jhajjar",
+        "Palwal",
+        "Rohtak",
+        "Yamunanagar"
+      ],
+      "best_val_acc": 96.0,
+      "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step6_vegetables_model.pt",
+      "duration_sec": 43.1
+    }
+  ]
+}

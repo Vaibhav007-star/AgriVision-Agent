@@ -43,6 +43,9 @@ models/saved_models/*.keras
 data/cache/
 data/raw/*
 data/processed/*
+data/haryana_crops/
+data/haryana_curriculum/
+data/haryana_unified_master/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/sample_images/

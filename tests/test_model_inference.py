@@ -17,8 +17,14 @@ class TestModelInference(unittest.TestCase):
     def setUp(self):
         init_db()
         self.classifier = get_classifier()
-        # Create synthetic leaf test image
-        self.sample_img = Image.new("RGB", (224, 224), color=(40, 150, 45))
+        sample_path = Path("data/sample_images/tomato_early_blight.jpg")
+        if sample_path.exists():
+            self.sample_img = Image.open(sample_path).convert("RGB")
+        else:
+            # Create synthetic textured green leaf image with edge variance
+            arr = np.random.randint(40, 180, (224, 224, 3), dtype=np.uint8)
+            arr[:, :, 1] = np.clip(arr[:, :, 1] + 60, 0, 255)
+            self.sample_img = Image.fromarray(arr)
         
     def test_model_architecture(self):
         model = build_transfer_learning_model(num_classes=15, input_shape=(224, 224, 3))

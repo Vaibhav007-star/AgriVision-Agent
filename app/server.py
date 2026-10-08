@@ -23,6 +23,7 @@ os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 from typing import Optional, List, Dict, Any
 import io
 import base64
+import json
 from pathlib import Path
 
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Request
@@ -344,6 +345,66 @@ async def market_rates_endpoint(crop: str = "Tomato", acres: float = 1.5):
     Returns live APMC Mandi commodity rates, arbitrage comparison, and farm economic projections.
     """
     return get_mandi_intelligence(crop, acreage=acres)
+
+
+@app.get("/api/haryana/districts")
+async def get_haryana_districts_endpoint() -> Dict[str, Any]:
+    """
+    Returns full profile for all 22 Haryana districts, including main cities/towns,
+    commonly grown crops, soil types, and APMC Mandi associations.
+    """
+    from src.data.haryana_agricultural_profile import HARYANA_DISTRICTS, HARYANA_REGIONAL_BELTS, HARYANA_CROP_SEASONS
+    return {
+        "state": "Haryana",
+        "total_districts": len(HARYANA_DISTRICTS),
+        "districts": HARYANA_DISTRICTS,
+        "regional_belts": HARYANA_REGIONAL_BELTS,
+        "seasons": HARYANA_CROP_SEASONS
+    }
+
+
+@app.get("/api/haryana/district/{name}")
+async def get_district_details_endpoint(name: str) -> Dict[str, Any]:
+    """
+    Retrieves crops, main towns, and agro-climatic profile for a specific Haryana district.
+    """
+    from src.data.haryana_agricultural_profile import get_district_info
+    info = get_district_info(name)
+    if not info:
+        raise HTTPException(status_code=404, detail=f"Haryana district '{name}' not found.")
+    return info
+
+
+@app.get("/api/haryana/crops")
+async def get_haryana_crops_endpoint() -> Dict[str, Any]:
+    """
+    Inverted index returning all major Haryana crops and the districts where they are cultivated.
+    """
+    from src.data.haryana_agricultural_profile import HARYANA_DISTRICTS, CROP_SPECIALIZATION_LEADERS, get_districts_by_crop
+    
+    crops_catalog = ["Wheat", "Paddy", "Cotton", "Sugarcane", "Mustard", "Bajra", "Maize", "Potato", "Vegetables", "Gram", "Guar"]
+    result = {}
+    for c in crops_catalog:
+        result[c] = {
+            "grown_in_districts": get_districts_by_crop(c),
+            "leading_districts": CROP_SPECIALIZATION_LEADERS.get(c, [])
+        }
+    return {
+        "state": "Haryana",
+        "crops": result
+    }
+
+
+@app.get("/api/haryana/training-curriculum")
+async def get_curriculum_report_endpoint() -> Dict[str, Any]:
+    """
+    Returns the telemetry and metrics from the stepwise GPU training curriculum on the NVIDIA RTX 3050.
+    """
+    summary_path = BASE_DIR / "models" / "haryana_checkpoints" / "haryana_curriculum_training_summary.json"
+    if summary_path.exists():
+        with open(summary_path, "r") as f:
+            return json.load(f)
+    return {"message": "Curriculum training summary not found."}
 
 
 @app.post("/api/chat")
