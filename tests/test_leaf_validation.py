@@ -30,12 +30,14 @@ def test_benchmark_leaves_pass_validation():
 
 def test_human_skin_and_faces_are_rejected():
     """Human skin tones must be detected and rejected with reason 'human_or_skin_detected'."""
-    # Synthetic skin patches with varied tone and realistic noise
+    # Synthetic skin patches with varied tone and realistic noise across Fitzpatrick I-VI
     tones = [
         [210, 160, 130],  # Fair / Asian tone
         [180, 130, 95],   # Olive / Medium tone
         [145, 95, 65],    # Deep / Dark tone
-        [235, 185, 155]   # Light peach tone
+        [235, 185, 155],  # Light peach tone
+        [195, 140, 105],  # Wheatish Indian tone
+        [110, 65, 40]     # Deep dark tone
     ]
     np.random.seed(42)
     for tone in tones:
@@ -47,6 +49,55 @@ def test_human_skin_and_faces_are_rejected():
         assert res["is_leaf"] is False, f"Failed to reject human tone {tone}"
         assert res["reason"] == "human_or_skin_detected"
         assert "Human" in res["message"] or "human" in res["message"].lower()
+
+
+def test_face_with_green_background_is_strictly_rejected():
+    """A human face standing in front of green plants, trees, or a green wall must still be rejected."""
+    # 224x224 synthetic photo with green plant wall background + centered human face
+    img = np.zeros((224, 224, 3), dtype=np.uint8)
+    img[:, :] = [45, 125, 45] # Green plant background
+    for y in range(40, 150):
+        for x in range(60, 164):
+            if ((x - 112) / 52) ** 2 + ((y - 95) / 55) ** 2 <= 1.0:
+                img[y, x] = [185, 130, 95] # Human face
+                
+    face_img = Image.fromarray(img)
+    res = validate_leaf_image(face_img)
+    assert res["is_leaf"] is False, "Face with green background was erroneously accepted as leaf"
+    assert res["reason"] == "human_or_skin_detected"
+
+
+def test_face_with_green_clothing_is_strictly_rejected():
+    """A human face wearing a green shirt or sweater must still be rejected."""
+    img = np.zeros((224, 224, 3), dtype=np.uint8)
+    img[:, :] = [225, 225, 230] # Neutral wall
+    img[150:, :] = [35, 115, 45] # Green shirt
+    for y in range(35, 145):
+        for x in range(65, 160):
+            if ((x - 112) / 47) ** 2 + ((y - 90) / 55) ** 2 <= 1.0:
+                img[y, x] = [195, 140, 105] # Face
+                
+    face_img = Image.fromarray(img)
+    res = validate_leaf_image(face_img)
+    assert res["is_leaf"] is False, "Face with green clothing was erroneously accepted as leaf"
+    assert res["reason"] == "human_or_skin_detected"
+
+
+def test_selfie_portraits_are_strictly_rejected():
+    """Close-up selfies and room portraits must be rejected regardless of lighting."""
+    # Close-up selfie
+    img = np.zeros((224, 224, 3), dtype=np.uint8)
+    img[:, :] = [180, 180, 190]
+    for y in range(20, 204):
+        for x in range(30, 194):
+            if ((x - 112) / 82) ** 2 + ((y - 112) / 92) ** 2 <= 1.0:
+                img[y, x] = [175, 125, 85]
+                
+    selfie_img = Image.fromarray(img)
+    res = validate_leaf_image(selfie_img)
+    assert res["is_leaf"] is False
+    assert res["reason"] == "human_or_skin_detected"
+
 
 
 def test_non_plant_objects_are_rejected():
@@ -86,6 +137,26 @@ def test_predict_crop_disease_rejects_human_input():
     assert diag["crop"] == "Non-Plant Object"
     assert len(diag["top_predictions"]) == 0
     assert diag["gradcam_overlay"] is None
+
+
+def test_predict_crop_disease_rejects_face_with_green_background():
+    """predict_crop_disease must reject a face even if background contains green foliage."""
+    img = np.zeros((224, 224, 3), dtype=np.uint8)
+    img[:, :] = [45, 125, 45] # Green background
+    for y in range(40, 150):
+        for x in range(60, 164):
+            if ((x - 112) / 52) ** 2 + ((y - 95) / 55) ** 2 <= 1.0:
+                img[y, x] = [185, 130, 95] # Human face
+                
+    diag = predict_crop_disease(Image.fromarray(img))
+    assert diag["is_leaf"] is False
+    assert diag["confidence"] == 0.0
+    assert diag["confidence_level"] == "Rejected"
+    assert diag["disease"] == "No Plant Leaf Detected"
+    assert diag["crop"] == "Non-Plant Object"
+    assert len(diag["top_predictions"]) == 0
+    assert "human" in diag["advisory_message"].lower() or "human" in diag["advisory_message_hi"]
+
 
 
 def test_agent_workflow_suppresses_treatment_for_non_leaf():

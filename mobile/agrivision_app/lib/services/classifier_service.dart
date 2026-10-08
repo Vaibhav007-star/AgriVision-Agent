@@ -69,7 +69,10 @@ class ClassifierService {
     int pixelIndex = 0;
     int foliagePixels = 0;
     int skinPixels = 0;
+    int centerSkinPixels = 0;
+    int centerFoliagePixels = 0;
     const int totalPixels = 224 * 224;
+    const double centerTotalPixels = 135.0 * 135.0; // Central ~60% region (44..179)
 
     for (int y = 0; y < 224; y++) {
       for (int x = 0; x < 224; x++) {
@@ -82,24 +85,43 @@ class ClassifierService {
         inputBuffer[pixelIndex++] = (g / 127.5) - 1.0;
         inputBuffer[pixelIndex++] = (b / 127.5) - 1.0;
 
-        // Botanical foliage check (green dominance or chlorophyll green)
-        if ((g > r * 0.88 && g > b * 1.02 && g > 30) || (g > 60 && g > r && g > b)) {
-          foliagePixels++;
-        }
+        final bool isCenter = (x >= 44 && x <= 179 && y >= 44 && y <= 179);
 
-        // Human skin tone check (YCbCr + RGB rules)
+        // Human skin tone check (YCbCr + RGB rules across Fitzpatrick I-VI)
         final double yVal = 0.299 * r + 0.587 * g + 0.114 * b;
         final double cr = (r - yVal) * 0.713 + 128;
         final double cb = (b - yVal) * 0.564 + 128;
-        if (r > 75 && g > 35 && b > 18 && r > g && r > b && (r - g) >= 8 && cr >= 130 && cr <= 178 && cb >= 75 && cb <= 130) {
+        final bool isSkinPixel = (r > 70 && g > 35 && b > 20 &&
+            r > g && r > b && (r - b) >= 12 && (r - g) >= 6 &&
+            cr >= 132 && cr <= 182 && cb >= 75 && cb <= 135 && (cr - cb) >= 20);
+
+        if (isSkinPixel) {
           skinPixels++;
+          if (isCenter) centerSkinPixels++;
+        }
+
+        // Botanical foliage check (Strictly excluding human skin)
+        final bool isFoliagePixel = !isSkinPixel && (
+            (g > r * 0.92 && g > b * 1.05 && g > 30) ||
+            (g > 55 && g > r * 0.90 && g > b)
+        );
+
+        if (isFoliagePixel) {
+          foliagePixels++;
+          if (isCenter) centerFoliagePixels++;
         }
       }
     }
 
     final double foliageRatio = foliagePixels / totalPixels;
     final double skinRatio = skinPixels / totalPixels;
-    final bool isHuman = skinRatio > 0.12 && skinRatio > foliageRatio * 0.5;
+    final double centerSkinRatio = centerSkinPixels / centerTotalPixels;
+    final double centerFoliageRatio = centerFoliagePixels / centerTotalPixels;
+
+    // Hardened human subject rejection (rejects selfies/portraits regardless of background clothing or walls)
+    final bool isHuman = (centerSkinRatio >= 0.12 && centerFoliageRatio < 0.65) ||
+        (skinRatio >= 0.14) ||
+        (centerSkinRatio >= 0.20);
     final bool isNonLeaf = isHuman || foliageRatio < 0.10;
 
     if (isNonLeaf) {

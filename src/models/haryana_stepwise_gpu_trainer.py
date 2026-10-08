@@ -24,8 +24,13 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any, Tuple
 
-if sys.stdout.encoding != 'utf-8':
-    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+try:
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace', line_buffering=True)
+    if hasattr(sys.stderr, 'reconfigure'):
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace', line_buffering=True)
+except Exception:
+    pass
 
 import torch
 import torch.nn as nn
@@ -363,5 +368,42 @@ def run_full_stepwise_curriculum(epochs_per_step: int = 3) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    epochs = int(sys.argv[1]) if len(sys.argv) > 1 else 3
-    run_full_stepwise_curriculum(epochs_per_step=epochs)
+    import argparse
+    parser = argparse.ArgumentParser(description="Haryana Stepwise GPU Crop Disease Trainer")
+    parser.add_argument("--step", type=str, default="all", help="Step number (1-6), crop name, or 'all'")
+    parser.add_argument("--epochs", type=int, default=3, help="Training epochs per step (default: 3)")
+    
+    # Support positional args like: python trainer.py [epochs] OR python trainer.py [step] [epochs]
+    args, unknown = parser.parse_known_args()
+    if unknown:
+        if len(unknown) == 1 and unknown[0].isdigit():
+            val = int(unknown[0])
+            if 1 <= val <= 6 and args.step == "all":
+                args.step = str(val)
+            else:
+                args.epochs = val
+        elif len(unknown) >= 2:
+            args.step = unknown[0]
+            if unknown[1].isdigit():
+                args.epochs = int(unknown[1])
+                
+    device = get_gpu_device()
+    if args.step.lower() == "all":
+        run_full_stepwise_curriculum(epochs_per_step=args.epochs)
+    else:
+        matched_item = None
+        if args.step.isdigit():
+            s_idx = int(args.step)
+            matched_item = next((x for x in HARYANA_TRAINING_CURRICULUM if x["step"] == s_idx), None)
+        else:
+            s_clean = args.step.lower()
+            matched_item = next((x for x in HARYANA_TRAINING_CURRICULUM if x["crop_key"].lower() == s_clean or s_clean in x["crop_name"].lower()), None)
+            
+        if matched_item:
+            print(f"\n[GPU TRAINER] Running single step training for: {matched_item['crop_name']} (Step {matched_item['step']}/6)")
+            train_single_step(matched_item, device=device, epochs=args.epochs)
+        else:
+            print(f"\n[ERROR] Step '{args.step}' not found. Available steps:")
+            for item in HARYANA_TRAINING_CURRICULUM:
+                print(f"  Step {item['step']}: {item['crop_name']} ({item['crop_key']})")
+            print("  Or run 'all' to train all 6 steps sequentially.")

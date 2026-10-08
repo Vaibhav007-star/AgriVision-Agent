@@ -1,12 +1,12 @@
 {
   "title": "AgriVision Agent: Haryana District-Wise Stepwise GPU Training Report",
-  "timestamp": "2026-10-08 10:09:09",
+  "timestamp": "2026-10-08 17:47:04",
   "hardware": {
     "gpu_device": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
     "cuda_version": "12.1",
     "pytorch_version": "2.5.1+cu121"
   },
-  "total_duration_sec": 221.7,
+  "total_duration_sec": 226.9,
   "steps_completed": [
     {
       "step": 1,
@@ -32,7 +32,7 @@
       ],
       "best_val_acc": 97.39776951672863,
       "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step1_wheat_model.pt",
-      "duration_sec": 34.5
+      "duration_sec": 30.7
     },
     {
       "step": 2,
@@ -52,7 +52,7 @@
         "Panipat",
         "Sonipat"
       ],
-      "best_val_acc": 87.5,
+      "best_val_acc": 75.0,
       "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step2_rice_model.pt",
       "duration_sec": 7.2
     },
@@ -73,9 +73,9 @@
         "Bhiwani",
         "Charkhi Dadri"
       ],
-      "best_val_acc": 99.35691318327974,
+      "best_val_acc": 98.71382636655949,
       "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step3_cotton_model.pt",
-      "duration_sec": 38.2
+      "duration_sec": 52.9
     },
     {
       "step": 4,
@@ -96,9 +96,9 @@
         "Ambala",
         "Kaithal"
       ],
-      "best_val_acc": 95.75,
+      "best_val_acc": 97.0,
       "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step4_sugarcane_model.pt",
-      "duration_sec": 79.3
+      "duration_sec": 101.6
     },
     {
       "step": 5,
@@ -115,9 +115,9 @@
         "Karnal",
         "Sonipat"
       ],
-      "best_val_acc": 86.875,
+      "best_val_acc": 84.375,
       "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step5_corn_model.pt",
-      "duration_sec": 14.6
+      "duration_sec": 8.8
     },
     {
       "step": 6,
@@ -149,9 +149,9 @@
         "Rohtak",
         "Yamunanagar"
       ],
-      "best_val_acc": 96.0,
+      "best_val_acc": 95.11111111111111,
       "checkpoint": "c:\\Projects\\AgriVision Agent\\models\\haryana_checkpoints\\step6_vegetables_model.pt",
-      "duration_sec": 43.1
+      "duration_sec": 25.0
     }
   ]
 }

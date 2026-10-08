@@ -202,12 +202,15 @@ def validate_leaf_image(
     image: Image.Image,
     min_foliage_ratio: float = 10.0,
     min_texture_var: float = 8.0,
-    skin_threshold_ratio: float = 12.0
+    skin_threshold_ratio: float = 14.0
 ) -> Dict[str, Any]:
     """
-    Botanical & Out-of-Distribution (OOD) Guardrail:
+    Hardened Botanical & Out-of-Distribution (OOD) Guardrail:
     Validates whether the input photograph contains genuine agricultural crop leaf foliage.
-    Detects and rejects non-plant objects, human faces/skin, animals, and blank backgrounds.
+    Detects and strictly rejects human faces/selfies, skin tones (Fitzpatrick I-VI),
+    animals, non-plant objects, and uniform blank surfaces.
+    
+    Prevents false disease diagnoses and accidental chemical spray prescriptions on humans.
     
     Returns:
         Dict with keys:
@@ -237,13 +240,15 @@ def validate_leaf_image(
             "reason": "blank_or_uniform_surface",
             "foliage_percentage": 0.0,
             "skin_percentage": 0.0,
+            "center_skin_percentage": 0.0,
+            "max_skin_blob_percentage": 0.0,
             "mean_gli": 0.0,
             "texture_variance": round(texture_var, 2),
             "message": "The uploaded image appears to be a blank or uniform surface without leaf biological texture.",
             "message_hi": "अपलोड की गई तस्वीर एक सादी सतह है जिसमें पौधे की पत्ती की कोई जैविक बनावट नहीं है।"
         }
         
-    # 2. Human Skin Chrominance & Color Detection (YCbCr + HSV + RGB)
+    # 2. Comprehensive Human Skin Chrominance & Spatial Analysis (Fitzpatrick I-VI, Indian Tones)
     y = 0.299 * r + 0.587 * g + 0.114 * b
     cr = (r - y) * 0.713 + 128
     cb = (b - y) * 0.564 + 128
@@ -252,48 +257,96 @@ def validate_leaf_image(
     s = hsv[:, :, 1]
     v = hsv[:, :, 2]
     
+    # Human skin chrominance signature across illumination variations
     skin_mask = (
-        (r > 75) & (g > 35) & (b > 18) &
-        (r > g) & (r > b) & ((r - g) >= 8) &
-        (cr >= 130) & (cr <= 178) & (cb >= 75) & (cb <= 130) &
-        (((h <= 18) | (h >= 168)) & (s >= 20) & (s <= 200) & (v >= 45))
+        (r > 70) & (g > 35) & (b > 20) &
+        (r > g) & (r > b) & ((r - b) >= 12) & ((r - g) >= 6) &
+        (cr >= 132) & (cr <= 182) & (cb >= 75) & (cb <= 135) & ((cr - cb) >= 20) &
+        (((h <= 26) | (h >= 165)) & (s >= 20) & (s <= 215) & (v >= 40))
     )
     skin_pct = float(np.sum(skin_mask) / total_pixels * 100)
     
-    # 3. Botanical Plant Foliage Detection (Green, Lime, Yellow-Green, Chlorotic/Blighted Tissue)
-    green_foliage = (h >= 24) & (h <= 98) & (s >= 18) & (v >= 20)
-    chlorosis_spots = (h >= 19) & (h < 24) & (s >= 20) & (v >= 25) & (g >= b)
-    green_dom = (g > r * 0.88) & (g > b * 1.02) & (g > 30)
+    # Central Zone Analysis (faces/selfies occupy the central 60% view)
+    cy1, cy2 = int(0.20 * h_orig), int(0.80 * h_orig)
+    cx1, cx2 = int(0.20 * w_orig), int(0.80 * w_orig)
+    center_pixels = max(1, (cy2 - cy1) * (cx2 - cx1))
+    c_skin = skin_mask[cy1:cy2, cx1:cx2]
+    center_skin_pct = float(np.sum(c_skin) / center_pixels * 100)
     
-    foliage_mask = green_foliage | chlorosis_spots | green_dom
+    # Upper-Central Zone Analysis (portrait headshots: top 15% to 70%)
+    uy1, uy2 = int(0.15 * h_orig), int(0.70 * h_orig)
+    ux1, ux2 = int(0.25 * w_orig), int(0.75 * w_orig)
+    upper_pixels = max(1, (uy2 - uy1) * (ux2 - ux1))
+    u_skin = skin_mask[uy1:uy2, ux1:ux2]
+    upper_skin_pct = float(np.sum(u_skin) / upper_pixels * 100)
+    
+    # Connected Component Face Blob Analysis (detect contiguous skin mass)
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(skin_mask.astype(np.uint8))
+    max_blob_pct = 0.0
+    if num_labels > 1:
+        max_blob_pct = float(np.max(stats[1:, cv2.CC_STAT_AREA]) / total_pixels * 100)
+        
+    # 3. Botanical Plant Foliage Detection (Excluding Human Skin)
+    # Green chlorophyll foliage
+    green_foliage = (h >= 24) & (h <= 98) & (s >= 18) & (v >= 20)
+    # Plant chlorosis (yellow-lime leaf spots): must have high green component, distinct from skin
+    chlorosis_spots = (h >= 19) & (h < 26) & (s >= 25) & (v >= 30) & (g >= r * 0.85) & ((r - g) <= 15) & (g >= b)
+    # Green dominance
+    green_dom = (g > r * 0.92) & (g > b * 1.05) & (g > 30)
+    
+    # Strict Exclusion: Human skin pixels can NEVER be counted as foliage
+    foliage_mask = (green_foliage | chlorosis_spots | green_dom) & (~skin_mask)
     foliage_pct = float(np.sum(foliage_mask) / total_pixels * 100)
+    
+    # True Chlorophyll Green Coverage
+    true_plant_green = (h >= 25) & (h <= 95) & (s >= 25) & (v >= 25) & (g > r * 0.92) & (g > b * 1.05) & (~skin_mask)
+    true_green_pct = float(np.sum(true_plant_green) / total_pixels * 100)
+    
+    # Central Zone Foliage Coverage
+    c_foliage = foliage_mask[cy1:cy2, cx1:cx2]
+    center_foliage_pct = float(np.sum(c_foliage) / center_pixels * 100)
     
     # 4. Green Leaf Index (GLI)
     denom = 2 * g + r + b
     denom[denom == 0] = 1e-5
     gli = (2 * g - r - b) / denom
     mean_gli = float(np.mean(gli))
+    center_gli = float(np.mean(gli[cy1:cy2, cx1:cx2]))
     
-    # Rule A: Human skin dominant over foliage
-    if skin_pct > skin_threshold_ratio and skin_pct > foliage_pct * 0.5:
+    # 5. Guardrail Decision Rules
+    # Rule A: Human Subject Detection (Faces, Selfies, Portraits, Arms/Hands)
+    # Rejects selfies regardless of background foliage or green clothing
+    is_human = (
+        (center_skin_pct >= 12.0 and center_foliage_pct < 65.0) or
+        (upper_skin_pct >= 14.0 and center_foliage_pct < 65.0) or
+        (max_blob_pct >= 5.0 and center_gli < 0.15) or
+        (skin_pct >= skin_threshold_ratio) or
+        (center_skin_pct >= 20.0)
+    )
+    
+    if is_human:
         return {
             "is_leaf": False,
             "reason": "human_or_skin_detected",
             "foliage_percentage": round(foliage_pct, 1),
             "skin_percentage": round(skin_pct, 1),
+            "center_skin_percentage": round(center_skin_pct, 1),
+            "max_skin_blob_percentage": round(max_blob_pct, 1),
             "mean_gli": round(mean_gli, 3),
             "texture_variance": round(texture_var, 2),
-            "message": "Human subject detected. AgriVision Agent is designed strictly for agricultural crop leaf pathology, not human diagnostics. No crop disease or pesticide treatment will be prescribed.",
+            "message": "Human subject detected. AgriVision Agent is designed strictly for agricultural crop leaf pathology, not human medical diagnostics. No crop disease or pesticide treatment will be prescribed.",
             "message_hi": "मानव चेहरा या त्वचा पहचानी गई है। एग्रीविज़न एजेंट केवल फसलों (टमाटर, आलू, मिर्च, सेब आदि) की पत्तियों के रोग निदान के लिए बनाया गया है। किसी गैर-पौधे के लिए कोई कीटनाशक उपचार नहीं दिया जाएगा।"
         }
         
     # Rule B: Insufficient botanical foliage coverage (cars, furniture, animals, rooms, blue objects)
-    if foliage_pct < min_foliage_ratio or (foliage_pct < 18.0 and mean_gli < -0.05):
+    if foliage_pct < min_foliage_ratio or (true_green_pct < 4.0 and foliage_pct < 18.0) or (foliage_pct < 18.0 and mean_gli < -0.05):
         return {
             "is_leaf": False,
             "reason": "non_plant_object",
             "foliage_percentage": round(foliage_pct, 1),
             "skin_percentage": round(skin_pct, 1),
+            "center_skin_percentage": round(center_skin_pct, 1),
+            "max_skin_blob_percentage": round(max_blob_pct, 1),
             "mean_gli": round(mean_gli, 3),
             "texture_variance": round(texture_var, 2),
             "message": "No crop leaf detected (insufficient plant foliage in image). Please upload a clear close-up photograph of an affected crop leaf to receive diagnosis and treatment.",
@@ -305,6 +358,8 @@ def validate_leaf_image(
         "reason": "valid_leaf",
         "foliage_percentage": round(foliage_pct, 1),
         "skin_percentage": round(skin_pct, 1),
+        "center_skin_percentage": round(center_skin_pct, 1),
+        "max_skin_blob_percentage": round(max_blob_pct, 1),
         "mean_gli": round(mean_gli, 3),
         "texture_variance": round(texture_var, 2),
         "message": "Valid crop leaf foliage successfully detected.",

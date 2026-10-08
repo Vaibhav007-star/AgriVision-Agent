@@ -92,35 +92,44 @@ def render_detection():
                 
         if "latest_prediction" in st.session_state:
             pred = st.session_state["latest_prediction"]
+            is_leaf = pred.get("is_leaf", True)
             
-            # Confidence Banner
-            if pred["confidence_level"] == "High":
-                st.markdown(f"""
-                <div class="result-card-healthy" style="border-left: 5px solid #2e7d32; padding: 12px; background: #e8f5e9; border-radius: 6px;">
-                    <h3 style="margin:0; color:#1b5e20;">🌾 {pred['crop']} — {pred['disease']}</h3>
-                    <p style="margin:4px 0 0 0; color:#2e7d32; font-weight:600;">
-                        Confidence: {pred['confidence_percentage']}% ({pred['confidence_level']} Certainty) | Status: {'Healthy' if pred['is_healthy'] else 'Pathogen Detected'}
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-            elif pred["confidence_level"] == "Moderate":
-                st.warning(f"🌾 **{pred['crop']} — {pred['disease']}** (Confidence: `{pred['confidence_percentage']}%` - Moderate Certainty)")
+            if not is_leaf or pred.get("confidence_level") == "Rejected":
+                st.error(f"🚫 **Input Rejected:** {pred.get('advisory_message', 'No valid crop leaf detected.')}")
+                if st.session_state.get("language") == "hi" and pred.get("advisory_message_hi"):
+                    st.caption(pred["advisory_message_hi"])
+                st.warning("🛡️ **Botanical Guardrail Active:** This photo was identified as a human subject or non-plant object. AgriVision strictly suppresses disease prediction and chemical dosage to prevent hazardous misapplications.")
+                st.info("📸 Please upload a clear close-up photograph of an affected crop leaf (Tomato, Potato, Pepper, Apple, Corn) in natural lighting.")
             else:
-                st.error(f"⚠️ **Low Confidence:** {pred['advisory_message']}")
+                # Confidence Banner
+                if pred["confidence_level"] == "High":
+                    st.markdown(f"""
+                    <div class="result-card-healthy" style="border-left: 5px solid #2e7d32; padding: 12px; background: #e8f5e9; border-radius: 6px;">
+                        <h3 style="margin:0; color:#1b5e20;">🌾 {pred['crop']} — {pred['disease']}</h3>
+                        <p style="margin:4px 0 0 0; color:#2e7d32; font-weight:600;">
+                            Confidence: {pred['confidence_percentage']}% ({pred['confidence_level']} Certainty) | Status: {'Healthy' if pred['is_healthy'] else 'Pathogen Detected'}
+                        </p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                elif pred["confidence_level"] == "Moderate":
+                    st.warning(f"🌾 **{pred['crop']} — {pred['disease']}** (Confidence: `{pred['confidence_percentage']}%` - Moderate Certainty)")
+                else:
+                    st.error(f"⚠️ **Low Confidence:** {pred['advisory_message']}")
+                    
+                # Grad-CAM Attention Map
+                if pred.get("gradcam_overlay") is not None:
+                    st.markdown("#### 🧠 Grad-CAM Neural Attention Map")
+                    st.caption("Visualizing gradient activations on the final convolutional layer highlighting lesion hot-spots.")
+                    st.image(pred["gradcam_overlay"], use_container_width=True)
+                    
+                # Top-3 Probability Distribution Table
+                if pred.get("top_predictions"):
+                    st.markdown("#### 📊 Top-3 Categorical Probability Distribution")
+                    top_df = pd.DataFrame(pred["top_predictions"])[["rank", "crop", "disease", "confidence_pct"]]
+                    top_df.columns = ["Rank", "Crop", "Condition", "Probability"]
+                    st.dataframe(top_df, use_container_width=True)
                 
-            # Grad-CAM Attention Map
-            if pred.get("gradcam_overlay") is not None:
-                st.markdown("#### 🧠 Grad-CAM Neural Attention Map")
-                st.caption("Visualizing gradient activations on the final convolutional layer highlighting lesion hot-spots.")
-                st.image(pred["gradcam_overlay"], use_container_width=True)
-                
-            # Top-3 Probability Distribution Table
-            st.markdown("#### 📊 Top-3 Categorical Probability Distribution")
-            top_df = pd.DataFrame(pred["top_predictions"])[["rank", "crop", "disease", "confidence_pct"]]
-            top_df.columns = ["Rank", "Crop", "Condition", "Probability"]
-            st.dataframe(top_df, use_container_width=True)
-            
-            st.info("👉 Switch to the **🤖 AI Agent Diagnosis** page to review autonomous multi-node reasoning, acreage dosage, and RAG treatment plans.")
+                st.info("👉 Switch to the **🤖 AI Agent Diagnosis** page to review autonomous multi-node reasoning, acreage dosage, and RAG treatment plans.")
         else:
             st.info("👈 Select a sample or upload a leaf photo to trigger neural inference.")
 
