@@ -50,7 +50,7 @@ from app.database.crud import (
 )
 from app.rag.vectorstore import get_vector_store
 from app.rag.retriever import retrieve_pathology_context
-from src.utils.image_processing import segment_leaf_mask
+from src.utils.image_processing import segment_leaf_mask, compute_digital_lcc
 from src.utils.dataset import get_available_samples
 
 app = FastAPI(
@@ -275,8 +275,9 @@ async def diagnose_leaf(
     orig_b64 = pil_to_base64(pil_image, format="JPEG")
     clahe_b64 = pil_to_base64(clahe_image, format="JPEG")
     gradcam_b64 = pil_to_base64(inference_result["gradcam_overlay"], format="JPEG") if inference_result.get("gradcam_overlay") else None
-    mask_b64 = pil_to_base64(seg_result["segmented_image"], format="JPEG")
-    
+    # 5. Digital IRRI Leaf Color Chart (LCC) Nitrogen Analysis
+    lcc_result = compute_digital_lcc(pil_image) if is_leaf else None
+
     return {
         "success": True,
         "is_leaf": is_leaf,
@@ -295,6 +296,7 @@ async def diagnose_leaf(
         "weather": weather_data if is_leaf else {},
         "dosage_plan": dosage_plan,
         "prescription": final_prescription,
+        "lcc": lcc_result,
         "reasoning_steps": agent_result.get("reasoning_steps", []),
         "images": {
             "original": orig_b64,

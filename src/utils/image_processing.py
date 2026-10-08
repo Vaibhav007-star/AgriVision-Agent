@@ -311,3 +311,169 @@ def validate_leaf_image(
         "message_hi": "पौधे की पत्ती सफलतापूर्वक पहचानी गई।"
     }
 
+
+# Calibrated IRRI / ICAR 5-Panel Reference Color Standards in CIE LAB & RGB space
+IRRI_LCC_STANDARDS = {
+    1: {
+        "lab": (79.0, -21.0, 44.0),
+        "rgb": (186, 202, 114),
+        "hex": "#BACA72",
+        "name": "Pale Yellow-Green",
+        "name_hi": "हल्का पीला-हरा",
+        "status": "Severe Nitrogen Deficit",
+        "status_hi": "गंभीर नाइट्रोजन की कमी",
+        "urea_kg_per_acre": 25,
+        "action": "Urgent Top-Dress Required",
+        "action_hi": "तत्काल यूरिया छिड़काव आवश्यक",
+        "advisory": "Chlorophyll synthesis is severely restricted. Top-dress 25-30 kg Urea per Acre or apply 2% foliar Urea spray immediately.",
+        "advisory_hi": "क्लोरोफिल की भारी कमी है। तुरंत 25-30 किलोग्राम यूरिया प्रति एकड़ दें या 2% यूरिया का पर्णीय छिड़काव करें।"
+    },
+    2: {
+        "lab": (71.0, -26.0, 48.0),
+        "rgb": (152, 186, 85),
+        "hex": "#98BA55",
+        "name": "Yellowish-Green",
+        "name_hi": "पीला-हरा",
+        "status": "Moderate Nitrogen Deficit",
+        "status_hi": "मध्यम नाइट्रोजन की कमी",
+        "urea_kg_per_acre": 20,
+        "action": "Top-Dress at Next Irrigation",
+        "action_hi": "अगली सिंचाई पर यूरिया दें",
+        "advisory": "Leaf greenness is below critical agronomic threshold. Apply 20 kg Urea per Acre with the next scheduled irrigation.",
+        "advisory_hi": "पत्ती का हरापन आवश्यक स्तर से कम है। अगली सिंचाई के साथ 20 किलोग्राम यूरिया प्रति एकड़ डालें।"
+    },
+    3: {
+        "lab": (62.0, -30.0, 47.0),
+        "rgb": (115, 160, 62),
+        "hex": "#73A03E",
+        "name": "Light / Balanced Green",
+        "name_hi": "संतुलित हरा",
+        "status": "Critical Agronomic Threshold",
+        "status_hi": "संतुलित स्तर",
+        "urea_kg_per_acre": 10,
+        "action": "Maintain / Conditional Top-Dress",
+        "action_hi": "संतुलन बनाए रखें",
+        "advisory": "Plant has adequate nitrogen for current growth. Apply a small top-dress of 10-15 kg Urea per Acre only if tillering or branching lags.",
+        "advisory_hi": "पौधे में वर्तमान वृद्धि के लिए पर्याप्त नाइट्रोजन है। यदि वानस्पतिक वृद्धि धीमी हो तभी 10-15 किलोग्राम यूरिया दें।"
+    },
+    4: {
+        "lab": (50.0, -32.0, 41.0),
+        "rgb": (77, 128, 44),
+        "hex": "#4D802C",
+        "name": "Deep Vibrant Green",
+        "name_hi": "गहरा चमकदार हरा",
+        "status": "Optimal Chlorophyll Health",
+        "status_hi": "आदर्श क्लोरोफिल स्तर",
+        "urea_kg_per_acre": 0,
+        "action": "Halt Nitrogen (Zero Urea)",
+        "action_hi": "यूरिया न डालें (पैसा बचाएं)",
+        "advisory": "Photosynthetic efficiency is at peak performance. DO NOT APPLY UREA. Save fertilizer expense and avoid crop burning.",
+        "advisory_hi": "पौधे का क्लोरोफिल उच्चतम स्तर पर है। यूरिया बिल्कुल न डालें। खाद की लागत बचाएं।"
+    },
+    5: {
+        "lab": (37.0, -31.0, 33.0),
+        "rgb": (45, 95, 30),
+        "hex": "#2D5F1E",
+        "name": "Dark Forest Green",
+        "name_hi": "अत्यधिक गहरा हरा",
+        "status": "Excessive Nitrogen (Hyper-Succulent)",
+        "status_hi": "अत्यधिक नाइट्रोजन (हानिकारक)",
+        "urea_kg_per_acre": 0,
+        "action": "Strictly Withhold Nitrogen",
+        "action_hi": "नाइट्रोजन तुरंत रोकें",
+        "advisory": "WARNING: Over-fertilization detected! Leaves are hyper-succulent, making the crop highly susceptible to fungal blights and sucking pests (Aphids, Whiteflies). Completely halt all nitrogen fertilizers.",
+        "advisory_hi": "चेतावनी: अत्यधिक यूरिया का उपयोग! पत्तियां बहुत नाजुक हो गई हैं, जिससे फफूंद रोग और कीटों (माहू, सफेद मक्खी) का भारी खतरा है। नाइट्रोजन तुरंत रोकें।"
+    }
+}
+
+
+def compute_digital_lcc(image: Image.Image) -> Dict[str, Any]:
+    """
+    Digital IRRI / ICAR Leaf Color Chart (LCC) Analyzer.
+    Segments healthy chlorophyll canopy, measures median CIE LAB color values,
+    and matches against the 5 standardized IRRI green panels using Euclidean Delta-E.
+    
+    Returns:
+        Dict containing matched panel (1-5), shade name, nitrogen status,
+        recommended Urea kg/Acre, hex color, and bilingual farmer guidance.
+    """
+    img_np = np.array(image.convert("RGB"))
+    hsv = cv2.cvtColor(img_np, cv2.COLOR_RGB2HSV)
+    
+    # Isolate green leaf canopy (excluding background, soil, and dark necrotic spots)
+    h = hsv[:, :, 0]
+    s = hsv[:, :, 1]
+    v = hsv[:, :, 2]
+    
+    green_canopy_mask = (h >= 24) & (h <= 98) & (s >= 20) & (v >= 25)
+    valid_pixel_count = int(np.sum(green_canopy_mask))
+    
+    if valid_pixel_count < 100:
+        # Fallback if insufficient green foliage is isolated
+        return {
+            "success": False,
+            "panel": 3,
+            "shade_name": "Indeterminate Foliage",
+            "shade_name_hi": "अनिश्चित हरापन",
+            "hex_color": "#73A03E",
+            "nitrogen_status": "Baseline (Insufficient Foliage Isolated)",
+            "nitrogen_status_hi": "सामान्य स्तर",
+            "urea_kg_per_acre": 0,
+            "action": "Maintain Current Regimen",
+            "action_hi": "वर्तमान व्यवस्था बनाए रखें",
+            "advisory": "Could not isolate enough healthy foliage pixels for LCC matching. Ensure close-up photo under clear daylight.",
+            "advisory_hi": "एलसीसी मिलान के लिए पर्याप्त स्वस्थ पत्ती क्षेत्र नहीं मिला। कृपया प्राकृतिक रोशनी में स्पष्ट तस्वीर लें।",
+            "delta_e": 0.0,
+            "measured_rgb": [115, 160, 62]
+        }
+        
+    # Convert image to standard CIE LAB (L in [0, 100], a,b in [-128, 127])
+    img_float = (img_np / 255.0).astype(np.float32)
+    lab = cv2.cvtColor(img_float, cv2.COLOR_RGB2LAB).astype(float)
+    
+    # Calculate median color of the healthy leaf pixels to avoid outlier specular highlights
+    l_vals = lab[:, :, 0][green_canopy_mask]
+    a_vals = lab[:, :, 1][green_canopy_mask]
+    b_vals = lab[:, :, 2][green_canopy_mask]
+    
+    med_l = float(np.median(l_vals))
+    med_a = float(np.median(a_vals))
+    med_b = float(np.median(b_vals))
+    measured_lab = np.array([med_l, med_a, med_b])
+    
+    # Also extract median RGB for display
+    r_med = int(np.median(img_np[:, :, 0][green_canopy_mask]))
+    g_med = int(np.median(img_np[:, :, 1][green_canopy_mask]))
+    b_med = int(np.median(img_np[:, :, 2][green_canopy_mask]))
+    
+    # Find closest IRRI LCC Panel using Euclidean Delta-E in LAB space
+    best_panel = 3
+    min_dist = float("inf")
+    
+    for panel_num, meta in IRRI_LCC_STANDARDS.items():
+        ref_lab = np.array(meta["lab"])
+        dist = float(np.linalg.norm(measured_lab - ref_lab))
+        if dist < min_dist:
+            min_dist = dist
+            best_panel = panel_num
+            
+    best_meta = IRRI_LCC_STANDARDS[best_panel]
+    
+    return {
+        "success": True,
+        "panel": best_panel,
+        "shade_name": best_meta["name"],
+        "shade_name_hi": best_meta["name_hi"],
+        "hex_color": best_meta["hex"],
+        "nitrogen_status": best_meta["status"],
+        "nitrogen_status_hi": best_meta["status_hi"],
+        "urea_kg_per_acre": best_meta["urea_kg_per_acre"],
+        "action": best_meta["action"],
+        "action_hi": best_meta["action_hi"],
+        "advisory": best_meta["advisory"],
+        "advisory_hi": best_meta["advisory_hi"],
+        "delta_e": round(min_dist, 2),
+        "measured_rgb": [r_med, g_med, b_med]
+    }
+
+

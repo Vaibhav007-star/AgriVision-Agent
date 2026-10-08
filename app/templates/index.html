@@ -614,6 +614,65 @@
               </div>
             </div>
 
+            <!-- Digital IRRI Leaf Color Chart (LCC) Nitrogen & Urea Card -->
+            <div id="lcc-card" class="zenze-card p-5 border-emerald-500/20 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                  <i data-lucide="leaf" class="w-4 h-4 text-emerald-400"></i>
+                  Digital IRRI Leaf Color Chart (LCC) — Nitrogen & Urea Engine
+                </span>
+                <span id="lcc-panel-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                  Panel 4: Optimal Nutrition
+                </span>
+              </div>
+
+              <!-- 5-Panel Visual Color Bar -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+                  <span>Deficient (Shade 1)</span>
+                  <span class="text-[10px] text-emerald-400/80 font-semibold tracking-wider uppercase">IRRI / ICAR Calibrated Scale</span>
+                  <span>Excessive (Shade 5)</span>
+                </div>
+                <div class="grid grid-cols-5 gap-2 p-2 bg-black/50 rounded-xl border border-white/10">
+                  <div id="lcc-bar-1" class="h-9 rounded-lg flex items-center justify-center text-xs font-black text-black/80 transition-all cursor-default" style="background-color: #BACA72;" title="Panel 1: Severe Deficit">1</div>
+                  <div id="lcc-bar-2" class="h-9 rounded-lg flex items-center justify-center text-xs font-black text-black/80 transition-all cursor-default" style="background-color: #98BA55;" title="Panel 2: Moderate Deficit">2</div>
+                  <div id="lcc-bar-3" class="h-9 rounded-lg flex items-center justify-center text-xs font-black text-white transition-all cursor-default" style="background-color: #73A03E;" title="Panel 3: Threshold">3</div>
+                  <div id="lcc-bar-4" class="h-9 rounded-lg flex items-center justify-center text-xs font-black text-white transition-all cursor-default ring-2 ring-white shadow-lg shadow-emerald-500/30" style="background-color: #4D802C;" title="Panel 4: Optimal">4</div>
+                  <div id="lcc-bar-5" class="h-9 rounded-lg flex items-center justify-center text-xs font-black text-white transition-all cursor-default" style="background-color: #2D5F1E;" title="Panel 5: Excess Toxic">5</div>
+                </div>
+              </div>
+
+              <!-- LCC Metrics Summary -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">Nitrogen Nutrition Status</div>
+                  <div id="lcc-status-val" class="text-sm font-bold text-white mt-0.5">Optimal Chlorophyll Health</div>
+                  <div id="lcc-shade-val" class="text-[10px] text-emerald-400 mt-0.5">Deep Vibrant Green (#4D802C)</div>
+                </div>
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">Urea Fertilizer Requirement</div>
+                  <div id="lcc-urea-val" class="text-lg font-black text-lime-400 mt-0.5">0 kg / Acre</div>
+                  <div class="text-[10px] text-slate-400">Halt Nitrogen (Zero Waste)</div>
+                </div>
+                <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">Action Guidance</div>
+                  <div id="lcc-action-val" class="text-xs font-semibold text-cyan-300 mt-0.5">Chlorophyll at Peak Efficiency</div>
+                  <div class="text-[10px] text-slate-400">Protects against pest attraction</div>
+                </div>
+              </div>
+
+              <!-- LCC Farmer Advisory Text -->
+              <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-xs space-y-1">
+                <div class="font-bold text-emerald-400 flex items-center gap-1.5">
+                  <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                  <span>Agronomic Nitrogen Advisory:</span>
+                </div>
+                <p id="lcc-advisory-text" class="text-slate-300">
+                  Photosynthetic efficiency is at peak performance. DO NOT APPLY UREA. Save fertilizer expense and avoid crop burning.
+                </p>
+              </div>
+            </div>
+
             <!-- Grounded Action Plan Tabs -->
             <div class="zenze-card p-5">
               <div class="flex border-b border-white/10 gap-4 text-xs font-semibold overflow-x-auto whitespace-nowrap">

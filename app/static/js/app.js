@@ -538,6 +538,59 @@ async function executeDiagnosis() {
       updateDosageMath(parseFloat(slider ? slider.value : 1.5));
     }
 
+    // Populate Digital IRRI Leaf Color Chart (LCC) Card
+    const lccBadge = document.getElementById('lcc-panel-badge');
+    const lccStatus = document.getElementById('lcc-status-val');
+    const lccShade = document.getElementById('lcc-shade-val');
+    const lccUrea = document.getElementById('lcc-urea-val');
+    const lccAction = document.getElementById('lcc-action-val');
+    const lccAdv = document.getElementById('lcc-advisory-text');
+
+    if (data.is_leaf === false || !data.lcc) {
+      if (lccBadge) {
+        lccBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30';
+        lccBadge.innerText = 'LCC Disabled (Non-Leaf)';
+      }
+      if (lccStatus) lccStatus.innerText = 'Non-Plant Subject';
+      if (lccShade) lccShade.innerText = 'No chlorophyll detected';
+      if (lccUrea) lccUrea.innerText = '0 kg / Acre (Disabled)';
+      if (lccAction) lccAction.innerText = 'No fertilizer application';
+      if (lccAdv) lccAdv.innerText = 'Digital LCC matching is strictly calibrated for genuine agricultural crop foliage.';
+      for (let p = 1; p <= 5; p++) {
+        const bar = document.getElementById(`lcc-bar-${p}`);
+        if (bar) bar.className = 'h-9 rounded-lg flex items-center justify-center text-xs font-black text-white/50 transition-all opacity-40';
+      }
+    } else {
+      const l = data.lcc;
+      const isHi = (typeof currentLang !== 'undefined' && currentLang === 'hi');
+      if (lccBadge) {
+        lccBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30';
+        lccBadge.innerText = `Panel ${l.panel}: ${isHi ? l.shade_name_hi : l.shade_name}`;
+      }
+      if (lccStatus) lccStatus.innerText = isHi ? l.nitrogen_status_hi : l.nitrogen_status;
+      if (lccShade) lccShade.innerText = `${isHi ? l.shade_name_hi : l.shade_name} (${l.hex_color})`;
+      if (lccUrea) {
+        lccUrea.innerText = `${l.urea_recommendation_kg} kg / Acre`;
+        lccUrea.className = l.urea_recommendation_kg > 0 
+          ? 'text-lg font-black text-amber-400 mt-0.5' 
+          : 'text-lg font-black text-lime-400 mt-0.5';
+      }
+      if (lccAction) lccAction.innerText = isHi ? l.action_hi : l.action;
+      if (lccAdv) lccAdv.innerText = isHi ? l.advisory_hi : l.advisory;
+
+      // Highlight active LCC Panel Bar
+      for (let p = 1; p <= 5; p++) {
+        const bar = document.getElementById(`lcc-bar-${p}`);
+        if (bar) {
+          if (p === l.panel) {
+            bar.className = 'h-9 rounded-lg flex items-center justify-center text-xs font-black text-white transition-all ring-4 ring-white shadow-lg shadow-emerald-500/50 scale-105';
+          } else {
+            bar.className = 'h-9 rounded-lg flex items-center justify-center text-xs font-bold text-white/80 transition-all opacity-70';
+          }
+        }
+      }
+    }
+
     // Default Tab
     switchRxTab('bio');
 
