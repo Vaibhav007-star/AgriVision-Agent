@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/haryana_offline_block.dart';
 import '../services/offline_agronomy_service.dart';
 
 class HaryanaOfflineAdvisorScreen extends StatefulWidget {
@@ -102,7 +101,7 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
+                          color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -118,7 +117,7 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
                         const SizedBox(height: 12),
                         // District Dropdown
                         DropdownButtonFormField<String>(
-                          value: _selectedDistrict,
+                          initialValue: _selectedDistrict,
                           decoration: InputDecoration(
                             labelText: hi ? 'जिला (District)' : 'District',
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -150,7 +149,7 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
                         // Block Dropdown
                         if (_selectedDistrict.isNotEmpty)
                           DropdownButtonFormField<String>(
-                            value: _selectedBlock,
+                            initialValue: _selectedBlock,
                             decoration: InputDecoration(
                               labelText: hi ? 'खंड / ब्लॉक (Block)' : 'Administrative Block',
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -204,7 +203,7 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -323,7 +322,7 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

@@ -23,11 +23,14 @@ def load_and_validate_image(image_source: Union[str, Path, bytes, io.BytesIO, Im
         path = Path(image_source)
         if not path.exists():
             raise FileNotFoundError(f"Image not found at path: {path}")
-        image = Image.open(path)
+        with Image.open(path) as _img:
+            image = _img.convert("RGB")
     elif isinstance(image_source, (bytes, bytearray)):
-        image = Image.open(io.BytesIO(image_source))
+        with Image.open(io.BytesIO(image_source)) as _img:
+            image = _img.convert("RGB")
     elif isinstance(image_source, io.BytesIO):
-        image = Image.open(image_source)
+        with Image.open(image_source) as _img:
+            image = _img.convert("RGB")
     else:
         raise ValueError(f"Unsupported image source type: {type(image_source)}")
         

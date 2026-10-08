@@ -17,11 +17,12 @@ def load_and_validate_image(
     if isinstance(image_input, (str, Path)):
         if not Path(image_input).exists():
             raise FileNotFoundError(f"Image not found at path: {image_input}")
-        img = Image.open(str(image_input))
+        with Image.open(str(image_input)) as _raw:
+            img = _raw.convert("RGB")
     elif isinstance(image_input, Image.Image):
-        img = image_input
+        img = image_input.convert("RGB") if image_input.mode != "RGB" else image_input
     elif isinstance(image_input, np.ndarray):
-        img = Image.fromarray(image_input.astype("uint8"))
+        img = Image.fromarray(image_input.astype("uint8")).convert("RGB")
     else:
         raise ValueError(f"Unsupported image input type: {type(image_input)}")
         

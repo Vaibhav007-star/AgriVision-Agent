@@ -3,8 +3,16 @@ Automated unit tests for AgriVision FastAPI Web Application and REST Endpoints.
 """
 
 import unittest
-from starlette.testclient import TestClient
+import warnings
 from pathlib import Path
+
+# Suppress Starlette / httpx deprecation warning
+warnings.filterwarnings("ignore", message=".*starlette.testclient.*")
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    from starlette.testclient import TestClient
 
 from app.server import app
 
