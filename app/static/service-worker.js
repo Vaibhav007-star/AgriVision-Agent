@@ -4,15 +4,18 @@
  * standalone mobile installation on Android and iOS.
  */
 
-const CACHE_NAME = 'agrivision-cache-v1';
+const CACHE_NAME = 'agrivision-cache-v2';
 const PRECACHE_ASSETS = [
   '/',
   '/static/css/theme.css',
+  '/static/js/haryana-data.js',
   '/static/js/app.js',
   '/static/manifest.json',
   '/static/icons/icon-192.png',
   '/static/icons/icon-512.png',
-  '/static/icons/icon-maskable.png'
+  '/static/icons/icon-maskable.png',
+  '/static/vendor/leaflet/leaflet.css',
+  '/static/vendor/leaflet/leaflet.js'
 ];
 
 // Install Event: Pre-cache critical application shell

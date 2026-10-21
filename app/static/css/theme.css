@@ -968,3 +968,34 @@ html {
   animation: none !important;
 }
 
+/* ========================================================================== */
+/* Cross-Platform Select & Leaflet Styling                                    */
+/* ========================================================================== */
+select option {
+  background-color: #111e16 !important;
+  color: #f0fdf4 !important;
+}
+
+.leaflet-container {
+  background-color: #0b130e !important;
+  font-family: inherit !important;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: #111e16 !important;
+  color: #f0fdf4 !important;
+  border: 1px solid rgba(74, 222, 128, 0.25) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8) !important;
+}
+
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: #111e16 !important;
+  color: #84cc16 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+

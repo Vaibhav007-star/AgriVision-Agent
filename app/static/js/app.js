@@ -20,22 +20,28 @@ let soundEnabled = true;
 let audioCtx = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (window.lucide) {
-    window.lucide.createIcons();
-  }
-  initSporesCanvas();
-  initSamples();
-  initWeather();
-  initStats();
-  initHistory();
-  initSplitSlider();
-  init3DTilt();
-  setupEventListeners();
-  populatePrintableReport();
-  initPWA();
-  initHaryanaBlockAdvisor();
-  initMandiForecast();
-  initHaryanaGisMap();
+  const safeRun = (name, fn) => {
+    try {
+      fn();
+    } catch (e) {
+      console.warn(`[AgriVision Init Note: ${name}]`, e);
+    }
+  };
+
+  if (window.lucide) safeRun('lucide', () => window.lucide.createIcons());
+  safeRun('initSporesCanvas', initSporesCanvas);
+  safeRun('initSamples', initSamples);
+  safeRun('initWeather', initWeather);
+  safeRun('initStats', initStats);
+  safeRun('initHistory', initHistory);
+  safeRun('initSplitSlider', initSplitSlider);
+  safeRun('init3DTilt', init3DTilt);
+  safeRun('setupEventListeners', setupEventListeners);
+  safeRun('populatePrintableReport', populatePrintableReport);
+  safeRun('initPWA', initPWA);
+  safeRun('initHaryanaBlockAdvisor', initHaryanaBlockAdvisor);
+  safeRun('initMandiForecast', initMandiForecast);
+  safeRun('initHaryanaGisMap', initHaryanaGisMap);
 });
 
 // ============================================================================
@@ -1267,137 +1273,162 @@ function toggleSpeechRecognition() {
 // ============================================================================
 // 12. Haryana Regional Agronomy & Offline Block Advisor
 // ============================================================================
-let haryanaBlocksData = [];
+let haryanaBlocksData = (typeof window !== 'undefined' && window.DEFAULT_HARYANA_BLOCKS) ? window.DEFAULT_HARYANA_BLOCKS : [];
 
 async function initHaryanaBlockAdvisor() {
   const districtSelect = document.getElementById('haryana-district-select');
   const blockSelect = document.getElementById('haryana-block-select');
   if (!districtSelect || !blockSelect) return;
 
+  if (!haryanaBlocksData || haryanaBlocksData.length === 0) {
+    if (window.DEFAULT_HARYANA_BLOCKS && window.DEFAULT_HARYANA_BLOCKS.length > 0) {
+      haryanaBlocksData = window.DEFAULT_HARYANA_BLOCKS;
+    }
+  }
+
+  function populateDistrictsDropdown() {
+    if (!haryanaBlocksData || haryanaBlocksData.length === 0) return;
+    const districts = [...new Set(haryanaBlocksData.map(b => b.district))].sort();
+    if (districts.length === 0) return;
+
+    if (districtSelect.options.length < 22) {
+      const currentVal = districtSelect.value || 'Karnal';
+      districtSelect.innerHTML = '';
+      districts.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        opt.style.backgroundColor = '#111e16';
+        opt.style.color = '#ffffff';
+        if (d.toLowerCase() === currentVal.toLowerCase()) opt.selected = true;
+        districtSelect.appendChild(opt);
+      });
+    }
+  }
+
+  function updateBlocksForDistrict(districtName) {
+    if (!haryanaBlocksData || haryanaBlocksData.length === 0) return;
+    const filteredBlocks = haryanaBlocksData.filter(b => b.district.toLowerCase() === districtName.toLowerCase());
+    blockSelect.innerHTML = '';
+    filteredBlocks.forEach((b, idx) => {
+      const opt = document.createElement('option');
+      opt.value = b.block_name;
+      opt.textContent = b.block_name;
+      opt.style.backgroundColor = '#111e16';
+      opt.style.color = '#ffffff';
+      if (idx === 0) opt.selected = true;
+      blockSelect.appendChild(opt);
+    });
+    if (filteredBlocks.length > 0) {
+      renderBlockDetails(filteredBlocks[0]);
+    }
+  }
+
+  function renderBlockDetails(block) {
+    if (!block) return;
+
+    // 1. Dialect
+    const dialectText = document.getElementById('haryana-dialect-text');
+    if (dialectText) {
+      dialectText.textContent = block.primary_dialect || 'Bangru / Khadar Haryanvi';
+    }
+
+    // 2. Primary Crops
+    const cropsContainer = document.getElementById('haryana-crops-container');
+    if (cropsContainer) {
+      cropsContainer.innerHTML = '';
+      (block.primary_crops || []).forEach(crop => {
+        const pill = document.createElement('span');
+        pill.className = 'px-2.5 py-1 rounded-lg bg-lime-500/15 border border-lime-500/30 text-lime-300 text-xs font-semibold flex items-center gap-1';
+        pill.innerHTML = `<span>🌾</span> <span>${crop}</span>`;
+        cropsContainer.appendChild(pill);
+      });
+    }
+
+    // 3. Top Diseases
+    const diseasesContainer = document.getElementById('haryana-diseases-container');
+    if (diseasesContainer) {
+      diseasesContainer.innerHTML = '';
+      (block.top_3_diseases || []).forEach(dis => {
+        const card = document.createElement('div');
+        card.className = 'p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-center gap-2';
+        card.innerHTML = `<span class="text-amber-400">⚠️</span> <span>${dis}</span>`;
+        diseasesContainer.appendChild(card);
+      });
+    }
+
+    // 4. Symptom Checklist Tabs
+    const triageTabs = document.getElementById('haryana-triage-tabs');
+    const symptomChain = document.getElementById('haryana-symptom-chain');
+    const hauSolution = document.getElementById('haryana-hau-solution');
+
+    const checklist = block.symptom_checklist || {};
+    const solutions = block.approved_pesticide_solution || {};
+    const keys = Object.keys(checklist);
+
+    if (triageTabs && keys.length > 0) {
+      triageTabs.innerHTML = '';
+      keys.forEach((k, idx) => {
+        const tabBtn = document.createElement('button');
+        const isSelected = idx === 0;
+        tabBtn.className = `px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+          isSelected
+            ? 'bg-lime-500/30 text-lime-300 border border-lime-500/50'
+            : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+        }`;
+        tabBtn.textContent = k.replace(/_/g, ' ');
+
+        tabBtn.addEventListener('click', () => {
+          Array.from(triageTabs.children).forEach(c => {
+            c.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10';
+          });
+          tabBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all bg-lime-500/30 text-lime-300 border border-lime-500/50';
+          if (symptomChain) symptomChain.textContent = checklist[k] || 'Diagnostic chain not available.';
+          if (hauSolution) hauSolution.textContent = solutions[k] || 'Solution recommendation pending HAU review.';
+        });
+
+        triageTabs.appendChild(tabBtn);
+      });
+
+      // Set initial tab values
+      if (symptomChain) symptomChain.textContent = checklist[keys[0]] || '';
+      if (hauSolution) hauSolution.textContent = solutions[keys[0]] || '';
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+
+  // Synchronous initialization from embedded dataset
+  populateDistrictsDropdown();
+  updateBlocksForDistrict(districtSelect.value || 'Karnal');
+
+  // Event Listeners
+  districtSelect.addEventListener('change', (e) => {
+    updateBlocksForDistrict(e.target.value);
+  });
+
+  blockSelect.addEventListener('change', (e) => {
+    if (!haryanaBlocksData) return;
+    const selectedB = haryanaBlocksData.find(
+      b => b.district.toLowerCase() === districtSelect.value.toLowerCase() && b.block_name === e.target.value
+    );
+    if (selectedB) renderBlockDetails(selectedB);
+  });
+
+  // Background fetch to refresh data if server has updates
   try {
     const res = await fetch('/api/haryana/offline-blocks');
-    if (!res.ok) return;
-    const data = await res.json();
-    haryanaBlocksData = data.blocks || [];
-    if (haryanaBlocksData.length === 0) return;
-
-    // Populate Districts
-    const districts = [...new Set(haryanaBlocksData.map(b => b.district))].sort();
-    districtSelect.innerHTML = '';
-    districts.forEach(d => {
-      const opt = document.createElement('option');
-      opt.value = d;
-      opt.textContent = d;
-      if (d.toLowerCase() === 'karnal') opt.selected = true;
-      districtSelect.appendChild(opt);
-    });
-
-    function updateBlocksForDistrict(districtName) {
-      const filteredBlocks = haryanaBlocksData.filter(b => b.district.toLowerCase() === districtName.toLowerCase());
-      blockSelect.innerHTML = '';
-      filteredBlocks.forEach((b, idx) => {
-        const opt = document.createElement('option');
-        opt.value = b.block_name;
-        opt.textContent = b.block_name;
-        if (idx === 0) opt.selected = true;
-        blockSelect.appendChild(opt);
-      });
-      if (filteredBlocks.length > 0) {
-        renderBlockDetails(filteredBlocks[0]);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.blocks && data.blocks.length > 0) {
+        haryanaBlocksData = data.blocks;
+        populateDistrictsDropdown();
       }
     }
-
-    function renderBlockDetails(block) {
-      if (!block) return;
-
-      // 1. Dialect
-      const dialectText = document.getElementById('haryana-dialect-text');
-      if (dialectText) {
-        dialectText.textContent = block.primary_dialect || 'Haryanvi';
-      }
-
-      // 2. Primary Crops
-      const cropsContainer = document.getElementById('haryana-crops-container');
-      if (cropsContainer) {
-        cropsContainer.innerHTML = '';
-        (block.primary_crops || []).forEach(crop => {
-          const pill = document.createElement('span');
-          pill.className = 'px-2.5 py-1 rounded-lg bg-lime-500/15 border border-lime-500/30 text-lime-300 text-xs font-semibold flex items-center gap-1';
-          pill.innerHTML = `<span>🌾</span> <span>${crop}</span>`;
-          cropsContainer.appendChild(pill);
-        });
-      }
-
-      // 3. Top Diseases
-      const diseasesContainer = document.getElementById('haryana-diseases-container');
-      if (diseasesContainer) {
-        diseasesContainer.innerHTML = '';
-        (block.top_3_diseases || []).forEach(dis => {
-          const card = document.createElement('div');
-          card.className = 'p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-center gap-2';
-          card.innerHTML = `<span class="text-amber-400">⚠️</span> <span>${dis}</span>`;
-          diseasesContainer.appendChild(card);
-        });
-      }
-
-      // 4. Symptom Checklist Tabs
-      const triageTabs = document.getElementById('haryana-triage-tabs');
-      const symptomChain = document.getElementById('haryana-symptom-chain');
-      const hauSolution = document.getElementById('haryana-hau-solution');
-
-      const checklist = block.symptom_checklist || {};
-      const solutions = block.approved_pesticide_solution || {};
-      const keys = Object.keys(checklist);
-
-      if (triageTabs && keys.length > 0) {
-        triageTabs.innerHTML = '';
-        keys.forEach((k, idx) => {
-          const tabBtn = document.createElement('button');
-          const isSelected = idx === 0;
-          tabBtn.className = `px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-            isSelected
-              ? 'bg-lime-500/30 text-lime-300 border border-lime-500/50'
-              : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
-          }`;
-          tabBtn.textContent = k.replace(/_/g, ' ');
-
-          tabBtn.addEventListener('click', () => {
-            Array.from(triageTabs.children).forEach(c => {
-              c.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10';
-            });
-            tabBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold transition-all bg-lime-500/30 text-lime-300 border border-lime-500/50';
-            if (symptomChain) symptomChain.textContent = checklist[k] || 'Diagnostic chain not available.';
-            if (hauSolution) hauSolution.textContent = solutions[k] || 'Solution recommendation pending HAU review.';
-          });
-
-          triageTabs.appendChild(tabBtn);
-        });
-
-        // Set initial tab values
-        if (symptomChain) symptomChain.textContent = checklist[keys[0]] || '';
-        if (hauSolution) hauSolution.textContent = solutions[keys[0]] || '';
-      }
-
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
-    }
-
-    districtSelect.addEventListener('change', (e) => {
-      updateBlocksForDistrict(e.target.value);
-    });
-
-    blockSelect.addEventListener('change', (e) => {
-      const selectedB = haryanaBlocksData.find(
-        b => b.district.toLowerCase() === districtSelect.value.toLowerCase() && b.block_name === e.target.value
-      );
-      if (selectedB) renderBlockDetails(selectedB);
-    });
-
-    // Initial population
-    updateBlocksForDistrict(districtSelect.value || 'Karnal');
   } catch (err) {
-    console.warn('[AgriVision Haryana] Error initializing block advisor:', err);
+    console.log('[AgriVision Haryana] Operating in offline mode.');
   }
 }
 
@@ -1538,46 +1569,113 @@ async function fetchMandiForecast() {
 // PILLAR 8: Haryana Agricultural GIS Outbreak Map
 // ============================================================================
 let haryanaGisMapInstance = null;
+let haryanaGisMarkers = {};
 
 async function initHaryanaGisMap() {
   const mapContainer = document.getElementById('haryana-gis-map');
-  if (!mapContainer || !window.L) return;
+  if (!mapContainer) return;
 
-  try {
-    const res = await fetch('/api/haryana/outbreak-map');
-    if (!res.ok) return;
-    const data = await res.json();
+  // 1. Telemetry Data (Immediate offline data with live network enhancement)
+  let data = (typeof window !== 'undefined' && window.DEFAULT_HARYANA_GIS_DATA) ? window.DEFAULT_HARYANA_GIS_DATA : {
+    map_center: [29.25, 76.5],
+    default_zoom: 8,
+    high_risk_districts: 3,
+    total_active_pathology_cases: 184,
+    districts: []
+  };
 
-    // Update Telemetry Header Metrics
+  const updateTelemetryUi = (d) => {
     const highRiskBadge = document.getElementById('gis-high-risk-badge');
     if (highRiskBadge) {
-      highRiskBadge.textContent = `${data.high_risk_districts} High Risk Districts`;
+      highRiskBadge.textContent = `${d.high_risk_districts || 3} High Risk Districts`;
     }
     const totalCases = document.getElementById('gis-total-cases');
     if (totalCases) {
-      totalCases.textContent = `${data.total_active_pathology_cases} Active Clusters`;
+      totalCases.textContent = `${d.total_active_pathology_cases || 184} Active Clusters`;
     }
+    renderGisDistrictTicker(d.districts || []);
+  };
 
-    // Initialize Leaflet Map
+  updateTelemetryUi(data);
+
+  // 2. Render Map (Leaflet or Vector SVG fallback)
+  if (window.L && typeof L.map === 'function') {
+    renderLeafletGisMap(mapContainer, data);
+  } else {
+    renderSvgGisMap(mapContainer, data);
+  }
+
+  // 3. Background Network Fetch
+  try {
+    const res = await fetch('/api/haryana/outbreak-map');
+    if (res.ok) {
+      const liveData = await res.json();
+      if (liveData && liveData.districts && liveData.districts.length > 0) {
+        updateTelemetryUi(liveData);
+        if (window.L && typeof L.map === 'function') {
+          renderLeafletGisMap(mapContainer, liveData);
+        } else {
+          renderSvgGisMap(mapContainer, liveData);
+        }
+      }
+    }
+  } catch (err) {
+    console.log('[Haryana GIS Map] Operating in offline GIS mode.');
+  }
+}
+
+function renderGisDistrictTicker(districts) {
+  const ticker = document.getElementById('gis-district-list');
+  if (!ticker || !districts || districts.length === 0) return;
+  ticker.innerHTML = '';
+
+  districts.forEach(d => {
+    const item = document.createElement('div');
+    item.className = 'flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer';
+    item.onclick = () => window.focusGisDistrict(d.district, d.lat, d.lon);
+    item.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full" style="background-color: ${d.pin_color}"></span>
+        <span class="font-bold text-white">${d.district}</span>
+        <span class="text-[10px] text-slate-400">(${d.primary_crop})</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] text-slate-300 truncate max-w-[140px]">${d.dominant_disease}</span>
+        <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${d.badge_class}">${d.risk_level}</span>
+      </div>
+    `;
+    ticker.appendChild(item);
+  });
+}
+
+function renderLeafletGisMap(mapContainer, data) {
+  try {
+    const placeholder = document.getElementById('gis-map-placeholder');
+    if (placeholder) placeholder.remove();
+
     if (!haryanaGisMapInstance) {
       haryanaGisMapInstance = L.map('haryana-gis-map', {
-        center: data.map_center,
-        zoom: data.default_zoom,
+        center: data.map_center || [29.25, 76.5],
+        zoom: data.default_zoom || 8,
         zoomControl: true,
         attributionControl: false
       });
 
-      // CartoDB DarkMatter Tiles
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      // Standard OSM Tile Layer with fast response
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
-        subdomains: 'abcd'
+        subdomains: 'abc',
+        attribution: '&copy; OpenStreetMap'
       }).addTo(haryanaGisMapInstance);
     }
 
-    const ticker = document.getElementById('gis-district-list');
-    if (ticker) ticker.innerHTML = '';
+    setTimeout(() => { if (haryanaGisMapInstance) haryanaGisMapInstance.invalidateSize(); }, 250);
+    setTimeout(() => { if (haryanaGisMapInstance) haryanaGisMapInstance.invalidateSize(); }, 800);
+    window.addEventListener('resize', () => { if (haryanaGisMapInstance) haryanaGisMapInstance.invalidateSize(); });
 
-    // Add Circle Markers for each of the 22 Haryana Districts
+    Object.values(haryanaGisMarkers).forEach(m => m.remove());
+    haryanaGisMarkers = {};
+
     data.districts.forEach(d => {
       const radius = d.risk_level === 'HIGH' ? 14 : d.risk_level === 'MODERATE' ? 10 : 7;
       const marker = L.circleMarker([d.lat, d.lon], {
@@ -1586,53 +1684,91 @@ async function initHaryanaGisMap() {
         color: '#ffffff',
         weight: 1.5,
         opacity: 0.9,
-        fillOpacity: 0.75
+        fillOpacity: 0.8
       }).addTo(haryanaGisMapInstance);
 
-      // Popup content
+      haryanaGisMarkers[d.district] = marker;
+
       const popupHtml = `
-        <div style="font-family: 'Inter', sans-serif; font-size: 11px; color: #0b130e; min-width: 170px; line-height: 1.4;">
-          <div style="font-weight: 800; font-size: 13px; color: #1B5E20; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin-bottom: 4px;">
-            ${d.district} District
+        <div style="font-family: 'Inter', sans-serif; font-size: 11px; color: #f0fdf4; min-width: 180px; line-height: 1.4;">
+          <div style="font-weight: 800; font-size: 13px; color: #84cc16; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 3px; margin-bottom: 5px;">
+            ${d.district} District (हरियाणा)
           </div>
           <div><b>Zone:</b> ${d.zone}</div>
           <div><b>Crop:</b> ${d.primary_crop}</div>
           <div><b>Pathogen:</b> <span style="color: ${d.pin_color}; font-weight: bold;">${d.dominant_disease}</span></div>
-          <div><b>Active Cases:</b> ${d.active_cases}</div>
-          <div style="margin-top: 5px; font-size: 10px; color: #555; background: #f4f7f4; padding: 4px; border-radius: 4px;">
+          <div><b>Active Clusters:</b> ${d.active_cases}</div>
+          <div style="margin-top: 5px; font-size: 10px; color: #cbd5e1; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">
             ${d.kvk_alert_en}
           </div>
         </div>
       `;
       marker.bindPopup(popupHtml);
 
-      // Add to sidebar ticker
-      if (ticker) {
-        const item = document.createElement('div');
-        item.className = 'flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer';
-        item.onclick = () => {
-          haryanaGisMapInstance.setView([d.lat, d.lon], 10);
-          marker.openPopup();
-        };
-        item.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full" style="background-color: ${d.pin_color}"></span>
-            <span class="font-bold text-white">${d.district}</span>
-            <span class="text-[10px] text-slate-400">(${d.primary_crop})</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-[10px] text-slate-300 truncate max-w-[140px]">${d.dominant_disease}</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${d.badge_class}">${d.risk_level}</span>
-          </div>
-        `;
-        ticker.appendChild(item);
-      }
+      marker.on('click', () => {
+        const select = document.getElementById('haryana-district-select');
+        if (select && select.value !== d.district) {
+          select.value = d.district;
+          select.dispatchEvent(new Event('change'));
+        }
+      });
     });
-
   } catch (err) {
-    console.warn('[Haryana GIS Map] Error initializing map:', err);
+    console.warn('[Leaflet Render Exception, falling back to SVG]:', err);
+    renderSvgGisMap(mapContainer, data);
   }
 }
+
+function renderSvgGisMap(container, data) {
+  if (!container || !data || !data.districts) return;
+  const w = container.clientWidth || 600;
+  const h = container.clientHeight || 340;
+
+  const minLat = 27.65, maxLat = 30.90;
+  const minLon = 74.45, maxLon = 77.60;
+
+  let svgHtml = `
+    <svg viewBox="0 0 ${w} ${h}" class="w-full h-full bg-[#08100b]" style="user-select: none;">
+      <defs>
+        <radialGradient id="haryanaGisGrid" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#16291d" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#08100b" stop-opacity="1"/>
+        </radialGradient>
+      </defs>
+      <rect width="${w}" height="${h}" fill="url(#haryanaGisGrid)"/>
+      <path d="M 30 30 L ${w-30} 30 L ${w-30} ${h-30} L 30 ${h-30} Z" fill="none" stroke="rgba(74,222,128,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+  `;
+
+  data.districts.forEach(d => {
+    const x = Math.round(((d.lon - minLon) / (maxLon - minLon)) * (w - 100) + 50);
+    const y = Math.round(((maxLat - d.lat) / (maxLat - minLat)) * (h - 70) + 35);
+    const r = d.risk_level === 'HIGH' ? 8 : d.risk_level === 'MODERATE' ? 6 : 4.5;
+
+    svgHtml += `
+      <g class="cursor-pointer" onclick="window.focusGisDistrict('${d.district}', ${d.lat}, ${d.lon})">
+        <circle cx="${x}" cy="${y}" r="${r + 4}" fill="${d.pin_color}" opacity="0.25"/>
+        <circle cx="${x}" cy="${y}" r="${r}" fill="${d.pin_color}" stroke="#ffffff" stroke-width="1.5"/>
+        <text x="${x}" y="${y - r - 3}" fill="#e2e8f0" font-size="9" font-weight="bold" text-anchor="middle" font-family="Inter, sans-serif">${d.district}</text>
+      </g>
+    `;
+  });
+
+  svgHtml += `</svg>`;
+  container.innerHTML = svgHtml;
+}
+
+window.focusGisDistrict = function(districtName, lat, lon) {
+  if (haryanaGisMapInstance && haryanaGisMarkers[districtName]) {
+    haryanaGisMapInstance.setView([lat, lon], 10);
+    haryanaGisMarkers[districtName].openPopup();
+  }
+
+  const select = document.getElementById('haryana-district-select');
+  if (select && select.value !== districtName) {
+    select.value = districtName;
+    select.dispatchEvent(new Event('change'));
+  }
+};
 
 
 

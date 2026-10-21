@@ -42,12 +42,18 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Leaflet CSS & JS for Haryana Agricultural GIS Outbreak Mapping -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Leaflet CSS & JS for Haryana Agricultural GIS Outbreak Mapping (Offline-First Local + CDN Fallback) -->
+  <link rel="stylesheet" href="/static/vendor/leaflet/leaflet.css">
+  <script src="/static/vendor/leaflet/leaflet.js"></script>
+  <script>
+    if (typeof window.L === 'undefined') {
+      document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">');
+      document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"><\/script>');
+    }
+  </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="/static/css/theme.css">
+  <link rel="stylesheet" href="/static/css/theme.css?v=2.2.0">
   
   <!-- Inter Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -904,7 +910,7 @@
               </div>
 
               <!-- Interactive Leaflet Map Container -->
-              <div class="rounded-xl overflow-hidden border border-white/10 shadow-lg relative" style="height: 340px;">
+              <div class="rounded-xl overflow-hidden border border-white/10 shadow-lg relative bg-[#08100b]" style="height: 340px;">
                 <div id="haryana-gis-map" class="w-full h-full z-10"></div>
                 <div class="absolute bottom-2 right-2 z-20 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-[10px] text-slate-300 flex items-center gap-3">
                   <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> High Risk</span>
@@ -915,7 +921,50 @@
 
               <!-- District Active Outbreak Ticker -->
               <div id="gis-district-list" class="max-h-36 overflow-y-auto space-y-1.5 pr-1 text-xs">
-                <!-- Dynamically loaded district items -->
+                <div class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer" onclick="window.focusGisDistrict('Sirsa', 29.5349, 75.0298)">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background-color: #E53935"></span>
+                    <span class="font-bold text-white">Sirsa</span>
+                    <span class="text-[10px] text-slate-400">(Cotton)</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-slate-300 truncate max-w-[140px]">Pink Bollworm & Whitefly</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded font-bold bg-red-500/20 text-red-400 border-red-500/30">HIGH</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer" onclick="window.focusGisDistrict('Kaithal', 29.8015, 76.4026)">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background-color: #E53935"></span>
+                    <span class="font-bold text-white">Kaithal</span>
+                    <span class="text-[10px] text-slate-400">(Basmati Rice)</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-slate-300 truncate max-w-[140px]">Bacterial Leaf Blight</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded font-bold bg-red-500/20 text-red-400 border-red-500/30">HIGH</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer" onclick="window.focusGisDistrict('Yamunanagar', 30.129, 77.2674)">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background-color: #E53935"></span>
+                    <span class="font-bold text-white">Yamunanagar</span>
+                    <span class="text-[10px] text-slate-400">(Sugarcane)</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-slate-300 truncate max-w-[140px]">Red Rot (Colletotrichum)</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded font-bold bg-red-500/20 text-red-400 border-red-500/30">HIGH</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer" onclick="window.focusGisDistrict('Karnal', 29.6857, 76.9905)">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full" style="background-color: #FB8C00"></span>
+                    <span class="font-bold text-white">Karnal</span>
+                    <span class="text-[10px] text-slate-400">(Wheat)</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-slate-300 truncate max-w-[140px]">Stripe Rust (Puccinia)</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded font-bold bg-amber-500/20 text-amber-400 border-amber-500/30">MODERATE</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1165,14 +1214,36 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">Select Haryana District (जिला)</label>
-            <select id="haryana-district-select" class="w-full bg-[#0b130e] border border-white/15 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-lime-500 outline-none">
-              <!-- Dynamically populated -->
+            <select id="haryana-district-select" class="w-full bg-[#111e16] border border-white/20 rounded-xl px-3 py-2 text-sm text-white focus:border-lime-500 outline-none">
+              <option value="Ambala" style="background-color: #111e16; color: #ffffff;">Ambala</option>
+              <option value="Bhiwani" style="background-color: #111e16; color: #ffffff;">Bhiwani</option>
+              <option value="Charkhi Dadri" style="background-color: #111e16; color: #ffffff;">Charkhi Dadri</option>
+              <option value="Faridabad" style="background-color: #111e16; color: #ffffff;">Faridabad</option>
+              <option value="Fatehabad" style="background-color: #111e16; color: #ffffff;">Fatehabad</option>
+              <option value="Gurugram" style="background-color: #111e16; color: #ffffff;">Gurugram</option>
+              <option value="Hisar" style="background-color: #111e16; color: #ffffff;">Hisar</option>
+              <option value="Jhajjar" style="background-color: #111e16; color: #ffffff;">Jhajjar</option>
+              <option value="Jind" style="background-color: #111e16; color: #ffffff;">Jind</option>
+              <option value="Kaithal" style="background-color: #111e16; color: #ffffff;">Kaithal</option>
+              <option value="Karnal" selected style="background-color: #111e16; color: #ffffff;">Karnal</option>
+              <option value="Kurukshetra" style="background-color: #111e16; color: #ffffff;">Kurukshetra</option>
+              <option value="Mahendragarh" style="background-color: #111e16; color: #ffffff;">Mahendragarh</option>
+              <option value="Nuh" style="background-color: #111e16; color: #ffffff;">Nuh</option>
+              <option value="Palwal" style="background-color: #111e16; color: #ffffff;">Palwal</option>
+              <option value="Panchkula" style="background-color: #111e16; color: #ffffff;">Panchkula</option>
+              <option value="Panipat" style="background-color: #111e16; color: #ffffff;">Panipat</option>
+              <option value="Rewari" style="background-color: #111e16; color: #ffffff;">Rewari</option>
+              <option value="Rohtak" style="background-color: #111e16; color: #ffffff;">Rohtak</option>
+              <option value="Sirsa" style="background-color: #111e16; color: #ffffff;">Sirsa</option>
+              <option value="Sonipat" style="background-color: #111e16; color: #ffffff;">Sonipat</option>
+              <option value="Yamunanagar" style="background-color: #111e16; color: #ffffff;">Yamunanagar</option>
             </select>
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">Administrative Block (खंड / ब्लॉक)</label>
-            <select id="haryana-block-select" class="w-full bg-[#0b130e] border border-white/15 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-lime-500 outline-none">
-              <!-- Dynamically populated -->
+            <select id="haryana-block-select" class="w-full bg-[#111e16] border border-white/20 rounded-xl px-3 py-2 text-sm text-white focus:border-lime-500 outline-none">
+              <option value="Gharaunda" selected style="background-color: #111e16; color: #ffffff;">Gharaunda</option>
+              <option value="Assandh" style="background-color: #111e16; color: #ffffff;">Assandh</option>
             </select>
           </div>
           <div>
@@ -1197,7 +1268,15 @@
                 <span>Primary Regional Crops (स्थानीय नाम)</span>
               </div>
               <div id="haryana-crops-container" class="flex flex-wrap gap-2 pt-1">
-                <!-- Crops pills -->
+                <span class="px-2.5 py-1 rounded-lg bg-lime-500/15 border border-lime-500/30 text-lime-300 text-xs font-semibold flex items-center gap-1">
+                  <span>🌾</span> <span>Dhan (Basmati Chawal) / Paddy</span>
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-lime-500/15 border border-lime-500/30 text-lime-300 text-xs font-semibold flex items-center gap-1">
+                  <span>🌾</span> <span>Gehu (Kanak) / Wheat</span>
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-lime-500/15 border border-lime-500/30 text-lime-300 text-xs font-semibold flex items-center gap-1">
+                  <span>🌾</span> <span>Tamatar (Bel Tamatar) / Tomato</span>
+                </span>
               </div>
             </div>
 
@@ -1208,7 +1287,15 @@
                 <span>Top Local Pathogens & Pests (प्रमुख रोग)</span>
               </div>
               <div id="haryana-diseases-container" class="space-y-2 pt-1">
-                <!-- Diseases cards -->
+                <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-center gap-2">
+                  <span class="text-amber-400">⚠️</span> <span>Rice Bacterial Leaf Blight (Patti Ka Jhulsa - Xanthomonas oryzae)</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-center gap-2">
+                  <span class="text-amber-400">⚠️</span> <span>Wheat Yellow / Stripe Rust (Peela Ratawa - Puccinia striiformis)</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-center gap-2">
+                  <span class="text-amber-400">⚠️</span> <span>Tomato Early Blight (Agheti Jhulsa - Alternaria solani)</span>
+                </div>
               </div>
             </div>
 
@@ -1228,7 +1315,9 @@
 
               <!-- Disease selection tabs -->
               <div id="haryana-triage-tabs" class="flex flex-wrap gap-1.5">
-                <!-- Dynamic tabs -->
+                <button class="px-3 py-1 rounded-lg text-xs font-bold transition-all bg-lime-500/30 text-lime-300 border border-lime-500/50">Rice Bacterial Blight</button>
+                <button class="px-3 py-1 rounded-lg text-xs font-bold transition-all bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10">Wheat Yellow Rust</button>
+                <button class="px-3 py-1 rounded-lg text-xs font-bold transition-all bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10">Tomato Early Blight</button>
               </div>
 
               <!-- Diagnostic steps box -->
@@ -1238,7 +1327,7 @@
                   <span>Stepwise Diagnostic Sequence:</span>
                 </div>
                 <p id="haryana-symptom-chain" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-mono">
-                  Loading diagnostic sequence...
+                  Leaf tips turn water-soaked -&gt; Lesions turn yellow-white with wavy margins along veins -&gt; Bacterial ooze droplets visible in early morning -&gt; Leaves wilt and dry (Kresek symptom)
                 </p>
               </div>
 
@@ -1249,7 +1338,7 @@
                   <span>CCS HAU Hisar Recommended Chemical / Bio-Pesticide:</span>
                 </div>
                 <p id="haryana-hau-solution" class="text-xs sm:text-sm font-semibold text-amber-200 leading-relaxed">
-                  Loading HAU package of practices recommendation...
+                  Copper Oxychloride 50% WP @ 500 g + Streptocycline @ 6 g in 200 L water per acre (CCS HAU Standard)
                 </p>
               </div>
 
@@ -1713,8 +1802,9 @@
     </div>
   </div>
 
-  <!-- Client-side Logic Script -->
-  <script src="/static/js/app.js"></script>
+  <!-- Haryana Offline Datasets & Client-side Logic Scripts -->
+  <script src="/static/js/haryana-data.js?v=2.2.0"></script>
+  <script src="/static/js/app.js?v=2.2.0"></script>
 
 </body>
 </html>
