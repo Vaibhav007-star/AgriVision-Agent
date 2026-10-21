@@ -16,37 +16,37 @@ import unicodedata
 
 CROPS_LEXICON = {
     "Wheat": {
-        "keywords": ["कनक", "गेहूं", "गेहूँ", "kanak", "gehu", "gehun", "wheat"],
+        "keywords": ["कनक", "गेहूं", "गेहूँ", "kanak", "gehu", "gehun", "wheat", "gahu", "kank"],
         "hindi_name": "गेहूं (कनक)",
         "scientific_name": "Triticum aestivum",
         "common_diseases": ["Yellow Rust (पीला रतुआ)", "Loose Smut (कांगुआ रोग)", "Karnal Bunt", "Powdery Mildew"]
     },
     "Paddy / Rice": {
-        "keywords": ["धान", "बासमती", "चावल", "झीरी", "dhan", "dhaan", "basmati", "chawal", "rice", "paddy", "jheeri"],
+        "keywords": ["धान", "बासमती", "चावल", "झीरी", "dhan", "dhaan", "basmati", "chawal", "rice", "paddy", "jheeri", "jhiri"],
         "hindi_name": "धान (बासमती)",
         "scientific_name": "Oryza sativa",
         "common_diseases": ["Bacterial Leaf Blight (झुलसा)", "Bakanae / Foot Rot (झंडा रोग)", "Sheath Blight", "Blast"]
     },
     "Cotton": {
-        "keywords": ["नरमा", "कपास", "रुई", "narma", "kapas", "cotton"],
+        "keywords": ["नरमा", "कपास", "रुई", "narma", "kapas", "cotton", "kapaas"],
         "hindi_name": "कपास (नरमा)",
         "scientific_name": "Gossypium hirsutum",
         "common_diseases": ["Pink Bollworm (गुलाबी सूंढी)", "Whitefly (सफेद मक्खी)", "Cotton Leaf Curl Virus", "Bacterial Blight"]
     },
     "Tomato": {
-        "keywords": ["टमाटर", "tamatar", "tomato"],
+        "keywords": ["टमाटर", "tamatar", "tomater", "tamater", "tomato", "tamato", "tamator"],
         "hindi_name": "टमाटर",
         "scientific_name": "Solanum lycopersicum",
         "common_diseases": ["Early Blight (अगेती झुलसा)", "Late Blight (पछेती झुलसा)", "Leaf Curl Virus", "Bacterial Wilt"]
     },
     "Potato": {
-        "keywords": ["आलू", "aloo", "aalu", "potato"],
+        "keywords": ["आलू", "aloo", "aalu", "potato", "patato"],
         "hindi_name": "आलू",
         "scientific_name": "Solanum tuberosum",
         "common_diseases": ["Early Blight", "Late Blight (पछेती झुलसा)", "Scab", "Black Scurf"]
     },
     "Mustard": {
-        "keywords": ["सरसों", "सरसो", "राई", "तोरिया", "sarson", "sarso", "mustard", "toria"],
+        "keywords": ["सरसों", "सरसो", "राई", "तोरिया", "sarson", "sarso", "mustard", "toria", "raya", "raaya"],
         "hindi_name": "सरसों / राई",
         "scientific_name": "Brassica juncea",
         "common_diseases": ["White Rust (सफेद रतुआ)", "Downy Mildew", "Alternaria Blight", "Aphids (चेपा)"]
@@ -69,7 +69,10 @@ SYMPTOM_DISEASE_RULES = [
     {
         "id": "wheat_yellow_rust",
         "crop": "Wheat",
-        "triggers": ["पीला", "पीले", "पिलिया", "रतुआ", "धारी", "peela", "yellow", "rust", "stripes", "ratawa"],
+        "triggers": [
+            "पीला", "पीले", "पिलिया", "रतुआ", "धारी", "peela", "pila", "yellow", "rust",
+            "stripes", "ratawa", "ratua", "peela ratua", "pila ratua", "peele patte", "yellow rust"
+        ],
         "disease": "Yellow / Stripe Rust (पीला रतुआ - Puccinia striiformis)",
         "severity": "HIGH",
         "symptoms_summary": "पत्तियों की ऊपरी सतह पर समानांतर पीली धारियों में पाउडरनुमा फफोले।",
@@ -91,7 +94,10 @@ SYMPTOM_DISEASE_RULES = [
     {
         "id": "rice_bacterial_blight",
         "crop": "Paddy / Rice",
-        "triggers": ["झुलसा", "पत्ते सूख", "सफेद पत्ते", "jhulsa", "blight", "bacterial", "tip dry", "sukha"],
+        "triggers": [
+            "झुलसा", "पत्ते सूख", "सफेद पत्ते", "jhulsa", "blight", "bacterial", "tip dry",
+            "sukha", "patti jhulsa", "jhilsa", "blast"
+        ],
         "disease": "Bacterial Leaf Blight (पत्ती का झुलसा - Xanthomonas oryzae)",
         "severity": "HIGH",
         "symptoms_summary": "पत्तियों के किनारे लहरदार रूप में पीले-सफेद होकर सूखने लगते हैं और सुबह के समय जीवाणु का रिसाव दिखता है।",
@@ -113,7 +119,10 @@ SYMPTOM_DISEASE_RULES = [
     {
         "id": "cotton_pink_bollworm",
         "crop": "Cotton",
-        "triggers": ["गुलाबी", "सूंढी", "सुंडी", "कीड़ा", "टिंडा", "pink", "bollworm", "sundi", "sundhi", "keeda"],
+        "triggers": [
+            "गुलाबी", "सूंढी", "सुंडी", "कीड़ा", "टिंडा", "pink", "bollworm", "sundi", "sundhi",
+            "keeda", "kida", "gulabi sundi", "gulabi sundhi", "pink bollworm"
+        ],
         "disease": "Pink Bollworm (गुलाबी सूंढी - Pectinophora gossypiella)",
         "severity": "CRITICAL",
         "symptoms_summary": "गुलाब के फूल जैसा खिलना (Rosetted flower) तथा टिंडों में छेद होकर अंदर बीज व लिंट का नष्ट होना।",
@@ -124,13 +133,46 @@ SYMPTOM_DISEASE_RULES = [
     {
         "id": "tomato_early_blight",
         "crop": "Tomato",
-        "triggers": ["अगेती", "धब्बे", "छल्ले", "गोल", "early", "blight", "target", "dhabbe"],
+        "triggers": [
+            "अगेती", "अगेती झुलसा", "धब्बे", "छल्ले", "गोल", "काले", "काले धब्बे",
+            "early", "blight", "early blight", "target", "dhabbe", "dhabba", "spots",
+            "ageti", "aageti", "agethi", "aagethi", "aage thi", "aage", "aageti jhulsa",
+            "jhulsa", "jhilsa", "jhilasa", "kale dhabbe", "kaale dhabbe", "alternaria"
+        ],
         "disease": "Early Blight (अगेती झुलसा - Alternaria solani)",
         "severity": "MODERATE",
         "symptoms_summary": "निचली पत्तियों पर गोल भूरे धब्बे जिन पर संकेंद्रित छल्ले (Target boards) बने होते हैं।",
         "treatment_hi": "मैंकोजेब 75% WP (डाइथेन एम-45) @ 600-800 ग्राम प्रति 200 लीटर पानी में मिलाकर 10-12 दिन के अंतराल पर छिड़कें।",
         "treatment_haryanvi": "टमाटर की निचली पत्तियां पै अगेती झुलसा आ गया सै। 600 ग्राम मैंकोजेब (M-45) 200 लीटर पाणी म मिलाकै बढ़िया छिड़काव करो।",
         "treatment_en": "Spray Mancozeb 75% WP (Dithane M-45) @ 600-800 g in 200 L water per acre at 10-12 day intervals."
+    },
+    {
+        "id": "tomato_late_blight",
+        "crop": "Tomato",
+        "triggers": [
+            "पछेती", "पछेती झुलसा", "सड़न", "late", "late blight", "pacheti", "pacheti jhulsa",
+            "pani jaise dhabbe", "phytophthora"
+        ],
+        "disease": "Late Blight (पछेती झुलसा - Phytophthora infestans)",
+        "severity": "CRITICAL",
+        "symptoms_summary": "पत्तियों, तने व फलों पर जलसिक्त भूरे-काले धब्बे जो नम मौसम में तेजी से फैलते हैं।",
+        "treatment_hi": "साइमोक्सानिल 8% + मैंकोजेब 64% WP (कर्जेट) @ 600 ग्राम प्रति 200 लीटर पानी में मिलाकर तुरंत छिड़काव करें।",
+        "treatment_haryanvi": "टमाटर म पछेती झुलसा का भारी अटैक सै। 600 ग्राम साइमोक्सानिल + मैंकोजेब (कर्जेट) 200 लीटर पाणी म मिलाकै तुरंत छिड़काव करो।",
+        "treatment_en": "Spray Cymoxanil 8% + Mancozeb 64% WP (Curzate) @ 600 g in 200 L water per acre immediately."
+    },
+    {
+        "id": "potato_late_blight",
+        "crop": "Potato",
+        "triggers": [
+            "पछेती", "पछेती झुलसा", "झुलसा", "late blight", "blight", "pacheti", "pacheti jhulsa",
+            "jhulsa", "jhilsa", "phytophthora"
+        ],
+        "disease": "Late Blight (पछेती झुलसा - Phytophthora infestans)",
+        "severity": "CRITICAL",
+        "symptoms_summary": "पत्तियों पर भूरे काले अनियमित धब्बे जिनके किनारों पर सफेद फफूंद दिखती है।",
+        "treatment_hi": "साइमोक्सानिल 8% + मैंकोजेब 64% WP (कर्जेट) @ 600 ग्राम प्रति 200 लीटर पानी में तुरंत स्प्रे करें।",
+        "treatment_haryanvi": "आलू म पछेती झुलसा का भारी खतरा सै। 600 ग्राम साइमोक्सानिल + मैंकोजेब (कर्जेट) 200 लीटर पाणी म तुरंत छिड़को।",
+        "treatment_en": "Spray Cymoxanil 8% + Mancozeb 64% WP @ 600 g in 200 L water per acre immediately."
     },
     {
         "id": "sugarcane_red_rot",
@@ -146,7 +188,10 @@ SYMPTOM_DISEASE_RULES = [
     {
         "id": "mustard_white_rust",
         "crop": "Mustard",
-        "triggers": ["सफेद", "फफोले", "white", "rust", "safed", "chepa", "aphid"],
+        "triggers": [
+            "सफेद", "फफोले", "चेपा", "माहू", "white", "rust", "safed", "chepa", "aphid",
+            "safed ratua", "white rust", "mowla"
+        ],
         "disease": "White Rust & Downy Mildew (सफेद रतुआ - Albugo candida)",
         "severity": "MODERATE",
         "symptoms_summary": "पत्तियों की निचली सतह पर सफेद या हल्के पीले उभरे हुए फफोले तथा पुष्पक्रम में विकृति।",

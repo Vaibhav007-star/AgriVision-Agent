@@ -465,9 +465,13 @@
               </div>
               <div class="flex items-center gap-2">
                 <span id="voice-res-severity-badge" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-500/20 text-red-400 border border-red-500/30">HIGH SEVERITY</span>
-                <button id="voice-play-tts-btn" class="px-3 py-1 rounded-lg bg-lime-500 hover:bg-lime-400 text-black font-bold text-xs flex items-center gap-1.5 shadow" onclick="playCurrentVoiceAdvisory()">
+                <button id="voice-play-tts-btn" class="px-3 py-1 rounded-lg bg-lime-500 hover:bg-lime-400 text-black font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer" onclick="playCurrentVoiceAdvisory()">
                   <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
                   <span id="voice-tts-btn-text">🔊 आवाज़ में सुनें (Play Audio)</span>
+                </button>
+                <button id="voice-stop-tts-btn" class="hidden px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer" onclick="stopCurrentVoiceAdvisory()">
+                  <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                  <span>⏹️ रोकें (Stop)</span>
                 </button>
               </div>
             </div>

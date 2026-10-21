@@ -54,6 +54,16 @@ def test_tomato_early_blight():
     assert "मैंकोजेब" in res["spoken_hi"]
 
 
+def test_phonetic_live_speech_query():
+    """User speech query: 'Tomater Mein aage thi jhilsa ko kaise theek Karen.'"""
+    query = "Tomater Mein aage thi jhilsa ko kaise theek Karen."
+    res = parse_voice_query(query, district_hint="Karnal")
+    assert res["status"] == "DIAGNOSIS_MATCHED"
+    assert res["crop"] == "Tomato"
+    assert "Early Blight" in res["disease_detected"]
+    assert "मैंकोजेब" in res["spoken_hi"]
+
+
 def test_general_advice_fallback():
     query = "गन्ने की खेती के बारे में जानकारी"
     res = parse_voice_query(query)

@@ -1929,10 +1929,14 @@ function clearVoiceInput() {
   if (clearBtn) clearBtn.classList.add('hidden');
 }
 
-// Built-in Offline Fallback KB for Zero-Latency Field Diagnostics
+// Built-in Offline Fallback KB for Zero-Latency Field Diagnostics (Supports Hindi, Haryanvi, Hinglish & English)
 const OFFLINE_VOICE_KB = [
   {
-    keywords: ['टमाटर', 'काले', 'छल्लेदार', 'अगेती', 'झुलसा', 'blight', 'tomato'],
+    keywords: [
+      'टमाटर', 'tamatar', 'tomater', 'tamater', 'tomato', 'tamato',
+      'अगेती', 'ageti', 'aageti', 'agethi', 'aagethi', 'aage thi', 'aage', 'aageti jhulsa',
+      'झुलसा', 'jhulsa', 'jhilsa', 'jhilasa', 'blight', 'early', 'काले', 'छल्लेदार', 'dhabbe'
+    ],
     crop: 'Tomato',
     hindi_crop_name: 'टमाटर (Tomato)',
     disease_detected: 'Early Blight (अगेती झुलसा - Alternaria solani)',
@@ -1943,7 +1947,10 @@ const OFFLINE_VOICE_KB = [
     prescription: 'मैंकोजेब 75% WP (डाइथेन एम-45) @ 600-800 ग्राम प्रति 200 लीटर पानी में मिलाकर 10-12 दिन के अंतराल पर छिड़कें।'
   },
   {
-    keywords: ['कनक', 'गेहूं', 'पीला', 'रतुआ', 'rust', 'yellow rust', 'wheat'],
+    keywords: [
+      'कनक', 'गेहूं', 'गेहूँ', 'kanak', 'gehu', 'gehun', 'wheat', 'gahu',
+      'पीला', 'peela', 'pila', 'रतुआ', 'ratua', 'ratawa', 'rust', 'yellow rust', 'yellow'
+    ],
     crop: 'Wheat',
     hindi_crop_name: 'कनक / गेहूं (Wheat)',
     disease_detected: 'Yellow Rust (पीला रतुआ - Puccinia striiformis)',
@@ -1954,7 +1961,10 @@ const OFFLINE_VOICE_KB = [
     prescription: '200 मिली प्रोपिकोनाजोल 25% EC (टिल्ट) को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़कें (CCS HAU हिसार सिफारिश)।'
   },
   {
-    keywords: ['धान', 'बासमती', 'पत्ती', 'झुलसा', 'blast', 'rice', 'paddy', 'शीथ'],
+    keywords: [
+      'धान', 'बासमती', 'चावल', 'झीरी', 'dhan', 'dhaan', 'basmati', 'rice', 'paddy',
+      'पत्ती', 'patti', 'झुलसा', 'jhulsa', 'jhilsa', 'blast', 'शीथ', 'blight'
+    ],
     crop: 'Rice',
     hindi_crop_name: 'धान / बासमती (Paddy)',
     disease_detected: 'Bacterial Leaf Blight / Blast (पत्ती झुलसा)',
@@ -1965,7 +1975,10 @@ const OFFLINE_VOICE_KB = [
     prescription: '300 ग्राम ट्राइसाइक्लाजोल 75% WP (Beam / Baan) को 200 लीटर पानी में प्रति एकड़ छिड़कें।'
   },
   {
-    keywords: ['नरमा', 'कपास', 'गुलाबी', 'सूंढी', 'bollworm', 'cotton'],
+    keywords: [
+      'नरमा', 'कपास', 'narma', 'kapas', 'cotton', 'kapaas',
+      'गुलाबी', 'gulabi', 'सूंढी', 'सुंडी', 'sundi', 'sundhi', 'bollworm', 'pink bollworm'
+    ],
     crop: 'Cotton',
     hindi_crop_name: 'नरमा / कपास (Cotton)',
     disease_detected: 'Pink Bollworm (गुलाबी सूंढी - Pectinophora gossypiella)',
@@ -1976,7 +1989,10 @@ const OFFLINE_VOICE_KB = [
     prescription: '100 ग्राम इमामेक्टिन बेंजोएट 5% SG या 200 मिली प्रोफेनोफॉस 50% EC प्रति एकड़ 200 लीटर पानी में मिलाकर स्प्रे करें।'
   },
   {
-    keywords: ['सरसों', 'राया', 'सफेद', 'रतुआ', 'चेपा', 'mustard', 'white rust', 'aphid'],
+    keywords: [
+      'सरसों', 'राया', 'राई', 'sarson', 'sarso', 'mustard', 'raya',
+      'सफेद', 'safed', 'रतुआ', 'ratua', 'चेपा', 'chepa', 'aphid', 'white rust'
+    ],
     crop: 'Mustard',
     hindi_crop_name: 'सरसों / राया (Mustard)',
     disease_detected: 'White Rust & Aphids (सफेद रतुआ व मोयला/चेपा)',
@@ -1987,7 +2003,10 @@ const OFFLINE_VOICE_KB = [
     prescription: '600 ग्राम मैंकोजेब + 50 मिली इमिडाक्लोप्रिड 17.8% SL को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़कें।'
   },
   {
-    keywords: ['आलू', 'पछेती', 'झुलसा', 'potato', 'late blight'],
+    keywords: [
+      'आलू', 'aloo', 'aalu', 'potato',
+      'पछेती', 'pacheti', 'झुलसा', 'jhulsa', 'jhilsa', 'late blight', 'blight'
+    ],
     crop: 'Potato',
     hindi_crop_name: 'आलू (Potato)',
     disease_detected: 'Late Blight (पछेती झुलसा - Phytophthora infestans)',
@@ -2156,9 +2175,17 @@ function updateVoiceResponseDisplay(data) {
   } catch (e) {}
 }
 
+let isVoiceAdvisorySpeaking = false;
+
 function playCurrentVoiceAdvisory() {
   if (!('speechSynthesis' in window)) {
     alert('Text-to-Speech audio playback is not supported on this browser.');
+    return;
+  }
+
+  // If already speaking, pressing again stops / silences the audio!
+  if (window.speechSynthesis.speaking || isVoiceAdvisorySpeaking) {
+    stopCurrentVoiceAdvisory();
     return;
   }
 
@@ -2174,17 +2201,49 @@ function playCurrentVoiceAdvisory() {
   utterance.lang = currentVoiceDialect === 'english' ? 'en-IN' : 'hi-IN';
 
   const btnText = document.getElementById('voice-tts-btn-text');
+  const playBtn = document.getElementById('voice-play-tts-btn');
+  const stopBtn = document.getElementById('voice-stop-tts-btn');
+
   utterance.onstart = () => {
-    if (btnText) btnText.innerText = '🔊 बोल रहा हूँ... (Playing)';
-  };
-  utterance.onend = () => {
-    if (btnText) btnText.innerText = '🔊 पुनः सुनें (Replay)';
-  };
-  utterance.onerror = () => {
-    if (btnText) btnText.innerText = '🔊 आवाज़ में सुनें (Play Audio)';
+    isVoiceAdvisorySpeaking = true;
+    if (btnText) btnText.innerText = '🔊 बोल रहा हूँ... (रोकने के लिए दबाएं)';
+    if (playBtn) playBtn.className = 'px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer';
+    if (stopBtn) {
+      stopBtn.classList.remove('hidden');
+      stopBtn.classList.add('flex');
+    }
   };
 
+  const onCompleteOrHalt = () => {
+    isVoiceAdvisorySpeaking = false;
+    if (btnText) btnText.innerText = '🔊 पुनः सुनें (Replay)';
+    if (playBtn) playBtn.className = 'px-3 py-1 rounded-lg bg-lime-500 hover:bg-lime-400 text-black font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer';
+    if (stopBtn) {
+      stopBtn.classList.add('hidden');
+      stopBtn.classList.remove('flex');
+    }
+  };
+
+  utterance.onend = onCompleteOrHalt;
+  utterance.onerror = onCompleteOrHalt;
+
   window.speechSynthesis.speak(utterance);
+}
+
+function stopCurrentVoiceAdvisory() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  isVoiceAdvisorySpeaking = false;
+  const btnText = document.getElementById('voice-tts-btn-text');
+  const playBtn = document.getElementById('voice-play-tts-btn');
+  const stopBtn = document.getElementById('voice-stop-tts-btn');
+  if (btnText) btnText.innerText = '🔊 पुनः सुनें (Replay)';
+  if (playBtn) playBtn.className = 'px-3 py-1 rounded-lg bg-lime-500 hover:bg-lime-400 text-black font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer';
+  if (stopBtn) {
+    stopBtn.classList.add('hidden');
+    stopBtn.classList.remove('flex');
+  }
 }
 
 window.toggleVoiceRecording = toggleVoiceRecording;
@@ -2193,6 +2252,7 @@ window.switchVoiceDialect = switchVoiceDialect;
 window.setVoicePrompt = setVoicePrompt;
 window.clearVoiceInput = clearVoiceInput;
 window.playCurrentVoiceAdvisory = playCurrentVoiceAdvisory;
+window.stopCurrentVoiceAdvisory = stopCurrentVoiceAdvisory;
 
 // ============================================================================
 // PILLAR 2: Live Camera Stream & Real-Time Bounding Box Scanner
