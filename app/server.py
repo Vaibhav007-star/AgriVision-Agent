@@ -152,13 +152,60 @@ async def list_benchmark_samples() -> Dict[str, Any]:
             thumb.thumbnail((120, 120))
             thumb_b64 = pil_to_base64(thumb, format="JPEG")
             
-            crop = "Tomato"
-            if "Early" in name:
-                cond = "Early Blight"
-            elif "Late" in name:
-                cond = "Late Blight"
+            stem_l = Path(path).stem.lower()
+            if "wheat" in stem_l:
+                crop = "Wheat"
+                if "stripe" in stem_l or "yellow" in stem_l:
+                    cond = "Stripe / Yellow Rust"
+                elif "leaf" in stem_l or "brown" in stem_l:
+                    cond = "Leaf / Brown Rust"
+                elif "stem" in stem_l or "black" in stem_l:
+                    cond = "Stem / Black Rust"
+                else:
+                    cond = "Healthy"
+            elif "rice" in stem_l:
+                crop = "Rice"
+                if "bacterial" in stem_l:
+                    cond = "Bacterial Leaf Blight"
+                elif "brown" in stem_l:
+                    cond = "Brown Spot"
+                elif "smut" in stem_l:
+                    cond = "Leaf Smut"
+                else:
+                    cond = "Healthy"
+            elif "cotton" in stem_l:
+                crop = "Cotton"
+                cond = "Diseased Leaf" if "diseased" in stem_l else "Healthy"
+            elif "sugarcane" in stem_l:
+                crop = "Sugarcane"
+                if "red" in stem_l:
+                    cond = "Red Rot"
+                elif "rust" in stem_l:
+                    cond = "Rust"
+                elif "yellow" in stem_l:
+                    cond = "Yellow Leaf"
+                else:
+                    cond = "Healthy"
+            elif "potato" in stem_l:
+                crop = "Potato"
+                cond = "Early Blight" if "early" in stem_l else ("Late Blight" if "late" in stem_l else "Healthy")
+            elif "corn" in stem_l:
+                crop = "Corn"
+                cond = "Common Rust" if "rust" in stem_l else "Healthy"
+            elif "pepper" in stem_l:
+                crop = "Pepper Bell"
+                cond = "Bacterial Spot" if "bacterial" in stem_l else "Healthy"
+            elif "apple" in stem_l:
+                crop = "Apple"
+                cond = "Apple Scab" if "scab" in stem_l else "Healthy"
             else:
-                cond = "Healthy"
+                crop = "Tomato"
+                if "early" in stem_l:
+                    cond = "Early Blight"
+                elif "late" in stem_l:
+                    cond = "Late Blight"
+                else:
+                    cond = "Healthy"
                 
             output.append({
                 "id": Path(path).stem,

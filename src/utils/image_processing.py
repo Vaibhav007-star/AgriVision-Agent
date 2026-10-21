@@ -260,12 +260,15 @@ def validate_leaf_image(
     s = hsv[:, :, 1]
     v = hsv[:, :, 2]
     
-    # Human skin chrominance signature across illumination variations
+    # Human skin chrominance signature across illumination variations (Fitzpatrick I-VI)
+    # Human skin melanin is characterized by reddish-peach hue (h <= 18 or h >= 168),
+    # distinct red excess (r - g >= 8 and r - b >= 12), and natural hemoglobin/melanin bounds.
     skin_mask = (
         (r > 70) & (g > 35) & (b > 20) &
-        (r > g) & (r > b) & ((r - b) >= 12) & ((r - g) >= 6) &
+        (r > g) & (r > b) & ((r - b) >= 12) & ((r - g) >= 8) &
+        (g <= b * 1.68) &
         (cr >= 132) & (cr <= 182) & (cb >= 75) & (cb <= 135) & ((cr - cb) >= 20) &
-        (((h <= 26) | (h >= 165)) & (s >= 20) & (s <= 215) & (v >= 40))
+        (((h <= 18) | (h >= 168)) & (s >= 20) & (s <= 215) & (v >= 40))
     )
     skin_pct = float(np.sum(skin_mask) / total_pixels * 100)
     
@@ -304,20 +307,20 @@ def validate_leaf_image(
     c_achromatic_pct = float(np.sum((white_mask | dark_mask)[cy1:cy2, cx1:cx2]) / center_pixels * 100)
     c_apparel_pct = float(np.sum(non_plant_apparel[cy1:cy2, cx1:cx2]) / center_pixels * 100)
 
-    # 3. Botanical Plant Foliage Detection (Excluding Human Skin & Foreground Objects)
+    # 3. Botanical Plant Foliage Detection (Excluding Foreground Apparel & Human Faces)
     # Genuine chlorophyll foliage: must have genuine green tone and green dominance over red & blue
-    green_foliage = (h >= 28) & (h <= 95) & (s >= 22) & (v >= 22) & (g > r * 0.92) & (g > b * 1.05)
-    # Plant chlorosis (yellow-lime leaf spots): must have high green component, distinct from skin & fabric
-    chlorosis_spots = (h >= 20) & (h < 28) & (s >= 25) & (v >= 30) & (g >= r * 0.88) & ((r - g) <= 15) & (g > b * 1.10)
+    green_foliage = (h >= 26) & (h <= 95) & (s >= 20) & (v >= 20) & (g > r * 0.88) & (g > b * 1.04)
+    # Plant chlorosis & rust lesions (yellow-lime to orange-yellow leaf pustules):
+    chlorosis_spots = (h >= 18) & (h < 26) & (s >= 25) & (v >= 30) & (g >= r * 0.82) & (g > b * 1.10)
     # Green dominance
-    green_dom = (g > r * 0.94) & (g > b * 1.08) & (g > 30)
+    green_dom = (g > r * 0.92) & (g > b * 1.05) & (g > 25)
     
-    # Strict Exclusion: Human skin, clothing/apparel pixels can NEVER be counted as foliage
-    foliage_mask = (green_foliage | chlorosis_spots | green_dom) & (~skin_mask) & (~non_plant_apparel)
+    # Strict Exclusion: Synthetic clothing/apparel pixels can NEVER be counted as foliage
+    foliage_mask = (green_foliage | chlorosis_spots | green_dom) & (~non_plant_apparel)
     foliage_pct = float(np.sum(foliage_mask) / total_pixels * 100)
     
     # True Chlorophyll Green Coverage
-    true_plant_green = (h >= 28) & (h <= 95) & (s >= 25) & (v >= 25) & (g > r * 0.94) & (g > b * 1.08) & (~skin_mask) & (~non_plant_apparel)
+    true_plant_green = (h >= 26) & (h <= 95) & (s >= 22) & (v >= 22) & (g > r * 0.90) & (g > b * 1.06) & (~non_plant_apparel)
     true_green_pct = float(np.sum(true_plant_green) / total_pixels * 100)
     
     # Central Zone Foliage Coverage
@@ -333,14 +336,22 @@ def validate_leaf_image(
     
     # 5. Guardrail Decision Rules
     # Rule A: Human Subject Detection (Faces, Selfies, Portraits, Arms/Hands)
-    is_human = (
-        (center_skin_pct >= 8.0) or
-        (upper_skin_pct >= 9.0) or
-        (skin_pct >= 6.0) or
-        (max_blob_pct >= 3.0 and center_gli < 0.20) or
-        (center_skin_pct >= 5.0 and upper_skin_pct >= 6.0) or
-        (skin_pct >= skin_threshold_ratio)
-    )
+    # Differentiates actual human faces/bodies from yellow/brown leaf lesions in authentic crop fields:
+    if center_foliage_pct < 25.0:
+        is_human = (
+            (center_skin_pct >= 6.0) or
+            (upper_skin_pct >= 7.0) or
+            (skin_pct >= 5.0) or
+            (max_blob_pct >= 3.0 and center_gli < 0.20) or
+            (skin_pct >= skin_threshold_ratio)
+        )
+    else:
+        # Authentic crop leaf dominates the central frame (foliage >= 25%):
+        # Only rejected as human if a massive foreground face/body obscures the camera
+        is_human = (
+            (center_skin_pct >= 30.0 and center_skin_pct > center_foliage_pct * 0.70) or
+            (max_blob_pct >= 20.0 and center_gli < 0.12)
+        )
     
     if is_human:
         return {
@@ -353,11 +364,11 @@ def validate_leaf_image(
             "mean_gli": round(mean_gli, 3),
             "texture_variance": round(texture_var, 2),
             "message": "Human subject detected. AgriVision Agent is designed strictly for agricultural crop leaf pathology, not human medical diagnostics. No crop disease or pesticide treatment will be prescribed.",
-            "message_hi": "मानव चेहरा या त्वचा पहचानी गई है। एग्रीविज़न एजेंट केवल फसलों (टमाटर, आलू, मिर्च, सेब आदि) की पत्तियों के रोग निदान के लिए बनाया गया है। किसी गैर-पौधे के लिए कोई कीटनाशक उपचार नहीं दिया जाएगा।"
+            "message_hi": "मानव चेहरा या त्वचा पहचानी गई है। एग्रीविज़न एजेंट केवल फसलों (गेहूं, धान, कपास, गन्ना, टमाटर, आलू, मिर्च आदि) की पत्तियों के रोग निदान के लिए बनाया गया है। किसी गैर-पौधे के लिए कोई कीटनाशक उपचार नहीं दिया जाएगा।"
         }
 
     # Rule B: Insufficient botanical foliage coverage (cars, furniture, rooms, blue objects)
-    if foliage_pct < min_foliage_ratio or (true_green_pct < 4.0 and foliage_pct < 18.0) or (foliage_pct < 18.0 and mean_gli < -0.05):
+    if foliage_pct < min_foliage_ratio or (true_green_pct < 3.0 and foliage_pct < 16.0) or (foliage_pct < 16.0 and mean_gli < -0.05):
         return {
             "is_leaf": False,
             "reason": "non_plant_object",
@@ -371,8 +382,13 @@ def validate_leaf_image(
             "message_hi": "पौधे की पत्ती नहीं पाई गई (छवि में पत्तों का क्षेत्र बहुत कम है)। कृपया सही रोग निदान और उपचार के लिए पौधे की पत्ती की स्पष्ट तस्वीर अपलोड करें।"
         }
 
-    # Rule C: Animal & Foreground Non-Plant Object Detection (Dogs, Cats, Synthetic Clothing, Yellow/White/Dark Shirts)
-    if (c_white_pct >= 12.0 and center_foliage_pct < 75.0) or (c_achromatic_pct >= 22.0 and center_foliage_pct < 70.0) or (c_apparel_pct >= 18.0 and center_foliage_pct < 70.0):
+    # Rule C: Animal & Foreground Non-Plant Object Detection (Dogs, Cats, Synthetic Clothing, Yellow/Red/Blue Shirts)
+    # Permits white laboratory paper/specimen backgrounds when authentic crop leaf is centered
+    c_dark_pct = float(np.sum(dark_mask[cy1:cy2, cx1:cx2]) / center_pixels * 100)
+    is_dog_or_animal = (c_white_pct >= 20.0 and c_dark_pct >= 3.0) or (c_dark_pct >= 20.0 and center_foliage_pct < 60.0)
+    is_colored_apparel = ((c_apparel_pct - c_white_pct) >= 16.0 and center_foliage_pct < 50.0)
+    is_animal_or_garment = (c_achromatic_pct >= 35.0 and center_foliage_pct < 20.0) or (c_white_pct >= 60.0 and center_foliage_pct < 15.0)
+    if is_dog_or_animal or is_colored_apparel or is_animal_or_garment:
         return {
             "is_leaf": False,
             "reason": "animal_or_clothing_detected",
@@ -386,9 +402,13 @@ def validate_leaf_image(
             "message_hi": "कपड़े, परिधान या गैर-जैविक वस्तु (टी-शर्ट, जानवर आदि) पहचानी गई है। एग्रीविज़न केवल समर्थित कृषि फसलों की पत्तियों के लिए मान्य है।"
         }
 
-    # Rule D: Macro Crop Leaf Lamina vs. Wide Landscape / Lawn Grass
-    # A genuine agricultural diagnostic photo must be a close-up of a crop leaf blade (center_foliage >= 60%, center_gli >= 0.12)
-    if center_foliage_pct < 60.0 or center_gli < 0.12:
+    # Rule D: Macro Crop Leaf Lamina vs. Wide Landscape / Non-Plant Scenery
+    # Accommodates both broadleaf crops (Tomato, Potato, Cotton) and linear monocots (Wheat, Rice, Sugarcane)
+    # Monocot blades naturally cover 20-50% of the centered square view when photographed in-field.
+    is_monocot_leaf = (foliage_pct >= 10.0 and (center_foliage_pct >= 20.0 or foliage_pct >= 18.0) and (center_gli > 0.02 or mean_gli > 0.01))
+    is_broad_leaf = (center_foliage_pct >= 45.0 and center_gli >= 0.08)
+    
+    if not (is_monocot_leaf or is_broad_leaf):
         return {
             "is_leaf": False,
             "reason": "non_leaf_landscape_or_lawn",
@@ -398,8 +418,8 @@ def validate_leaf_image(
             "max_skin_blob_percentage": round(max_blob_pct, 1),
             "mean_gli": round(mean_gli, 3),
             "texture_variance": round(texture_var, 2),
-            "message": "Wide-angle landscape, grass lawn, or non-crop scene detected. Please upload a clear close-up photograph of an affected crop leaf from project crops (Tomato, Potato, Pepper, Apple, Corn).",
-            "message_hi": "परिदृश्य, घास का मैदान या सामान्य दृश्य पहचाना गया। कृपया परियोजना फसलों (टमाटर, आलू, मिर्च, सेब, मक्का) की पत्ती की क्लोज-अप तस्वीर लें।"
+            "message": "Wide-angle landscape, blurry background, or non-crop scene detected. Please upload a clear close-up photograph of an affected crop leaf from authorized project crops (Wheat, Rice, Cotton, Sugarcane, Mustard, Corn, Tomato, Potato, Pepper Bell, Apple).",
+            "message_hi": "परिदृश्य या धुंधला दृश्य पहचाना गया। कृपया समर्थित फसलों (गेहूं, धान, कपास, गन्ना, सरसों, मक्का, टमाटर, आलू, मिर्च, सेब) की पत्ती की क्लोज-अप तस्वीर लें।"
         }
         
     return {

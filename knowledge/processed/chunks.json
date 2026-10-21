@@ -60,6 +60,36 @@
     "clean_text": "Corn - Healthy Crop Care - Ensure adequate nitrogen application at knee-high and silking stages. - Maintain soil moisture during critical tasseling and grain filling windows."
   },
   {
+    "chunk_id": "cotton_pathology_001",
+    "source": "knowledge/documents/cotton_pathology.md",
+    "doc_title": "Cotton Pathology",
+    "section": "Cotton (Kapas / Narma) Pathology & Agronomic Management (Haryana Protocol)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "# Cotton (Kapas / Narma) Pathology & Agronomic Management (Haryana Protocol)",
+    "clean_text": "Cotton (Kapas / Narma) Pathology & Agronomic Management (Haryana Protocol)"
+  },
+  {
+    "chunk_id": "cotton_pathology_002",
+    "source": "knowledge/documents/cotton_pathology.md",
+    "doc_title": "Cotton Pathology",
+    "section": "Cotton - Bacterial Blight / Angular Leaf Spot (Xanthomonas citri pv. malvacearum)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Cotton - Bacterial Blight / Angular Leaf Spot (Xanthomonas citri pv. malvacearum)\n- **Pathogen:** *Xanthomonas citri pv. malvacearum*\n- **Severity Level:** High\n- **Symptoms:**\n  - Angular, water-soaked translucent lesions delimited by leaf veinlets, turning reddish-brown to dark black.\n  - Black arm phase attacks petioles and stems causing breaking and boll shedding.\n- **Management:**\n  - Spray Streptocycline @ 20 g per acre mixed with Copper Oxychloride 50% WP @ 500 g per acre in 200 L water.\n  - Apply cold-pressed Neem Oil (5 ml/L) for sucking pest vector control (Whiteflies, Jassids).\n\n---",
+    "clean_text": "Cotton - Bacterial Blight / Angular Leaf Spot (Xanthomonas citri pv. malvacearum) - Pathogen: *Xanthomonas citri pv. malvacearum* - Severity Level: High - Symptoms:   - Angular, water-soaked translucent lesions delimited by leaf veinlets, turning reddish-brown to dark black.   - Black arm phase attacks petioles and stems causing breaking and boll shedding. - Management:   - Spray Streptocycline @ 20 g per acre mixed with Copper Oxychloride 50% WP @ 500 g per acre in 200 L water.   - Apply cold-pressed Neem Oil (5 ml/L) for sucking pest vector control (Whiteflies, Jassids). ---"
+  },
+  {
+    "chunk_id": "cotton_pathology_003",
+    "source": "knowledge/documents/cotton_pathology.md",
+    "doc_title": "Cotton Pathology",
+    "section": "Cotton - Healthy Crop Care",
+    "crop": "General",
+    "disease": "Healthy",
+    "text": "## Cotton - Healthy Crop Care\n- Ensure balanced NPK (80:40:40 kg/ha). Apply 4 foliar sprays of 2% Potassium Nitrate (13:0:45) at flowering and boll development.\n- Monitor whitefly populations to prevent Cotton Leaf Curl Virus (CLCuV) transmission.",
+    "clean_text": "Cotton - Healthy Crop Care - Ensure balanced NPK (80:40:40 kg/ha). Apply 4 foliar sprays of 2% Potassium Nitrate (13:0:45) at flowering and boll development. - Monitor whitefly populations to prevent Cotton Leaf Curl Virus (CLCuV) transmission."
+  },
+  {
     "chunk_id": "general_agronomy_001",
     "source": "knowledge/documents/general_agronomy.md",
     "doc_title": "General Agronomy",
@@ -140,6 +170,76 @@
     "clean_text": "Potato - Healthy Crop Care - Ensure deep loose sandy-loam soil with good drainage. - Maintain soil pH 5.2 - 6.4 (slightly acidic helps suppress common scab). - Balanced N-P-K (150:100:120 kg/ha) with micronutrient foliar sprays of Zinc and Boron."
   },
   {
+    "chunk_id": "rice_pathology_001",
+    "source": "knowledge/documents/rice_pathology.md",
+    "doc_title": "Rice Pathology",
+    "section": "Rice / Paddy (Dhaan) Pathology & Agronomic Management (CCS HAU & ICAR Protocol)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "# Rice / Paddy (Dhaan) Pathology & Agronomic Management (CCS HAU & ICAR Protocol)",
+    "clean_text": "Rice / Paddy (Dhaan) Pathology & Agronomic Management (CCS HAU & ICAR Protocol)"
+  },
+  {
+    "chunk_id": "rice_pathology_002",
+    "source": "knowledge/documents/rice_pathology.md",
+    "doc_title": "Rice Pathology",
+    "section": "Rice - Bacterial Leaf Blight (Xanthomonas oryzae pv. oryzae)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Rice - Bacterial Leaf Blight (Xanthomonas oryzae pv. oryzae)\n- **Pathogen:** *Xanthomonas oryzae pv. oryzae* (Gram-negative bacterium)\n- **Severity Level:** High\n- **Symptoms:**\n  - Water-soaked to yellowish-green undulating lesions starting from leaf tips or margins, expanding downwards into long straw-colored bleached stripes.\n  - Early morning dew displays milky bacterial ooze beads drying into amber crusted droplets on leaf surfaces.\n  - 'Kresek' phase causes rapid wilting and seedling death within 1-3 weeks after transplanting.\n- **Favorable Weather:**\n  - High humidity (> 75%), temperature 25-34\u00b0C, strong winds and rain showers.\n- **Management:**\n  - Spray Streptocycline @ 20 g per acre + Copper Oxychloride 50% WP @ 500 g per acre in 200 Liters of water.\n  - Avoid top-dressing nitrogen while disease is active. Drain excess standing water for 3-4 days.\n\n---",
+    "clean_text": "Rice - Bacterial Leaf Blight (Xanthomonas oryzae pv. oryzae) - Pathogen: *Xanthomonas oryzae pv. oryzae* (Gram-negative bacterium) - Severity Level: High - Symptoms:   - Water-soaked to yellowish-green undulating lesions starting from leaf tips or margins, expanding downwards into long straw-colored bleached stripes.   - Early morning dew displays milky bacterial ooze beads drying into amber crusted droplets on leaf surfaces.   - 'Kresek' phase causes rapid wilting and seedling death within 1-3 weeks after transplanting. - Favorable Weather:   - High humidity (> 75%), temperature 25-34\u00b0C, strong winds and rain showers. - Management:   - Spray Streptocycline @ 20 g per acre + Copper Oxychloride 50% WP @ 500 g per acre in 200 Liters of water.   - Avoid top-dressing nitrogen while disease is active. Drain excess standing water for 3-4 days. ---"
+  },
+  {
+    "chunk_id": "rice_pathology_003",
+    "source": "knowledge/documents/rice_pathology.md",
+    "doc_title": "Rice Pathology",
+    "section": "Rice - Brown Spot (Bipolaris oryzae / Helminthosporium oryzae)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Rice - Brown Spot (Bipolaris oryzae / Helminthosporium oryzae)\n- **Pathogen:** *Bipolaris oryzae* (Fungus)\n- **Severity Level:** Moderate\n- **Symptoms:**\n  - Dark brown, oval or sesame seed-shaped spots with a gray or whitish center and yellow chlorotic halo.\n- **Management:**\n  - Spray Mancozeb 75% WP @ 500 g/acre or Propiconazole 25% EC @ 200 ml/acre in 200 L water. Apply Potash (MOP) to correct nutritional stress.\n\n---",
+    "clean_text": "Rice - Brown Spot (Bipolaris oryzae / Helminthosporium oryzae) - Pathogen: *Bipolaris oryzae* (Fungus) - Severity Level: Moderate - Symptoms:   - Dark brown, oval or sesame seed-shaped spots with a gray or whitish center and yellow chlorotic halo. - Management:   - Spray Mancozeb 75% WP @ 500 g/acre or Propiconazole 25% EC @ 200 ml/acre in 200 L water. Apply Potash (MOP) to correct nutritional stress. ---"
+  },
+  {
+    "chunk_id": "rice_pathology_004",
+    "source": "knowledge/documents/rice_pathology.md",
+    "doc_title": "Rice Pathology",
+    "section": "Rice - Leaf Smut (Entyloma oryzae)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Rice - Leaf Smut (Entyloma oryzae)\n- **Pathogen:** *Entyloma oryzae* (Fungus)\n- **Severity Level:** Moderate\n- **Symptoms:**\n  - Small, angular, slightly raised leaden-black spots scattered on both sides of rice leaves.\n- **Management:**\n  - Spray Tricyclazole 75% WP @ 120 g/acre or Propiconazole 25% EC @ 200 ml/acre.",
+    "clean_text": "Rice - Leaf Smut (Entyloma oryzae) - Pathogen: *Entyloma oryzae* (Fungus) - Severity Level: Moderate - Symptoms:   - Small, angular, slightly raised leaden-black spots scattered on both sides of rice leaves. - Management:   - Spray Tricyclazole 75% WP @ 120 g/acre or Propiconazole 25% EC @ 200 ml/acre."
+  },
+  {
+    "chunk_id": "sugarcane_pathology_001",
+    "source": "knowledge/documents/sugarcane_pathology.md",
+    "doc_title": "Sugarcane Pathology",
+    "section": "Sugarcane (Ganna) Pathology & Agronomic Management (Haryana Protocol)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "# Sugarcane (Ganna) Pathology & Agronomic Management (Haryana Protocol)",
+    "clean_text": "Sugarcane (Ganna) Pathology & Agronomic Management (Haryana Protocol)"
+  },
+  {
+    "chunk_id": "sugarcane_pathology_002",
+    "source": "knowledge/documents/sugarcane_pathology.md",
+    "doc_title": "Sugarcane Pathology",
+    "section": "Sugarcane - Red Rot (Colletotrichum falcatum)",
+    "crop": "General",
+    "disease": "Healthy",
+    "text": "## Sugarcane - Red Rot (Colletotrichum falcatum)\n- **Pathogen:** *Colletotrichum falcatum* (Fungus)\n- **Severity Level:** Critical ('Cancer of Sugarcane')\n- **Symptoms:**\n  - Discoloration of 3rd or 4th leaf from top; leaf margins turn yellow and dry up.\n  - Longitudinal splitting of infected cane reveals reddened internal pith tissues with distinct crosswise white patches.\n  - Alcoholic, sour fermentation odor emanating from split stalks.\n- **Management:**\n  - Plant healthy certified setts treated with Carbendazim 50% WP (1 g/L water) or hot water treatment (52\u00b0C, 30 min).\n  - Soil application of *Trichoderma harzianum* enriched farmyard manure @ 10 kg/acre.\n  - Immediately uproot and burn infected stools; do not ratoon severely infected fields.\n\n---",
+    "clean_text": "Sugarcane - Red Rot (Colletotrichum falcatum) - Pathogen: *Colletotrichum falcatum* (Fungus) - Severity Level: Critical ('Cancer of Sugarcane') - Symptoms:   - Discoloration of 3rd or 4th leaf from top; leaf margins turn yellow and dry up.   - Longitudinal splitting of infected cane reveals reddened internal pith tissues with distinct crosswise white patches.   - Alcoholic, sour fermentation odor emanating from split stalks. - Management:   - Plant healthy certified setts treated with Carbendazim 50% WP (1 g/L water) or hot water treatment (52\u00b0C, 30 min).   - Soil application of *Trichoderma harzianum* enriched farmyard manure @ 10 kg/acre.   - Immediately uproot and burn infected stools; do not ratoon severely infected fields. ---"
+  },
+  {
+    "chunk_id": "sugarcane_pathology_003",
+    "source": "knowledge/documents/sugarcane_pathology.md",
+    "doc_title": "Sugarcane Pathology",
+    "section": "Sugarcane - Rust (Puccinia melanocephala)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Sugarcane - Rust (Puccinia melanocephala)\n- **Pathogen:** *Puccinia melanocephala* (Fungus)\n- **Severity Level:** Moderate\n- **Symptoms:**\n  - Elongated chlorotic flecks turning reddish-brown pustules on both leaf surfaces.\n- **Management:**\n  - Spray Mancozeb 75% WP @ 500 g per acre or Propiconazole 25% EC @ 200 ml per acre in 200 L water.",
+    "clean_text": "Sugarcane - Rust (Puccinia melanocephala) - Pathogen: *Puccinia melanocephala* (Fungus) - Severity Level: Moderate - Symptoms:   - Elongated chlorotic flecks turning reddish-brown pustules on both leaf surfaces. - Management:   - Spray Mancozeb 75% WP @ 500 g per acre or Propiconazole 25% EC @ 200 ml per acre in 200 L water."
+  },
+  {
     "chunk_id": "tomato_pathology_001",
     "source": "knowledge/documents/tomato_pathology.md",
     "doc_title": "Tomato Pathology",
@@ -188,5 +288,55 @@
     "disease": "Healthy",
     "text": "## Tomato - Healthy Care Guidelines\n- Maintain soil pH between 6.0 and 6.8.\n- Balanced fertilization: Avoid excessive nitrogen which promotes dense, humid foliage susceptible to fungal spores.\n- Apply calcium-rich amendments (gypsum / lime) to prevent blossom end rot.",
     "clean_text": "Tomato - Healthy Care Guidelines - Maintain soil pH between 6.0 and 6.8. - Balanced fertilization: Avoid excessive nitrogen which promotes dense, humid foliage susceptible to fungal spores. - Apply calcium-rich amendments (gypsum / lime) to prevent blossom end rot."
+  },
+  {
+    "chunk_id": "wheat_pathology_001",
+    "source": "knowledge/documents/wheat_pathology.md",
+    "doc_title": "Wheat Pathology",
+    "section": "Wheat (Gehun) Pathology & Agronomic Management (CCS HAU & ICAR Protocol)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "# Wheat (Gehun) Pathology & Agronomic Management (CCS HAU & ICAR Protocol)",
+    "clean_text": "Wheat (Gehun) Pathology & Agronomic Management (CCS HAU & ICAR Protocol)"
+  },
+  {
+    "chunk_id": "wheat_pathology_002",
+    "source": "knowledge/documents/wheat_pathology.md",
+    "doc_title": "Wheat Pathology",
+    "section": "Wheat - Stripe / Yellow Rust (Puccinia striiformis f. sp. tritici)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Wheat - Stripe / Yellow Rust (Puccinia striiformis f. sp. tritici)\n- **Pathogen:** *Puccinia striiformis f. sp. tritici* (Obligate biotrophic basidiomycete fungus)\n- **Causal Agent:** Airborne fungal urediniospores blown from Himalayan foothills into Haryana plains (Panchkula, Ambala, Yamunanagar, Kurukshetra, Karnal).\n- **Severity Level:** Critical / Epidemic Potential\n- **Symptoms:**\n  - Bright yellow to orange-yellow powdery pustules arranged in distinct, narrow parallel stripes (linear rows) along the leaf blade veins.\n  - Pustules contain thousands of powdery yellow urediniospores that leave a yellow powder on fingers upon touching.\n  - Severe infection causes premature leaf desiccation, lodging, and shriveled grains with up to 70% yield loss.\n- **Favorable Weather Conditions:**\n  - Cool temperatures (10\u00b0C to 18\u00b0C) accompanied by persistent winter morning fog, dew, and intermittent drizzle (RH > 85%).\n- **Organic & Biological Control:**\n  - Foliar spray of *Trichoderma viride* or *Bacillus subtilis* (5 g/L) at vegetative stages.\n  - Spray 5% Neem Seed Kernel Extract (NSKE) or cold-pressed neem oil (5 ml/L) mixed with 0.1% surfactant upon first notice of yellowing.\n- **Chemical Control (CCS HAU Hisar & ICAR Standard Recommendations):**\n  - **First Line Defense:** Propiconazole 25% EC (Tilt / Bumper / Radar) @ 200 ml per acre dissolved in 200 Liters of water (1.0 ml per Liter of water).\n  - **Alternative Triazoles:** Tebuconazole 250 EC (Folicur) @ 200 ml per acre or Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 200 ml per acre in 200 L water.\n  - Repeat spray after 15 days if cloudy/foggy conditions persist and new yellow pustules emerge on the flag leaf.\n- **Cultural Management & Prevention:**\n  - Cultivate stripe-rust resistant wheat varieties recommended for Haryana: HD-3086 (Pusa Gautami), HD-3226 (Pusa Yashaswi), WH-1105, PBW-550, and DBW-187 (Karan Vandana).\n  - Avoid excessive nitrogen fertilization (keep Urea within 110-120 kg/acre split into 3 doses).\n  - Practice early Rabi sowing (completed between 25th October and 15th November).\n\n---",
+    "clean_text": "Wheat - Stripe / Yellow Rust (Puccinia striiformis f. sp. tritici) - Pathogen: *Puccinia striiformis f. sp. tritici* (Obligate biotrophic basidiomycete fungus) - Causal Agent: Airborne fungal urediniospores blown from Himalayan foothills into Haryana plains (Panchkula, Ambala, Yamunanagar, Kurukshetra, Karnal). - Severity Level: Critical / Epidemic Potential - Symptoms:   - Bright yellow to orange-yellow powdery pustules arranged in distinct, narrow parallel stripes (linear rows) along the leaf blade veins.   - Pustules contain thousands of powdery yellow urediniospores that leave a yellow powder on fingers upon touching.   - Severe infection causes premature leaf desiccation, lodging, and shriveled grains with up to 70% yield loss. - Favorable Weather Conditions:   - Cool temperatures (10\u00b0C to 18\u00b0C) accompanied by persistent winter morning fog, dew, and intermittent drizzle (RH > 85%). - Organic & Biological Control:   - Foliar spray of *Trichoderma viride* or *Bacillus subtilis* (5 g/L) at vegetative stages.   - Spray 5% Neem Seed Kernel Extract (NSKE) or cold-pressed neem oil (5 ml/L) mixed with 0.1% surfactant upon first notice of yellowing. - Chemical Control (CCS HAU Hisar & ICAR Standard Recommendations):   - First Line Defense: Propiconazole 25% EC (Tilt / Bumper / Radar) @ 200 ml per acre dissolved in 200 Liters of water (1.0 ml per Liter of water).   - Alternative Triazoles: Tebuconazole 250 EC (Folicur) @ 200 ml per acre or Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 200 ml per acre in 200 L water.   - Repeat spray after 15 days if cloudy/foggy conditions persist and new yellow pustules emerge on the flag leaf. - Cultural Management & Prevention:   - Cultivate stripe-rust resistant wheat varieties recommended for Haryana: HD-3086 (Pusa Gautami), HD-3226 (Pusa Yashaswi), WH-1105, PBW-550, and DBW-187 (Karan Vandana).   - Avoid excessive nitrogen fertilization (keep Urea within 110-120 kg/acre split into 3 doses).   - Practice early Rabi sowing (completed between 25th October and 15th November). ---"
+  },
+  {
+    "chunk_id": "wheat_pathology_003",
+    "source": "knowledge/documents/wheat_pathology.md",
+    "doc_title": "Wheat Pathology",
+    "section": "Wheat - Leaf / Brown Rust (Puccinia triticina)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Wheat - Leaf / Brown Rust (Puccinia triticina)\n- **Pathogen:** *Puccinia triticina* (Basidiomycete fungus)\n- **Severity Level:** Moderate to High\n- **Symptoms:**\n  - Small, round to oval, scattered cinnamon-brown to orange-brown pustules appearing primarily on the upper leaf lamina without linear striping.\n  - Unlike stripe rust, pustules are non-linear, irregularly distributed across the blade.\n- **Favorable Weather:**\n  - Moderate to warm temperatures (18\u00b0C to 25\u00b0C) with high relative humidity and dew.\n- **Management:**\n  - Propiconazole 25% EC @ 200 ml/acre in 200 L water or Mancozeb 75% WP @ 500 g/acre.\n  - Destroy volunteer wheat plants and alternate hosts around field bunds.\n\n---",
+    "clean_text": "Wheat - Leaf / Brown Rust (Puccinia triticina) - Pathogen: *Puccinia triticina* (Basidiomycete fungus) - Severity Level: Moderate to High - Symptoms:   - Small, round to oval, scattered cinnamon-brown to orange-brown pustules appearing primarily on the upper leaf lamina without linear striping.   - Unlike stripe rust, pustules are non-linear, irregularly distributed across the blade. - Favorable Weather:   - Moderate to warm temperatures (18\u00b0C to 25\u00b0C) with high relative humidity and dew. - Management:   - Propiconazole 25% EC @ 200 ml/acre in 200 L water or Mancozeb 75% WP @ 500 g/acre.   - Destroy volunteer wheat plants and alternate hosts around field bunds. ---"
+  },
+  {
+    "chunk_id": "wheat_pathology_004",
+    "source": "knowledge/documents/wheat_pathology.md",
+    "doc_title": "Wheat Pathology",
+    "section": "Wheat - Stem / Black Rust (Puccinia graminis f. sp. tritici)",
+    "crop": "General",
+    "disease": "Agronomy",
+    "text": "## Wheat - Stem / Black Rust (Puccinia graminis f. sp. tritici)\n- **Pathogen:** *Puccinia graminis f. sp. tritici* (Fungus)\n- **Severity Level:** Critical\n- **Symptoms:**\n  - Elongated, ragged reddish-brown pustules erupting through the epidermis of stems, leaf sheaths, and glumes, turning black as teliospores form late in the season.\n- **Management:**\n  - Spray Propiconazole 25% EC @ 200 ml/acre at initial detection.\n\n---",
+    "clean_text": "Wheat - Stem / Black Rust (Puccinia graminis f. sp. tritici) - Pathogen: *Puccinia graminis f. sp. tritici* (Fungus) - Severity Level: Critical - Symptoms:   - Elongated, ragged reddish-brown pustules erupting through the epidermis of stems, leaf sheaths, and glumes, turning black as teliospores form late in the season. - Management:   - Spray Propiconazole 25% EC @ 200 ml/acre at initial detection. ---"
+  },
+  {
+    "chunk_id": "wheat_pathology_005",
+    "source": "knowledge/documents/wheat_pathology.md",
+    "doc_title": "Wheat Pathology",
+    "section": "Wheat - Healthy Crop Care",
+    "crop": "General",
+    "disease": "Healthy",
+    "text": "## Wheat - Healthy Crop Care\n- Ensure balanced basal fertilization (NPK 150:60:40 kg/ha). Apply Zinc Sulfate 21% @ 25 kg/acre during field preparation.\n- Execute timely irrigations at critical physiological growth stages: CRI (Crown Root Initiation at 21 days), Tillering (40-45 days), Jointing (60-65 days), Flowering (80-85 days), and Milking/Dough stage (100-105 days).",
+    "clean_text": "Wheat - Healthy Crop Care - Ensure balanced basal fertilization (NPK 150:60:40 kg/ha). Apply Zinc Sulfate 21% @ 25 kg/acre during field preparation. - Execute timely irrigations at critical physiological growth stages: CRI (Crown Root Initiation at 21 days), Tillering (40-45 days), Jointing (60-65 days), Flowering (80-85 days), and Milking/Dough stage (100-105 days)."
   }
 ]

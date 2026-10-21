@@ -418,6 +418,11 @@ async function executeDiagnosis() {
       clahe.src = data.images.clahe;
     }
     const diagBanner = document.getElementById('diagnosis-banner');
+    const diagCrop = document.getElementById('diag-crop');
+    const diagCond = document.getElementById('diag-condition');
+    const diagAdvice = document.getElementById('diag-advice');
+    const diagConf = document.getElementById('diag-conf-pct');
+    const diagBadge = document.getElementById('diag-conf-badge');
     const isRejected = (data.is_leaf === false) || (data.confidence_level === 'Rejected');
 
     if (data.images && data.images.gradcam) {
@@ -474,7 +479,7 @@ async function executeDiagnosis() {
         top3Container.innerHTML = `
           <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
             <div class="font-bold flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4"></i> Guardrail Triggered: Supported Crops Only</div>
-            <p class="text-slate-300">${data.advisory_message || 'This image does not contain a close-up leaf of authorized project crops (Tomato, Potato, Pepper, Apple, Corn). Disease diagnosis and chemical spray plans are halted to prevent misapplication.'}</p>
+            <p class="text-slate-300">${data.advisory_message || 'This image does not contain a close-up leaf of authorized project crops (Wheat, Rice, Cotton, Sugarcane, Mustard, Corn, Tomato, Potato, Pepper Bell, Apple). Disease diagnosis and chemical spray plans are halted to prevent misapplication.'}</p>
           </div>
         `;
         if (window.lucide) window.lucide.createIcons();
@@ -994,7 +999,20 @@ function populatePrintableReport(data = null) {
   const repAcres = document.getElementById('rep-acres');
   const repStage = document.getElementById('rep-stage');
 
-  if (repCrop) repCrop.innerText = d && d.crop ? `${d.crop} (${d.crop === 'Tomato' ? 'Solanum lycopersicum' : (d.crop === 'Potato' ? 'Solanum tuberosum' : 'Capsicum annuum')})` : 'Tomato (Solanum lycopersicum)';
+  const cropBotanicalMap = {
+    'Wheat': 'Triticum aestivum',
+    'Rice': 'Oryza sativa',
+    'Cotton': 'Gossypium hirsutum',
+    'Sugarcane': 'Saccharum officinarum',
+    'Corn': 'Zea mays',
+    'Tomato': 'Solanum lycopersicum',
+    'Potato': 'Solanum tuberosum',
+    'Pepper Bell': 'Capsicum annuum',
+    'Apple': 'Malus domestica',
+    'Mustard': 'Brassica juncea'
+  };
+  const sciName = (d && d.crop && cropBotanicalMap[d.crop]) ? cropBotanicalMap[d.crop] : 'Agronomic Cultivar';
+  if (repCrop) repCrop.innerText = d && d.crop ? `${d.crop} (${sciName})` : 'Tomato (Solanum lycopersicum)';
   if (repLocation) repLocation.innerText = locVal;
   if (repAcres) repAcres.innerText = acresVal;
   if (repStage) repStage.innerText = stageVal;
@@ -1030,14 +1048,24 @@ function populatePrintableReport(data = null) {
     if (repCert) repCert.innerText = `${(d.confidence_level || 'HIGH').toUpperCase()} CERTAINTY`;
 
     // Pathogen details
-    let pathName = 'Pathogen: Unknown';
-    if (d.disease.includes('Late Blight')) pathName = 'Pathogen: Phytophthora infestans (Oomycete Water Mold) • Severity: Critical';
+    let pathName = 'Pathogen: Foliar Plant Pathogen';
+    if (d.disease.includes('Stripe Rust') || d.disease.includes('Yellow Rust')) pathName = 'Pathogen: Puccinia striiformis f. sp. tritici (Fungus) • Severity: High';
+    else if (d.disease.includes('Leaf Rust') || d.disease.includes('Brown Rust')) pathName = 'Pathogen: Puccinia triticina (Fungus) • Severity: Moderate to High';
+    else if (d.disease.includes('Stem Rust') || d.disease.includes('Black Rust')) pathName = 'Pathogen: Puccinia graminis f. sp. tritici (Fungus) • Severity: Critical';
+    else if (d.crop === 'Rice' && d.disease.includes('Bacterial')) pathName = 'Pathogen: Xanthomonas oryzae pv. oryzae (Bacterium) • Severity: High';
+    else if (d.crop === 'Rice' && d.disease.includes('Brown Spot')) pathName = 'Pathogen: Bipolaris oryzae (Fungus) • Severity: Moderate';
+    else if (d.crop === 'Rice' && d.disease.includes('Smut')) pathName = 'Pathogen: Entyloma oryzae (Fungus) • Severity: Moderate';
+    else if (d.crop === 'Cotton' && d.disease.includes('Diseased')) pathName = 'Pathogen: Xanthomonas citri pv. malvacearum / Foliar Complex • Severity: High';
+    else if (d.crop === 'Sugarcane' && d.disease.includes('Red Rot')) pathName = 'Pathogen: Colletotrichum falcatum (Fungus) • Severity: Critical';
+    else if (d.crop === 'Sugarcane' && d.disease.includes('Rust')) pathName = 'Pathogen: Puccinia melanocephala (Fungus) • Severity: Moderate';
+    else if (d.crop === 'Sugarcane' && d.disease.includes('Yellow')) pathName = 'Pathogen: Sugarcane Yellow Leaf Luteovirus • Severity: High';
+    else if (d.disease.includes('Late Blight')) pathName = 'Pathogen: Phytophthora infestans (Oomycete Water Mold) • Severity: Critical';
     else if (d.disease.includes('Early Blight')) pathName = 'Pathogen: Alternaria solani (Fungus) • Severity: Moderate to High';
     else if (d.disease.includes('Bacterial')) pathName = 'Pathogen: Xanthomonas campestris (Bacterium) • Severity: Severe';
     else if (d.disease.includes('Septoria')) pathName = 'Pathogen: Septoria lycopersici (Fungus) • Severity: Moderate';
     else if (d.disease.includes('Leaf Mold')) pathName = 'Pathogen: Passalora fulva (Fungus) • Severity: Moderate';
     else if (d.disease.includes('Spider')) pathName = 'Pathogen: Tetranychus urticae (Acarina / Pest) • Severity: Moderate';
-    else if (d.disease.includes('Yellow')) pathName = 'Pathogen: Tomato Yellow Leaf Curl Begomovirus • Severity: High';
+    else if (d.disease.includes('Yellow Leaf Curl')) pathName = 'Pathogen: Tomato Yellow Leaf Curl Begomovirus • Severity: High';
     else if (d.disease.includes('Healthy')) pathName = 'Specimen Condition: Healthy Foliage • No Pathogen Detected';
     if (repPathogen) repPathogen.innerText = pathName;
   }

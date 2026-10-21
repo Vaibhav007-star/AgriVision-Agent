@@ -29,10 +29,36 @@ def calculate_spray_dosage(
             "safety_equipment": ["Standard gloves", "Sun hat"]
         }
         
-    # Standard fungicide rate: 2.5 grams per Liter
-    chem_grams = round(water_volume_liters * 2.5, 1)
-    chem_kg = chem_grams / 1000.0
-    chem_str = f"{chem_kg:.2f} kg ({chem_grams:.0f} g) of Mancozeb 75% WP" if chem_kg >= 1.0 else f"{chem_grams:.0f} g of Mancozeb 75% WP"
+    crop_l = crop.lower()
+    dis_l = disease.lower()
+    
+    # Crop & Disease Specific Calibration:
+    if "wheat" in crop_l and ("rust" in dis_l or "stripe" in dis_l or "yellow" in dis_l):
+        # CCS HAU Hisar / ICAR Recommendation: Propiconazole 25% EC (Tilt) @ 1.0 ml per Liter (200 ml / acre in 200 L water)
+        prop_ml = round(field_acres * 200.0, 0)
+        chem_str = f"{prop_ml:.0f} ml of Propiconazole 25% EC (Tilt) @ 1 ml/L ({prop_ml/1000.0:.2f} L in {water_volume_liters:.0f} L water)"
+    elif "rice" in crop_l and ("bacterial" in dis_l or "blight" in dis_l):
+        # Streptocycline (20 g / acre) + Copper Oxychloride 50% WP (500 g / acre)
+        strep_g = round(field_acres * 20.0, 0)
+        coc_g = round(field_acres * 500.0, 0)
+        chem_str = f"{strep_g:.0f} g of Streptocycline + {coc_g:.0f} g of Copper Oxychloride 50% WP in {water_volume_liters:.0f} L water"
+    elif "cotton" in crop_l and ("diseased" in dis_l or "bacterial" in dis_l):
+        strep_g = round(field_acres * 20.0, 0)
+        coc_g = round(field_acres * 500.0, 0)
+        chem_str = f"{strep_g:.0f} g Streptocycline + {coc_g:.0f} g Copper Oxychloride 50% WP in {water_volume_liters:.0f} L water"
+    elif "sugarcane" in crop_l and "red" in dis_l:
+        carb_g = round(field_acres * 200.0, 0)
+        chem_str = f"{carb_g:.0f} g Carbendazim 50% WP Sett Treatment + Trichoderma harzianum @ 10 kg/acre soil application"
+    elif "late" in dis_l:
+        # Late blight: Cymoxanil + Mancozeb (Curzate) @ 3 g/L
+        chem_grams = round(water_volume_liters * 3.0, 1)
+        chem_kg = chem_grams / 1000.0
+        chem_str = f"{chem_kg:.2f} kg ({chem_grams:.0f} g) of Cymoxanil 8% + Mancozeb 64% WP (Curzate)"
+    else:
+        # Standard contact fungicide rate: 2.5 grams per Liter
+        chem_grams = round(water_volume_liters * 2.5, 1)
+        chem_kg = chem_grams / 1000.0
+        chem_str = f"{chem_kg:.2f} kg ({chem_grams:.0f} g) of Mancozeb 75% WP" if chem_kg >= 1.0 else f"{chem_grams:.0f} g of Mancozeb 75% WP"
     
     # Organic rate: 5.0 ml per Liter
     neem_ml = round(water_volume_liters * 5.0, 0)

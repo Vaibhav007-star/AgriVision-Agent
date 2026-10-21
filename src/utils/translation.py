@@ -9,6 +9,11 @@ from typing import Dict, Any, Optional
 # Agricultural Domain Translation Lexicon
 AGRI_GLOSSARY_EN_TO_HI = {
     # Crops
+    "Wheat": "गेहूं (Wheat)",
+    "Rice": "धान / चावल (Rice)",
+    "Cotton": "कपास / नरमा (Cotton)",
+    "Sugarcane": "गन्ना (Sugarcane)",
+    "Mustard": "सरसों / राया (Mustard)",
     "Tomato": "टमाटर (Tomato)",
     "Potato": "आलू (Potato)",
     "Corn (Maize)": "मक्का (Corn)",
@@ -18,6 +23,19 @@ AGRI_GLOSSARY_EN_TO_HI = {
     "Pepper": "शिमला मिर्च (Bell Pepper)",
     
     # Diseases
+    "Stripe / Yellow Rust": "पीला रतुआ / हल्दी रोग (Stripe / Yellow Rust)",
+    "Stripe Rust": "पीला रतुआ (Stripe Rust)",
+    "Yellow Rust": "पीला रतुआ (Yellow Rust)",
+    "Leaf / Brown Rust": "भूरा रतुआ (Leaf / Brown Rust)",
+    "Leaf Rust": "भूरा रतुआ (Leaf Rust)",
+    "Stem / Black Rust": "काला रतुआ (Stem / Black Rust)",
+    "Stem Rust": "काला रतुआ (Stem Rust)",
+    "Bacterial Leaf Blight": "जीवाणु झुलसा रोग (Bacterial Leaf Blight)",
+    "Bacterial Blight": "जीवाणु झुलसा (Bacterial Blight)",
+    "Brown Spot": "भूरा धब्बा रोग (Brown Spot)",
+    "Leaf Smut": "पत्ती कंडुआ रोग (Leaf Smut)",
+    "Diseased Leaf": "पत्ती झुलसा / जीवाणु अंगमारी (Diseased Leaf)",
+    "Red Rot": "लाल सड़न रोग (Red Rot)",
     "Early Blight": "अगेती झुलसा रोग (Early Blight)",
     "Late Blight": "पछेती झुलसा रोग (Late Blight)",
     "Leaf Mold": "पत्ती फफूंद रोग (Leaf Mold)",
