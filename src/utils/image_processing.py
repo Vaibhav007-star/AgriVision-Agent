@@ -289,29 +289,35 @@ def validate_leaf_image(
     if num_labels > 1:
         max_blob_pct = float(np.max(stats[1:, cv2.CC_STAT_AREA]) / total_pixels * 100)
         
-    # Non-Plant Foreground Object Analysis (Animals, Fur, Synthetic Clothing, White Shirts)
+    # Non-Plant Foreground Object Analysis (Animals, Fur, Synthetic Clothing, Yellow/Red/Blue Shirts)
     # White achromatic (white shirts, white dog/cat fur, synthetic paper)
     white_mask = (s < 35) & (v > 165)
     # Dark achromatic (black dog fur, shoes, dark synthetic fabric)
     dark_mask = (v < 45) & (s < 50)
-    non_plant_achromatic = white_mask | dark_mask
+    # Synthetic yellow fabric (bright yellow shirt/textiles: r and g very high, b low, r >= g*0.90, high sat)
+    yellow_apparel = (r > 150) & (g > 140) & (b < 110) & (r >= g * 0.90) & (s > 60)
+    # Synthetic red/blue/denim fabric
+    red_apparel = (r > 150) & (g < 100) & (b < 100)
+    blue_apparel = (b > 115) & (b > r * 1.15) & (b > g * 1.10)
+    non_plant_apparel = white_mask | dark_mask | yellow_apparel | red_apparel | blue_apparel
     c_white_pct = float(np.sum(white_mask[cy1:cy2, cx1:cx2]) / center_pixels * 100)
-    c_achromatic_pct = float(np.sum(non_plant_achromatic[cy1:cy2, cx1:cx2]) / center_pixels * 100)
+    c_achromatic_pct = float(np.sum((white_mask | dark_mask)[cy1:cy2, cx1:cx2]) / center_pixels * 100)
+    c_apparel_pct = float(np.sum(non_plant_apparel[cy1:cy2, cx1:cx2]) / center_pixels * 100)
 
     # 3. Botanical Plant Foliage Detection (Excluding Human Skin & Foreground Objects)
-    # Green chlorophyll foliage
-    green_foliage = (h >= 24) & (h <= 98) & (s >= 18) & (v >= 20)
-    # Plant chlorosis (yellow-lime leaf spots): must have high green component, distinct from skin
-    chlorosis_spots = (h >= 19) & (h < 26) & (s >= 25) & (v >= 30) & (g >= r * 0.85) & ((r - g) <= 15) & (g >= b)
+    # Genuine chlorophyll foliage: must have genuine green tone and green dominance over red & blue
+    green_foliage = (h >= 28) & (h <= 95) & (s >= 22) & (v >= 22) & (g > r * 0.92) & (g > b * 1.05)
+    # Plant chlorosis (yellow-lime leaf spots): must have high green component, distinct from skin & fabric
+    chlorosis_spots = (h >= 20) & (h < 28) & (s >= 25) & (v >= 30) & (g >= r * 0.88) & ((r - g) <= 15) & (g > b * 1.10)
     # Green dominance
-    green_dom = (g > r * 0.92) & (g > b * 1.05) & (g > 30)
+    green_dom = (g > r * 0.94) & (g > b * 1.08) & (g > 30)
     
-    # Strict Exclusion: Human skin and achromatic clothing/fur pixels can NEVER be counted as foliage
-    foliage_mask = (green_foliage | chlorosis_spots | green_dom) & (~skin_mask) & (~non_plant_achromatic)
+    # Strict Exclusion: Human skin, clothing/apparel pixels can NEVER be counted as foliage
+    foliage_mask = (green_foliage | chlorosis_spots | green_dom) & (~skin_mask) & (~non_plant_apparel)
     foliage_pct = float(np.sum(foliage_mask) / total_pixels * 100)
     
     # True Chlorophyll Green Coverage
-    true_plant_green = (h >= 25) & (h <= 95) & (s >= 25) & (v >= 25) & (g > r * 0.92) & (g > b * 1.05) & (~skin_mask) & (~non_plant_achromatic)
+    true_plant_green = (h >= 28) & (h <= 95) & (s >= 25) & (v >= 25) & (g > r * 0.94) & (g > b * 1.08) & (~skin_mask) & (~non_plant_apparel)
     true_green_pct = float(np.sum(true_plant_green) / total_pixels * 100)
     
     # Central Zone Foliage Coverage
@@ -328,11 +334,12 @@ def validate_leaf_image(
     # 5. Guardrail Decision Rules
     # Rule A: Human Subject Detection (Faces, Selfies, Portraits, Arms/Hands)
     is_human = (
-        (center_skin_pct >= 12.0 and center_foliage_pct < 65.0) or
-        (upper_skin_pct >= 14.0 and center_foliage_pct < 65.0) or
-        (max_blob_pct >= 5.0 and center_gli < 0.15) or
-        (skin_pct >= skin_threshold_ratio) or
-        (center_skin_pct >= 20.0)
+        (center_skin_pct >= 8.0) or
+        (upper_skin_pct >= 9.0) or
+        (skin_pct >= 6.0) or
+        (max_blob_pct >= 3.0 and center_gli < 0.20) or
+        (center_skin_pct >= 5.0 and upper_skin_pct >= 6.0) or
+        (skin_pct >= skin_threshold_ratio)
     )
     
     if is_human:
@@ -364,8 +371,8 @@ def validate_leaf_image(
             "message_hi": "पौधे की पत्ती नहीं पाई गई (छवि में पत्तों का क्षेत्र बहुत कम है)। कृपया सही रोग निदान और उपचार के लिए पौधे की पत्ती की स्पष्ट तस्वीर अपलोड करें।"
         }
 
-    # Rule C: Animal & Foreground Non-Plant Object Detection (Dogs, Cats, Synthetic Clothing, White Shirts)
-    if (c_white_pct >= 12.0 and center_foliage_pct < 75.0) or (c_achromatic_pct >= 22.0 and center_foliage_pct < 70.0):
+    # Rule C: Animal & Foreground Non-Plant Object Detection (Dogs, Cats, Synthetic Clothing, Yellow/White/Dark Shirts)
+    if (c_white_pct >= 12.0 and center_foliage_pct < 75.0) or (c_achromatic_pct >= 22.0 and center_foliage_pct < 70.0) or (c_apparel_pct >= 18.0 and center_foliage_pct < 70.0):
         return {
             "is_leaf": False,
             "reason": "animal_or_clothing_detected",
@@ -375,8 +382,8 @@ def validate_leaf_image(
             "max_skin_blob_percentage": round(max_blob_pct, 1),
             "mean_gli": round(mean_gli, 3),
             "texture_variance": round(texture_var, 2),
-            "message": "Animal or synthetic clothing subject detected (dog/pet, apparel, or non-botanical object in frame). AgriVision tests only authentic agricultural crop leaves.",
-            "message_hi": "जानवर या गैर-जैविक वस्तु (पालतू कुत्ता, कपड़े आदि) पहचानी गई है। एग्रीविज़न केवल समर्थित कृषि फसलों की पत्तियों के लिए मान्य है।"
+            "message": "Animal or synthetic clothing subject detected (apparel, human garments, pet, or non-botanical object in frame). AgriVision tests only authentic agricultural crop leaves.",
+            "message_hi": "कपड़े, परिधान या गैर-जैविक वस्तु (टी-शर्ट, जानवर आदि) पहचानी गई है। एग्रीविज़न केवल समर्थित कृषि फसलों की पत्तियों के लिए मान्य है।"
         }
 
     # Rule D: Macro Crop Leaf Lamina vs. Wide Landscape / Lawn Grass

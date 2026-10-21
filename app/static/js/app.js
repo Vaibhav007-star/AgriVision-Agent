@@ -417,23 +417,21 @@ async function executeDiagnosis() {
     if (data.images.clahe && clahe) {
       clahe.src = data.images.clahe;
     }
-    if (data.images.gradcam) {
-      if (gradcam) gradcam.src = data.images.gradcam;
-      if (over) over.src = data.images.gradcam;
-    }
-
-    if (lesionTag) lesionTag.innerText = `Necrotic Foliage: ${data.lesion_percentage}%`;
-
-    // Populate Diagnosis Banner
-    const diagCrop = document.getElementById('diag-crop');
-    const diagCond = document.getElementById('diag-condition');
-    const diagAdvice = document.getElementById('diag-advice');
-    const diagConf = document.getElementById('diag-conf-pct');
-    const diagBadge = document.getElementById('diag-conf-badge');
+    const diagBanner = document.getElementById('diagnosis-banner');
     const isRejected = (data.is_leaf === false) || (data.confidence_level === 'Rejected');
 
+    if (data.images && data.images.gradcam) {
+      if (gradcam) gradcam.src = data.images.gradcam;
+      if (over) over.src = data.images.gradcam;
+    } else if (isRejected) {
+      const oodSvg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%230b130e"/><circle cx="200" cy="170" r="60" fill="%23450a0a" stroke="%23ef4444" stroke-width="4"/><line x1="160" y1="130" x2="240" y2="210" stroke="%23ef4444" stroke-width="6"/><text x="200" y="275" font-family="sans-serif" font-size="16" font-weight="bold" fill="%23fca5a5" text-anchor="middle">Non-Plant / OOD Subject</text><text x="200" y="305" font-family="sans-serif" font-size="12" fill="%2394a3b8" text-anchor="middle">No Plant Foliage Detected</text></svg>';
+      if (gradcam) gradcam.src = oodSvg;
+      if (over) over.src = oodSvg;
+    }
+
     if (isRejected) {
-      if (diagCrop) diagCrop.innerText = `Subject: ${data.crop || 'Non-Project / OOD Subject'}`;
+      if (diagBanner) diagBanner.className = 'p-5 rounded-2xl bg-gradient-to-r from-rose-950/70 via-black/80 to-red-950/70 border border-rose-500/50 space-y-2';
+      if (diagCrop) diagCrop.innerText = `Subject: ${data.crop || 'Non-Plant / Human Subject'}`;
       if (diagCond) diagCond.innerText = `🚫 ${data.disease || 'No Supported Crop Leaf Detected'}`;
       if (diagAdvice) diagAdvice.innerText = data.advisory_message;
       if (diagConf) diagConf.innerText = '0.0%';
@@ -441,7 +439,16 @@ async function executeDiagnosis() {
         diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
         diagBadge.innerText = 'Rejected (Non-Crop / OOD)';
       }
+      // Strictly hide lesion hotspots on non-leaf images (never show hotspots on human faces!)
+      document.querySelectorAll('.lesion-hotspot').forEach(el => el.classList.add('hidden'));
+      const hotspotLabel = document.querySelector('.scanner-overlay span.text-lime-400, .scanner-overlay span.text-rose-400');
+      if (hotspotLabel) {
+        hotspotLabel.innerText = '● 0 Hotspots';
+        hotspotLabel.className = 'text-[10px] text-rose-400';
+      }
+      if (lesionTag) lesionTag.innerText = 'Necrotic Foliage: 0.0% (Non-Leaf)';
     } else {
+      if (diagBanner) diagBanner.className = 'p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 to-zenze-card border border-lime-500/30';
       if (diagCrop) diagCrop.innerText = `Crop: ${data.crop}`;
       if (diagCond) diagCond.innerText = `${data.crop} — ${data.disease}`;
       if (diagAdvice) diagAdvice.innerText = data.advisory_message;
@@ -450,6 +457,14 @@ async function executeDiagnosis() {
         diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-lime-500/20 text-lime-300 border border-lime-500/40';
         diagBadge.innerText = `${data.confidence_level} Certainty`;
       }
+      // Show lesion hotspots for valid leaves
+      document.querySelectorAll('.lesion-hotspot').forEach(el => el.classList.remove('hidden'));
+      const hotspotLabel = document.querySelector('.scanner-overlay span.text-rose-400, .scanner-overlay span.text-lime-400');
+      if (hotspotLabel) {
+        hotspotLabel.innerText = '● 2 Hotspots';
+        hotspotLabel.className = 'text-[10px] text-lime-400';
+      }
+      if (lesionTag) lesionTag.innerText = `Necrotic Foliage: ${data.lesion_percentage}%`;
     }
 
     // Top-3 Distribution
@@ -743,7 +758,11 @@ function readAloudPrescription() {
   const advice = document.getElementById('diag-advice');
   let text = `${cond ? cond.innerText : 'Crop diagnosis'}. ${advice ? advice.innerText : 'Consult recommendation.'}`;
 
-  if (currentLanguage === 'hi' && latestRxData.hindi_summary) {
+  if (latestDiagnosticData && latestDiagnosticData.is_leaf === false) {
+    text = (currentLanguage === 'hi') 
+      ? 'सावधान: पहचानी गई तस्वीर पौधे की पत्ती की नहीं है। किसी इंसान या गैर-पौधे पर कोई कृषि कीटनाशक या रासायनिक छिड़काव न करें।'
+      : 'Alert: Input image is rejected as a non-plant subject or human. Chemical and biological pesticide application is strictly halted.';
+  } else if (currentLanguage === 'hi' && latestRxData.hindi_summary) {
     text = latestRxData.hindi_summary;
   }
 
@@ -2203,7 +2222,26 @@ function switchScannerMode(mode) {
   if (tabCamera) tabCamera.className = mode === 'camera' ? activeTab : inactiveTab;
   if (tabDrone) tabDrone.className = mode === 'drone' ? activeTab : inactiveTab;
 
-  if (mode !== 'camera' && liveCameraStream) {
+  if (mode === 'camera') {
+    startLiveCamera();
+    // Hide benchmark hotspots
+    document.querySelectorAll('.lesion-hotspot').forEach(el => el.classList.add('hidden'));
+    const diagCrop = document.getElementById('diag-crop');
+    const diagCond = document.getElementById('diag-condition');
+    const diagAdvice = document.getElementById('diag-advice');
+    const diagConf = document.getElementById('diag-conf-pct');
+    const diagBadge = document.getElementById('diag-conf-badge');
+    const diagBanner = document.getElementById('diagnosis-banner');
+    if (diagBanner) diagBanner.className = 'p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 to-zenze-card border border-lime-500/30';
+    if (diagCrop) diagCrop.innerText = 'Live Optical Scanner';
+    if (diagCond) diagCond.innerText = '📷 Ready to Scan Crop Leaf';
+    if (diagAdvice) diagAdvice.innerText = 'Position plant foliage inside the central viewfinder box and click "Capture & Diagnose".';
+    if (diagConf) diagConf.innerText = '--';
+    if (diagBadge) {
+      diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-lime-500/20 text-lime-300 border border-lime-500/30';
+      diagBadge.innerText = 'CAMERA ACTIVE';
+    }
+  } else if (mode !== 'camera' && liveCameraStream) {
     stopLiveCamera();
   }
 }
@@ -2279,6 +2317,8 @@ function flipCameraFacingMode() {
   startLiveCamera();
 }
 
+let offscreenSampleCanvas = null;
+
 function drawLiveBoundingBoxes() {
   const video = document.getElementById('live-camera-video');
   const canvas = document.getElementById('live-camera-canvas');
@@ -2301,8 +2341,48 @@ function drawLiveBoundingBoxes() {
   const boxX = Math.round((w - boxW) / 2);
   const boxY = Math.round((h - boxH) / 2);
 
+  // Real-time optical color sampling from viewfinder ROI
+  if (!offscreenSampleCanvas) {
+    offscreenSampleCanvas = document.createElement('canvas');
+    offscreenSampleCanvas.width = 32;
+    offscreenSampleCanvas.height = 32;
+  }
+  const sCtx = offscreenSampleCanvas.getContext('2d', { willReadFrequently: true });
+  let isHumanDetected = false;
+  let isGreenLeafDetected = false;
+
+  try {
+    sCtx.drawImage(video, boxX, boxY, boxW, boxH, 0, 0, 32, 32);
+    const pix = sCtx.getImageData(0, 0, 32, 32).data;
+    let skinCount = 0;
+    let greenCount = 0;
+
+    for (let i = 0; i < pix.length; i += 4) {
+      const r = pix[i], g = pix[i+1], b = pix[i+2];
+      if (r > 70 && g > 35 && b > 20 && r > g && r > b && (r - b) >= 15 && (r - g) >= 8) {
+        skinCount++;
+      }
+      if (g > 40 && g > r * 1.08 && g > b * 1.15) {
+        greenCount++;
+      }
+    }
+    if (skinCount > 100) isHumanDetected = true;
+    else if (greenCount > 140) isGreenLeafDetected = true;
+  } catch (e) {}
+
+  let boxColor = '#84cc16';
+  let labelText = '🌿 Leaf ROI: Target Centered';
+
+  if (isHumanDetected) {
+    boxColor = '#ef4444';
+    labelText = '⚠️ Human / Non-Plant in Frame';
+  } else if (!isGreenLeafDetected) {
+    boxColor = '#38bdf8';
+    labelText = '🔍 Aim Camera at Crop Foliage';
+  }
+
   // Draw corner brackets
-  ctx.strokeStyle = '#84cc16';
+  ctx.strokeStyle = boxColor;
   ctx.lineWidth = 3;
   const cornerLen = 24;
 
@@ -2335,17 +2415,18 @@ function drawLiveBoundingBoxes() {
   ctx.stroke();
 
   // Crosshair center dot
-  ctx.fillStyle = '#84cc16';
+  ctx.fillStyle = boxColor;
   ctx.beginPath();
   ctx.arc(w / 2, h / 2, 4, 0, Math.PI * 2);
   ctx.fill();
 
   // Bounding Box Label
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
-  ctx.fillRect(boxX, boxY - 26, 175, 22);
-  ctx.fillStyle = '#84cc16';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+  const labelWidth = isHumanDetected ? 200 : (isGreenLeafDetected ? 180 : 195);
+  ctx.fillRect(boxX, boxY - 26, labelWidth, 22);
+  ctx.fillStyle = boxColor;
   ctx.font = 'bold 11px Inter, sans-serif';
-  ctx.fillText('🌿 Leaf ROI: Target Centered', boxX + 6, boxY - 11);
+  ctx.fillText(labelText, boxX + 6, boxY - 11);
 
   cameraAnimFrameId = requestAnimationFrame(drawLiveBoundingBoxes);
 }
@@ -2358,6 +2439,7 @@ function captureAndDiagnoseFrame() {
   }
 
   playChime('click');
+  document.querySelectorAll('.lesion-hotspot').forEach(el => el.classList.add('hidden'));
   const snapCanvas = document.createElement('canvas');
   snapCanvas.width = video.videoWidth;
   snapCanvas.height = video.videoHeight;
