@@ -53,7 +53,7 @@
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="/static/css/theme.css?v=2.2.0">
+  <link rel="stylesheet" href="/static/css/theme.css?v=2.5.0">
   
   <!-- Inter Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -786,13 +786,13 @@
             <div id="diagnosis-banner" class="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 to-zenze-card border border-lime-500/30">
               <div class="flex items-start justify-between">
                 <div>
-                  <span id="diag-crop" class="text-xs uppercase font-bold text-lime-400 tracking-wider">Crop: Tomato</span>
-                  <h3 id="diag-condition" class="text-2xl font-black text-white mt-0.5">Tomato — Early Blight</h3>
-                  <p id="diag-advice" class="text-xs text-slate-300 mt-1">Diagnosis confidence is high (94.8%). Treatment recommendations are ready.</p>
+                  <span id="diag-crop" class="text-xs uppercase font-bold text-lime-400 tracking-wider">🌿 Precision Agriculture AI</span>
+                  <h3 id="diag-condition" class="text-2xl font-black text-white mt-0.5">Ready for Leaf Diagnosis</h3>
+                  <p id="diag-advice" class="text-xs text-slate-300 mt-1">Upload a crop leaf photo or pick a benchmark sample, then click "Execute Diagnostic Engine".</p>
                 </div>
                 <div class="text-right">
-                  <div id="diag-conf-pct" class="text-3xl font-extrabold text-lime-400">94.8%</div>
-                  <span id="diag-conf-badge" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-lime-500/20 text-lime-400 uppercase">High Certainty</span>
+                  <div id="diag-conf-pct" class="text-3xl font-extrabold text-lime-400">--%</div>
+                  <span id="diag-conf-badge" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-lime-500/20 text-lime-400 uppercase">Awaiting Scan</span>
                 </div>
               </div>
 
@@ -872,8 +872,8 @@
               </div>
 
               <div class="space-y-1.5 text-xs text-slate-300 pt-3 border-t border-white/5">
-                <div>&bull; <strong>Chemical Formulation:</strong> <span id="chem-req-val" class="text-slate-200">750 g of Mancozeb 75% WP</span></div>
-                <div>&bull; <strong>Organic Alternative:</strong> <span id="organic-req-val" class="text-slate-200">1.5 L of Neem Oil 10,000 ppm</span></div>
+                <div>&bull; <strong>Chemical Formulation:</strong> <span id="chem-req-val" class="text-slate-200">Awaiting scan calculation...</span></div>
+                <div>&bull; <strong>Organic Alternative:</strong> <span id="organic-req-val" class="text-slate-200">Awaiting scan calculation...</span></div>
                 <div>&bull; <strong>Recommended PPE:</strong> <span class="text-slate-400">Chemical goggles, N95 mask, nitrile gloves</span></div>
               </div>
             </div>
@@ -1900,7 +1900,7 @@
         <div class="profile-grid">
           <div class="profile-item">
             <span class="prof-label">CROP SPECIMEN:</span>
-            <span id="rep-crop" class="prof-val font-bold text-emerald-900">Tomato (Solanum lycopersicum)</span>
+            <span id="rep-crop" class="prof-val font-bold text-emerald-900">Crop Leaf Specimen</span>
           </div>
           <div class="profile-item">
             <span class="prof-label">FARM LOCATION:</span>
@@ -1959,15 +1959,15 @@
       <div class="diagnosis-banner-box">
         <div class="diag-left">
           <span class="diag-sub-tag">PRIMARY PATHOLOGICAL DIAGNOSIS</span>
-          <h3 id="rep-condition" class="diag-headline">Tomato — Late Blight</h3>
-          <p id="rep-pathogen-info" class="diag-pathogen">Pathogen: <em>Phytophthora infestans</em> (Oomycete Water Mold) • Severity: Critical</p>
-          <p id="rep-summary-text" class="diag-desc">Deep neural network identified pathogen with high activation over target lesion margins. Spore sporulation risk elevated.</p>
+          <h3 id="rep-condition" class="diag-headline">Clinical Evaluation Pending</h3>
+          <p id="rep-pathogen-info" class="diag-pathogen">Pathogen: Run diagnostic scan to evaluate foliar pathology</p>
+          <p id="rep-summary-text" class="diag-desc">Deep neural network pathology assessment will be generated upon executing leaf scan.</p>
         </div>
         <div class="diag-right">
           <div class="conf-box">
             <span class="conf-label">CONFIDENCE SCORE</span>
-            <div id="rep-conf-val" class="conf-percent">90.9%</div>
-            <span id="rep-certainty-badge" class="conf-certainty">HIGH CERTAINTY</span>
+            <div id="rep-conf-val" class="conf-percent">--%</div>
+            <span id="rep-certainty-badge" class="conf-certainty">AWAITING SCAN</span>
           </div>
         </div>
       </div>
@@ -1982,19 +1982,7 @@
           </div>
           <div id="rep-top3-list" class="diff-list">
             <div class="diff-item">
-              <span class="diff-name">1. Late Blight (Tomato)</span>
-              <div class="diff-bar-wrap"><div class="diff-bar" style="width: 90.9%;"></div></div>
-              <span class="diff-score">90.9%</span>
-            </div>
-            <div class="diff-item">
-              <span class="diff-name">2. Early Blight (Tomato)</span>
-              <div class="diff-bar-wrap"><div class="diff-bar" style="width: 2.8%;"></div></div>
-              <span class="diff-score">2.8%</span>
-            </div>
-            <div class="diff-item">
-              <span class="diff-name">3. Leaf Mold (Tomato)</span>
-              <div class="diff-bar-wrap"><div class="diff-bar" style="width: 2.5%;"></div></div>
-              <span class="diff-score">2.5%</span>
+              <span class="diff-name">Differential diagnosis populated on scan execution</span>
             </div>
           </div>
         </div>
@@ -2052,9 +2040,9 @@
                 <td id="rep-dose-acres" class="font-bold">1.5 Acres</td>
                 <td id="rep-dose-water" class="font-bold text-emerald-800">300.0 Liters</td>
                 <td id="rep-dose-tanks" class="font-bold text-emerald-800">20.0 Tanks</td>
-                <td id="rep-dose-chem">750 g Mancozeb 75% WP</td>
-                <td id="rep-dose-org">1.5 L Neem Oil 10,000 ppm</td>
-                <td id="rep-dose-savings" class="font-bold text-emerald-700">₹3,390 Saved</td>
+                <td id="rep-dose-chem">Awaiting scan calculation...</td>
+                <td id="rep-dose-org">Awaiting scan calculation...</td>
+                <td id="rep-dose-savings" class="font-bold text-emerald-700">Calculated upon scan</td>
               </tr>
             </tbody>
           </table>
@@ -2139,8 +2127,8 @@
   </div>
 
   <!-- Haryana Offline Datasets & Client-side Logic Scripts -->
-  <script src="/static/js/haryana-data.js?v=2.2.0"></script>
-  <script src="/static/js/app.js?v=2.2.0"></script>
+  <script src="/static/js/haryana-data.js?v=2.5.0"></script>
+  <script src="/static/js/app.js?v=2.5.0"></script>
 
 </body>
 </html>

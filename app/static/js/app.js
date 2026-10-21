@@ -236,6 +236,40 @@ function handleFileSelected(file) {
   playChime('click');
   selectedFile = file;
   selectedSampleId = null;
+
+  const fname = file.name.toLowerCase();
+  const cropSelect = document.getElementById('target-crop-select');
+  if (cropSelect) {
+    if (fname.includes('wheat') || fname.includes('rust') || fname.includes('gehun')) {
+      cropSelect.value = 'Wheat';
+    } else if (fname.includes('rice') || fname.includes('paddy') || fname.includes('dhaan')) {
+      cropSelect.value = 'Rice';
+    } else if (fname.includes('cotton') || fname.includes('kapas')) {
+      cropSelect.value = 'Cotton';
+    } else if (fname.includes('sugarcane') || fname.includes('ganna')) {
+      cropSelect.value = 'Sugarcane';
+    } else if (fname.includes('corn') || fname.includes('makka')) {
+      cropSelect.value = 'Corn';
+    }
+  }
+
+  const diagCrop = document.getElementById('diag-crop');
+  const diagCond = document.getElementById('diag-condition');
+  const diagAdvice = document.getElementById('diag-advice');
+  const diagConf = document.getElementById('diag-conf-pct');
+  const diagBadge = document.getElementById('diag-conf-badge');
+  const banner = document.getElementById('diagnosis-banner');
+
+  if (banner) banner.className = 'p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 to-zenze-card border border-lime-500/30';
+  if (diagCrop) diagCrop.innerText = 'Ready for Scan';
+  if (diagCond) diagCond.innerText = `Uploaded: ${file.name}`;
+  if (diagAdvice) diagAdvice.innerText = 'Click "Execute Diagnostic Engine" to analyze foliar pathology.';
+  if (diagConf) diagConf.innerText = '--%';
+  if (diagBadge) {
+    diagBadge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-lime-500/20 text-lime-300 border border-lime-500/40';
+    diagBadge.innerText = 'Queued';
+  }
+
   const reader = new FileReader();
   reader.onload = (e) => {
     const orig = document.getElementById('preview-original');
@@ -721,31 +755,96 @@ function switchRxTab(tab) {
     return;
   }
 
+  const currCrop = (latestDiagnosticData && latestDiagnosticData.crop) ? latestDiagnosticData.crop.toLowerCase() : 'crop';
+  const isHealthy = (latestDiagnosticData && (latestDiagnosticData.is_healthy || (latestDiagnosticData.disease && latestDiagnosticData.disease.toLowerCase().includes('healthy'))));
+
   if (tab === 'bio') {
     if (tabs[0]) tabs[0].className = 'rx-tab text-lime-400 border-b-2 border-lime-400 pb-2';
-    const items = latestRxData.biological_controls || [
+    let defaultBio = [
       'Prune lower chlorotic foliage to prevent upward spore splash.',
       'Apply cold-pressed organic Neem oil solution (5 ml/L) mixed with mild surfactant.'
     ];
+    if (currCrop.includes('wheat')) {
+      defaultBio = [
+        'Bio-agent formulation: Spray Trichoderma harzianum or Pseudomonas fluorescens @ 5 g/L at vegetative onset.',
+        'Avoid excessive nitrogen fertilization to decrease foliar susceptibility to stripe rust.'
+      ];
+    } else if (currCrop.includes('rice')) {
+      defaultBio = [
+        'Apply Pseudomonas fluorescens (biocontrol agent) @ 10 g/kg seed and foliar spray at tillering.',
+        'Regulate field water drainage to inhibit bacterial spread.'
+      ];
+    } else if (currCrop.includes('cotton')) {
+      defaultBio = [
+        'Conserve predatory beneficial insects (ladybird beetles, chrysoperla) for whitefly control.',
+        'Spray 5% NSKE (Neem Seed Kernel Extract) at 15-day intervals.'
+      ];
+    }
+    const items = (latestRxData.biological_controls && latestRxData.biological_controls.length) ? latestRxData.biological_controls : defaultBio;
     items.forEach((item) => (content.innerHTML += `<p>&bull; ${item}</p>`));
   } else if (tab === 'chem') {
     if (tabs[1]) tabs[1].className = 'rx-tab text-lime-400 border-b-2 border-lime-400 pb-2';
-    const items = latestRxData.chemical_controls || [
+    let defaultChem = [
       'Spray Mancozeb 75% WP @ 2.5 g/L of water at initial symptom manifestation.',
       'Rotate with Azoxystrobin 23% SC (1 ml/L) to manage FRAC fungicide resistance.'
     ];
+    if (isHealthy) {
+      defaultChem = [
+        '✅ No synthetic fungicide spray required (Crop foliage is healthy).',
+        'Maintain balanced NPK fertilization and periodic field scouting.'
+      ];
+    } else if (currCrop.includes('wheat')) {
+      defaultChem = [
+        'First Line Defense (CCS HAU & ICAR): Propiconazole 25% EC (Tilt / Bumper) @ 200 ml per acre in 200 Liters of water (1.0 ml/L).',
+        'Alternative Triazole: Tebuconazole 250 EC (Folicur) @ 200 ml/acre in 200 L water.',
+        'Repeat spray after 15 days if cloudy/foggy weather persists and yellow pustules expand.'
+      ];
+    } else if (currCrop.includes('rice')) {
+      defaultChem = [
+        'Spray Streptocycline 90% (15-20 g) + Copper Oxychloride 50% WP (500 g) in 200 L water per acre.',
+        'Avoid urea top-dressing during active leaf blight lesions.'
+      ];
+    } else if (currCrop.includes('cotton')) {
+      defaultChem = [
+        'Spray Copper Oxychloride 50% WP (500 g) + Streptocycline (15 g) in 200 L water per acre for bacterial leaf spots.',
+        'For sucking pests: Flonicamid 50 WG @ 60 g/acre or Dinotefuran 20% SG @ 60 g/acre.'
+      ];
+    }
+    const items = (latestRxData.chemical_controls && latestRxData.chemical_controls.length) ? latestRxData.chemical_controls : defaultChem;
     items.forEach((item) => (content.innerHTML += `<p>&bull; ${item}</p>`));
   } else if (tab === 'prev') {
     if (tabs[2]) tabs[2].className = 'rx-tab text-lime-400 border-b-2 border-lime-400 pb-2';
-    const items = latestRxData.cultural_prevention || [
-      'Enforce 3-year crop rotation with non-solanaceous crops.',
-      'Disinfect pruning shears with 10% sodium hypochlorite solution.'
+    let defaultPrev = [
+      'Enforce crop rotation with non-host botanical families.',
+      'Disinfect field tools and pruning shears with 10% sodium hypochlorite solution.'
     ];
+    if (currCrop.includes('wheat')) {
+      defaultPrev = [
+        'Sow stripe-rust resistant wheat varieties recommended for Haryana: HD-3086 (Pusa Gautami), HD-3226, WH-1105, DBW-187.',
+        'Avoid excessive nitrogen fertilization (keep Urea within 110-120 kg/acre split into 3 doses).',
+        'Complete timely Rabi sowing between 25th October and 15th November.'
+      ];
+    } else if (currCrop.includes('rice')) {
+      defaultPrev = [
+        'Cultivate BLB-resistant varieties: Pusa Basmati 1718, PB 1885, PB 1886.',
+        'Avoid deep standing water (keep 2-3 cm intermittent wetting and drying).'
+      ];
+    }
+    const items = (latestRxData.cultural_prevention && latestRxData.cultural_prevention.length) ? latestRxData.cultural_prevention : defaultPrev;
     items.forEach((item) => (content.innerHTML += `<p>&bull; ${item}</p>`));
   } else if (tab === 'hindi') {
     if (tabs[3]) tabs[3].className = 'rx-tab text-lime-400 border-b-2 border-lime-400 pb-2';
-    const text = latestRxData.hindi_summary || 'कृषि परामर्श तैयार कर दिया गया है। नीम का तेल और मैंकोजेब का अनुशंसित छिड़काव करें।';
-    content.innerHTML = `<p class="text-lime-300 font-medium">${text.replace(/\n/g, '<br>')}</p>`;
+    let defaultHi = latestRxData.hindi_summary;
+    if (!defaultHi) {
+      if (currCrop.includes('wheat')) {
+        defaultHi = 'गेहूं परामर्श (CCS HAU हिसार): पीले रतुआ की रोकथाम के लिए प्रोपिकोनाजोल 25% ईसी (टिल्ट) @ 200 मिली को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़कें। 15 दिन बाद आवश्यकता पड़ने पर दोहराएं।';
+      } else if (currCrop.includes('rice')) {
+        defaultHi = 'धान परामर्श (HAU हिसार): पत्ती झुलसा रोग हेतु 500 ग्राम कॉपर ऑक्सीक्लोराइड + 15 ग्राम स्ट्रेप्टोसाइक्लिन को 200 लीटर पानी में घोलकर प्रति एकड़ छिड़काव करें।';
+      } else {
+        defaultHi = 'कृषि परामर्श तैयार है। अनुशंसित मात्रा में जैविक व रासायनिक छिड़काव करें तथा मौसम के अनुसार स्प्रे का समय चुनें।';
+      }
+    }
+    content.innerHTML = `<p class="text-lime-300 font-medium">${defaultHi.replace(/\n/g, '<br>')}</p>`;
   }
 }
 

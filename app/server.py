@@ -79,6 +79,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def add_no_cache_headers(request: Request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    if path == "/" or path.endswith(".js") or path.endswith(".html") or path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 # Register Sub-Routers
 app.include_router(bot_router)
 
@@ -286,7 +297,21 @@ async def diagnose_leaf(
     seg_result = segment_leaf_mask(pil_image)
     
     # 2. Deep Learning Inference & Botanical OOD Guardrail
-    inference_result = predict_crop_disease(pil_image, compute_gradcam=True, target_crop=target_crop)
+    detected_target = target_crop
+    if (not detected_target or detected_target.lower() == "auto") and image_name:
+        fname = image_name.lower()
+        if any(w in fname for w in ["wheat", "gehun", "gehu", "stripe_rust", "leaf_rust", "stem_rust", "puccinia"]):
+            detected_target = "wheat"
+        elif any(r in fname for r in ["rice", "paddy", "dhaan", "bacterial_blight", "brown_spot", "leaf_smut"]):
+            detected_target = "rice"
+        elif any(c in fname for c in ["cotton", "kapas", "narma"]):
+            detected_target = "cotton"
+        elif any(s in fname for s in ["sugarcane", "ganna", "red_rot"]):
+            detected_target = "sugarcane"
+        elif any(m in fname for m in ["corn", "maize", "makka"]):
+            detected_target = "corn"
+
+    inference_result = predict_crop_disease(pil_image, compute_gradcam=True, target_crop=detected_target)
     is_leaf = inference_result.get("is_leaf", True) and (inference_result.get("confidence_level") != "Rejected")
     leaf_val = inference_result.get("leaf_validation", {})
     

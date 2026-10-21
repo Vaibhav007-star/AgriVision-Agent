@@ -257,6 +257,39 @@ def _generate_pytorch_gradcam(model: Any, input_tensor: Any, target_img: Image.I
         return None
 
 
+def _detect_monocot_leaf_blade(img: Image.Image) -> bool:
+    """
+    Botanically identifies whether the foliar specimen is a linear monocot grass blade
+    (Wheat, Rice, Sugarcane, Corn) versus a broadleaf dicot (Tomato, Potato, Pepper Bell).
+    Monocots exhibit elongated aspect ratios (>2.0:1) and parallel venation.
+    """
+    try:
+        arr = np.array(img.convert("RGB"))
+        hsv = cv2.cvtColor(arr, cv2.COLOR_RGB2HSV)
+        h, s, v = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
+        
+        # Foliage and chlorosis/rust mask
+        green = (h >= 20) & (h <= 95) & (s >= 20) & (v >= 20)
+        rust_yellow = (h >= 14) & (h < 26) & (s >= 25) & (v >= 25)
+        leaf_mask = (green | rust_yellow).astype(np.uint8) * 255
+        
+        contours, _ = cv2.findContours(leaf_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if not contours:
+            return False
+            
+        largest = max(contours, key=cv2.contourArea)
+        if len(largest) >= 5 and cv2.contourArea(largest) > 500:
+            _, (w_box, h_box), _ = cv2.minAreaRect(largest)
+            min_dim = min(w_box, h_box)
+            max_dim = max(w_box, h_box)
+            if min_dim > 0:
+                aspect = max_dim / min_dim
+                return aspect >= 2.0
+        return False
+    except Exception:
+        return False
+
+
 def predict_crop_disease(
     image_input: Union[str, Path, Image.Image, np.ndarray],
     model_path: Optional[str] = None,
@@ -271,7 +304,8 @@ def predict_crop_disease(
        - If specific crop selected (Wheat, Rice, Cotton, Sugarcane, Corn, Tomato, Potato, Pepper):
          Routes directly to specialized, calibrated high-accuracy checkpoint!
        - If 'auto':
-         Evaluates 33 Haryana disease classes using unified GPU master model.
+         Evaluates aggregate probability mass across Haryana crop families,
+         enforces botanical monocot/dicot geometry gating, and dispatches to calibrated step model.
     3. Grad-CAM visual lesion explainability generation.
     4. Safety & Out-of-Distribution gating.
     """
@@ -301,6 +335,26 @@ def predict_crop_disease(
         
     norm_crop = target_crop.strip().lower() if target_crop else "auto"
     
+    # Extract crop hint from image filename if available
+    input_hint = None
+    if isinstance(image_input, (str, Path)):
+        fname = Path(image_input).name.lower()
+        if any(w in fname for w in ["wheat", "gehun", "gehu", "rust", "ttritici"]):
+            input_hint = "wheat"
+        elif any(r in fname for r in ["rice", "paddy", "dhaan"]):
+            input_hint = "rice"
+        elif any(c in fname for c in ["cotton", "kapas", "narma"]):
+            input_hint = "cotton"
+        elif any(s in fname for s in ["sugarcane", "ganna", "red_rot"]):
+            input_hint = "sugarcane"
+        elif any(m in fname for m in ["corn", "maize", "makka"]):
+            input_hint = "corn"
+        elif any(t in fname for t in ["tomato", "tamatar"]):
+            input_hint = "vegetables"
+            
+    if norm_crop == "auto" and input_hint:
+        norm_crop = input_hint
+
     # 1. Specialized Step Model Execution for Haryana field crops (Wheat, Rice, Cotton, Sugarcane, Corn)
     step_key = None
     if norm_crop in ["wheat", "gehun", "gehu"]:
@@ -313,10 +367,12 @@ def predict_crop_disease(
         step_key = "sugarcane"
     elif norm_crop in ["corn", "maize", "makka"]:
         step_key = "corn"
+    elif norm_crop in ["tomato", "potato", "pepper", "pepper bell", "capsicum", "vegetables"]:
+        step_key = "vegetables"
         
     specialized_model_loaded = _load_pytorch_step_model(step_key) if step_key else None
         
-    # Execute Specialized Step Model if selected
+    # Execute Specialized Step Model if selected or hinted
     if specialized_model_loaded is not None and torch is not None and _PYTORCH_TRANSFORM is not None:
         model, class_names = specialized_model_loaded
         tensor = _PYTORCH_TRANSFORM(raw_img.convert("RGB")).unsqueeze(0).to(_DEVICE)
@@ -348,7 +404,7 @@ def predict_crop_disease(
         if compute_gradcam:
             cam_overlay = _generate_pytorch_gradcam(model, tensor, raw_img, top_indices[0].item())
             
-        conf_level = "High" if best_conf >= 0.75 else ("Moderate" if best_conf >= 0.45 else "Low")
+        conf_level = "High" if best_conf >= 0.70 else ("Moderate" if best_conf >= 0.40 else "Low")
         return {
             "is_leaf": True,
             "leaf_validation": leaf_validation,
@@ -358,15 +414,15 @@ def predict_crop_disease(
             "confidence": best_conf,
             "confidence_percentage": round(best_conf * 100, 1),
             "confidence_level": conf_level,
-            "is_confident": best_conf >= 0.45,
-            "clarification_needed": best_conf < 0.45,
+            "is_confident": best_conf >= 0.40,
+            "clarification_needed": best_conf < 0.40,
             "advisory_message": f"Diagnosis verified with {conf_level.lower()} certainty for {best['crop']} ({best['disease']}).",
             "top_predictions": top_predictions,
             "gradcam_overlay": cam_overlay,
             "processed_image": resized_img
         }
         
-    # 2. Auto-Detection / Haryana Master Multi-Crop Inference (33 classes)
+    # 2. Auto-Detection / Haryana Master Multi-Crop Inference (33 classes) with Crop Family Aggregation
     if norm_crop == "auto":
         master_loaded = _load_haryana_master_model()
         if master_loaded is not None and torch is not None and _PYTORCH_TRANSFORM is not None:
@@ -377,15 +433,42 @@ def predict_crop_disease(
                 logits = m_model(tensor)
                 probs = torch.softmax(logits, dim=1).squeeze(0)
                 
-            top_probs, top_indices = torch.topk(probs, k=min(3, len(m_classes)))
-            raw_top_class = m_classes[top_indices[0].item()]
-            c_crop, c_dis, c_hlth = _clean_label(raw_top_class)
-            best_conf = top_probs[0].item()
+            # Botanical Morphology Gating
+            is_monocot = _detect_monocot_leaf_blade(raw_img)
             
-            # If the master model identified a crop with dedicated step checkpoint, refine with step checkpoint
-            refinement_crop = c_crop.lower()
-            if refinement_crop in ["wheat", "rice", "cotton", "sugarcane", "corn"]:
-                refine_model = _load_pytorch_step_model(refinement_crop)
+            # Aggregate Probability Mass per Crop Family
+            crop_family_mass: Dict[str, float] = {}
+            for p_val, c_name in zip(probs, m_classes):
+                c_crop, _, _ = _clean_label(c_name)
+                # If monocot blade geometry detected, severely penalize broadleaf dicots (Tomato, Potato, Pepper)
+                weight = 1.0
+                if is_monocot and c_crop in ["Tomato", "Potato", "Pepper Bell"]:
+                    weight = 0.02
+                elif (not is_monocot) and c_crop in ["Wheat", "Rice", "Sugarcane"]:
+                    weight = 0.60
+                    
+                crop_family_mass[c_crop] = crop_family_mass.get(c_crop, 0.0) + (p_val.item() * weight)
+                
+            # Determine Top-Ranked Crop Family
+            sorted_crops = sorted(crop_family_mass.items(), key=lambda x: -x[1])
+            dominant_crop = sorted_crops[0][0]
+            dominant_crop_key = dominant_crop.lower()
+            
+            # Dispatch to specialized step model for maximum precision
+            step_dispatch_map = {
+                "wheat": "wheat",
+                "rice": "rice",
+                "cotton": "cotton",
+                "sugarcane": "sugarcane",
+                "corn": "corn",
+                "tomato": "vegetables",
+                "potato": "vegetables",
+                "pepper bell": "vegetables",
+                "vegetables": "vegetables"
+            }
+            step_target = step_dispatch_map.get(dominant_crop_key)
+            if step_target:
+                refine_model = _load_pytorch_step_model(step_target)
                 if refine_model is not None:
                     r_m, r_classes = refine_model
                     with torch.no_grad():
@@ -428,7 +511,8 @@ def predict_crop_disease(
                         "processed_image": resized_img
                     }
                     
-            # If not refined via step model, format master predictions
+            # If step model dispatch unavailable, fallback to master predictions
+            top_probs, top_indices = torch.topk(probs, k=min(3, len(m_classes)))
             top_predictions = []
             for rank, (p, idx) in enumerate(zip(top_probs, top_indices), start=1):
                 raw_c = m_classes[idx.item()]
@@ -444,6 +528,7 @@ def predict_crop_disease(
                 })
                 
             best = top_predictions[0]
+            best_conf = best["confidence"]
             cam_overlay = _generate_pytorch_gradcam(m_model, tensor, raw_img, top_indices[0].item()) if compute_gradcam else None
             conf_level = "High" if best_conf >= 0.70 else ("Moderate" if best_conf >= 0.40 else "Low")
             

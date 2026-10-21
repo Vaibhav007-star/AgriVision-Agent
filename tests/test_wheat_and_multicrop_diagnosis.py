@@ -78,3 +78,4 @@ def test_cotton_diagnosed_as_cotton():
         assert res["is_leaf"] is True
         assert res["crop"] == "Cotton"
         assert "tomato" not in res["crop"].lower()
+
