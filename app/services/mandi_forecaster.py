@@ -197,3 +197,4 @@ def forecast_mandi_prices(
         "forecast_series": forecast,
         "generated_at": datetime.now().isoformat()
     }
+

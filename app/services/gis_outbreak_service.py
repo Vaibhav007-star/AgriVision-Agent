@@ -142,3 +142,4 @@ def get_haryana_gis_outbreak_telemetry() -> Dict[str, Any]:
         "districts": district_telemetry,
         "timestamp": datetime.now().isoformat()
     }
+

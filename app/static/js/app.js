@@ -81,53 +81,13 @@ function playChime(type = 'success') {
 }
 
 // ============================================================================
-// 2. Ambient Spores Particle Background
+// 2. Ambient Spores Particle Background (Disabled - Zero Motion Mode)
 // ============================================================================
 function initSporesCanvas() {
   const canvas = document.getElementById('spores-canvas');
-  if (!canvas || !canvas.parentElement) return;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  let width = (canvas.width = canvas.parentElement.offsetWidth);
-  let height = (canvas.height = canvas.parentElement.offsetHeight);
-
-  window.addEventListener('resize', () => {
-    if (canvas && canvas.parentElement) {
-      width = canvas.width = canvas.parentElement.offsetWidth;
-      height = canvas.height = canvas.parentElement.offsetHeight;
-    }
-  });
-
-  const particles = Array.from({ length: 45 }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    radius: Math.random() * 2 + 0.6,
-    dx: (Math.random() - 0.5) * 0.4,
-    dy: -Math.random() * 0.5 - 0.2,
-    alpha: Math.random() * 0.5 + 0.2
-  }));
-
-  function render() {
-    ctx.clearRect(0, 0, width, height);
-    particles.forEach((p) => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(132, 204, 22, ${p.alpha})`;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = '#84cc16';
-      ctx.fill();
-
-      p.x += p.dx;
-      p.y += p.dy;
-
-      if (p.y < 0) p.y = height;
-      if (p.x < 0) p.x = width;
-      if (p.x > width) p.x = 0;
-    });
-    requestAnimationFrame(render);
+  if (canvas) {
+    canvas.style.display = 'none';
   }
-  render();
 }
 
 // ============================================================================
@@ -192,26 +152,10 @@ function switchVisualMode(mode) {
 }
 
 // ============================================================================
-// 4. 3D Mouse Tilt Effect for Zenze Cards
+// 4. 3D Mouse Tilt Effect (Disabled - Zero Motion Mode)
 // ============================================================================
 function init3DTilt() {
-  const cards = document.querySelectorAll('.zenze-card');
-  cards.forEach((card) => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -4;
-      const rotateY = ((x - centerX) / centerX) * 4;
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-    });
-  });
+  // Motion disabled per user preference
 }
 
 // ============================================================================
@@ -380,7 +324,7 @@ function simulateWeather(mode) {
     if (tempSpan) tempSpan.innerText = '26.4°C';
     if (sporeSpan) {
       sporeSpan.innerText = 'CRITICAL HIGH Risk';
-      sporeSpan.className = 'font-bold text-red-400 animate-pulse';
+      sporeSpan.className = 'font-bold text-red-400';
     }
     if (statRisk) {
       statRisk.innerText = 'Critical High';
@@ -1282,7 +1226,7 @@ function toggleSpeechRecognition() {
     speechRecognitionInstance.onstart = () => {
       isRecognizingSpeech = true;
       if (micBtn) {
-        micBtn.className = 'w-9 h-9 rounded-xl bg-rose-500/30 text-rose-300 border border-rose-500/50 flex items-center justify-center shrink-0 animate-pulse ring-2 ring-rose-400';
+        micBtn.className = 'w-9 h-9 rounded-xl bg-rose-500/30 text-rose-300 border border-rose-500/50 flex items-center justify-center shrink-0 ring-2 ring-rose-400';
       }
       if (chatInput) {
         chatInput.placeholder = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'सुन रहा हूँ... बोलिए...' : 'Listening... Speak your question...';
