@@ -57,3 +57,4 @@ def test_deficiency_triage_zinc():
     assert "Zinc" in triage["element"]
     assert "खैरा" in triage["vernacular_name"]
     assert "Zinc Sulphate" in triage["emergency_spray"]
+

@@ -126,3 +126,4 @@ def search_schemes_and_packages(query: str) -> Dict[str, Any]:
         "matched_schemes": matched_schemes,
         "recommended_varieties": matched_variety
     }
+

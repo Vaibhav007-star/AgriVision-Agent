@@ -141,3 +141,4 @@ def calculate_disease_triangle(
         },
         "five_day_trajectory": trajectory
     }
+

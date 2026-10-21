@@ -232,3 +232,4 @@ def calculate_fertilizer_dosage(
         "deficiency_triage": deficiency_info,
         "standard_schedule_summary": f"HAU Hisar schedule for {acres} acres {crop_data['crop_name']}: Apply {dap_bags_50kg} bags DAP and {mop_bags_50kg} bags MOP at sowing, with {urea_bags_45kg} bags Urea in scheduled splits."
     }
+

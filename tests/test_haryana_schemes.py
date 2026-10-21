@@ -31,3 +31,4 @@ def test_hau_variety_search():
     assert res["status"] == "MATCHED"
     assert res["recommended_varieties"] is not None
     assert any(v["code"] == "WH-1105" for v in res["recommended_varieties"]["varieties"])
+

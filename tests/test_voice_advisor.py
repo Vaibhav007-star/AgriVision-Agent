@@ -68,3 +68,4 @@ def test_unrecognized_query():
     res = parse_voice_query(query)
     assert res["status"] == "UNRECOGNIZED"
     assert "फसल का नाम" in res["spoken_hi"]
+

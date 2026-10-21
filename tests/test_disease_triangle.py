@@ -32,3 +32,4 @@ def test_favorable_clear_conditions():
     assert res["status"] == "SUCCESS"
     assert res["composite_risk_pct"] < 45.0
     assert res["alert_level"] == "FAVORABLE_CLEAR"
+

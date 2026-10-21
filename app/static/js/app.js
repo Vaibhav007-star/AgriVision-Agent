@@ -1824,6 +1824,17 @@ function initVoiceAdvisor() {
 
   const queryInput = document.getElementById('voice-query-input');
   if (queryInput) {
+    queryInput.addEventListener('input', () => {
+      const clearBtn = document.getElementById('voice-clear-btn');
+      if (clearBtn) {
+        if (queryInput.value && queryInput.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+    });
+
     queryInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -1881,41 +1892,202 @@ function switchVoiceDialect(dialect) {
 
 function setVoicePrompt(text) {
   const input = document.getElementById('voice-query-input');
+  const clearBtn = document.getElementById('voice-clear-btn');
   if (input) {
     input.value = text;
+    if (clearBtn) clearBtn.classList.remove('hidden');
     submitVoiceQuery(text);
   }
 }
 
 function clearVoiceInput() {
   const input = document.getElementById('voice-query-input');
+  const clearBtn = document.getElementById('voice-clear-btn');
   if (input) {
     input.value = '';
     input.focus();
   }
+  if (clearBtn) clearBtn.classList.add('hidden');
+}
+
+// Built-in Offline Fallback KB for Zero-Latency Field Diagnostics
+const OFFLINE_VOICE_KB = [
+  {
+    keywords: ['टमाटर', 'काले', 'छल्लेदार', 'अगेती', 'झुलसा', 'blight', 'tomato'],
+    crop: 'Tomato',
+    hindi_crop_name: 'टमाटर (Tomato)',
+    disease_detected: 'Early Blight (अगेती झुलसा - Alternaria solani)',
+    severity: 'MODERATE',
+    spoken_haryanvi: 'राम राम किसान भाई! टमाटर की निचली पत्तियां पै अगेती झुलसा आ गया सै। 600 ग्राम मैंकोजेब (M-45) 200 लीटर पाणी म मिलाकै बढ़िया छिड़काव करो।',
+    spoken_hi: 'किसान भाई, आपकी टमाटर में Early Blight (अगेती झुलसा) के लक्षण हैं। समाधान: मैंकोजेब 75% WP @ 600-800 ग्राम प्रति 200 लीटर पानी में मिलाकर 10-12 दिन के अंतराल पर छिड़कें।',
+    spoken_en: 'Farmer alert: Early Blight detected in Tomato. Recommendation: Spray Mancozeb 75% WP (Dithane M-45) @ 600-800 g in 200 L water per acre.',
+    prescription: 'मैंकोजेब 75% WP (डाइथेन एम-45) @ 600-800 ग्राम प्रति 200 लीटर पानी में मिलाकर 10-12 दिन के अंतराल पर छिड़कें।'
+  },
+  {
+    keywords: ['कनक', 'गेहूं', 'पीला', 'रतुआ', 'rust', 'yellow rust', 'wheat'],
+    crop: 'Wheat',
+    hindi_crop_name: 'कनक / गेहूं (Wheat)',
+    disease_detected: 'Yellow Rust (पीला रतुआ - Puccinia striiformis)',
+    severity: 'HIGH',
+    spoken_haryanvi: 'राम राम किसान भाई! म्हारी कनक म पीला रतुआ का अटैक सै। 200 मिली प्रोपिकोनाजोल (टिल्ट) 200 लीटर पाणी म मिलाकै धूप खिलदे ई छिड़क देओ।',
+    spoken_hi: 'किसान भाई, कनक में पीला रतुआ (Yellow Rust) के लक्षण हैं। समाधान: प्रोपिकोनाजोल 25% EC @ 200 मिली प्रति 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़काव करें।',
+    spoken_en: 'Farmer advisory: Yellow Rust detected in Wheat crop. Spray Propiconazole 25% EC (Tilt) @ 200 ml in 200 L water per acre.',
+    prescription: '200 मिली प्रोपिकोनाजोल 25% EC (टिल्ट) को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़कें (CCS HAU हिसार सिफारिश)।'
+  },
+  {
+    keywords: ['धान', 'बासमती', 'पत्ती', 'झुलसा', 'blast', 'rice', 'paddy', 'शीथ'],
+    crop: 'Rice',
+    hindi_crop_name: 'धान / बासमती (Paddy)',
+    disease_detected: 'Bacterial Leaf Blight / Blast (पत्ती झुलसा)',
+    severity: 'HIGH',
+    spoken_haryanvi: 'राम राम भाई! धान की पत्तियां पै झुलसा रोग आग्या। तुरंत 300 ग्राम ट्राइसाइक्लाजोल (बाण) 200 लीटर पाणी म मिलाकै खेत म मार देओ।',
+    spoken_hi: 'किसान भाई, धान की फसल में पत्ती झुलसा या ब्लास्ट का प्रकोप है। 300 ग्राम ट्राइसाइक्लाजोल 75% WP को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़काव करें।',
+    spoken_en: 'Paddy alert: Leaf Blast / Blight symptoms identified. Spray Tricyclazole 75% WP @ 300 g in 200 L water per acre.',
+    prescription: '300 ग्राम ट्राइसाइक्लाजोल 75% WP (Beam / Baan) को 200 लीटर पानी में प्रति एकड़ छिड़कें।'
+  },
+  {
+    keywords: ['नरमा', 'कपास', 'गुलाबी', 'सूंढी', 'bollworm', 'cotton'],
+    crop: 'Cotton',
+    hindi_crop_name: 'नरमा / कपास (Cotton)',
+    disease_detected: 'Pink Bollworm (गुलाबी सूंढी - Pectinophora gossypiella)',
+    severity: 'CRITICAL',
+    spoken_haryanvi: 'राम राम किसान भाई! नरमा म गुलाबी सूंढी का खतरा बढ़ग्या। 100 मिली इमामेक्टिन बेंजोएट (प्रोक्लेम) 200 लीटर पाणी म मिलाकै शामती टैम छिड़काव करो।',
+    spoken_hi: 'किसान भाई, कपास में गुलाबी सूंढी का प्रकोप है। इमामेक्टिन बेंजोएट 5% SG @ 100 ग्राम प्रति 200 लीटर पानी में मिलाकर सायंकाल छिड़काव करें।',
+    spoken_en: 'Cotton alert: Pink Bollworm infestation detected. Spray Emamectin Benzoate 5% SG @ 100 g in 200 L water per acre.',
+    prescription: '100 ग्राम इमामेक्टिन बेंजोएट 5% SG या 200 मिली प्रोफेनोफॉस 50% EC प्रति एकड़ 200 लीटर पानी में मिलाकर स्प्रे करें।'
+  },
+  {
+    keywords: ['सरसों', 'राया', 'सफेद', 'रतुआ', 'चेपा', 'mustard', 'white rust', 'aphid'],
+    crop: 'Mustard',
+    hindi_crop_name: 'सरसों / राया (Mustard)',
+    disease_detected: 'White Rust & Aphids (सफेद रतुआ व मोयला/चेपा)',
+    severity: 'MODERATE',
+    spoken_haryanvi: 'राम राम किसान भाई! सरसों म सफेद रतुआ और चेपा दिख रह्या सै। 600 ग्राम मैंकोजेब गैल 50 मिली इमिडाक्लोप्रिड 200 लीटर पाणी म मिलाकै छिड़क दो।',
+    spoken_hi: 'किसान भाई, सरसों में सफेद रतुआ और चेपा/माहू का प्रकोप है। 600 ग्राम रिडोमिल एमजेड या मैंकोजेब के साथ 50-60 मिली इमिडाक्लोप्रिड 17.8% SL मिलाकर छिड़कें।',
+    spoken_en: 'Mustard alert: White Rust and Aphid pest complex. Spray Mancozeb 75% WP (600 g) along with Imidacloprid 17.8% SL (50 ml) per acre.',
+    prescription: '600 ग्राम मैंकोजेब + 50 मिली इमिडाक्लोप्रिड 17.8% SL को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़कें।'
+  },
+  {
+    keywords: ['आलू', 'पछेती', 'झुलसा', 'potato', 'late blight'],
+    crop: 'Potato',
+    hindi_crop_name: 'आलू (Potato)',
+    disease_detected: 'Late Blight (पछेती झुलसा - Phytophthora infestans)',
+    severity: 'CRITICAL',
+    spoken_haryanvi: 'राम राम किसान भाई! आलू म पछेती झुलसा का भारी खतरा सै। 600 ग्राम साइमोक्सानिल + मैंकोजेब (कर्जेट) 200 लीटर पाणी म तुरंत छिड़को।',
+    spoken_hi: 'किसान भाई, आलू की फसल में पछेती झुलसा के लक्षण हैं। साइमोक्सानिल 8% + मैंकोजेब 64% WP (कर्जेट) @ 600 ग्राम प्रति 200 लीटर पानी में मिलाकर तुरंत छिड़काव करें।',
+    spoken_en: 'Potato alert: Late Blight (Phytophthora) detected. Spray Cymoxanil + Mancozeb (Curzate) @ 600 g in 200 L water per acre immediately.',
+    prescription: 'साइमोक्सानिल 8% + मैंकोजेब 64% WP @ 600 ग्राम प्रति 200 लीटर पानी में तुरंत स्प्रे करें।'
+  }
+];
+
+function getOfflineVoiceAdvisory(query, dialect, district) {
+  const qLower = (query || '').toLowerCase();
+  let bestEntry = null;
+  let maxMatches = 0;
+
+  for (const item of OFFLINE_VOICE_KB) {
+    let count = 0;
+    for (const kw of item.keywords) {
+      if (qLower.includes(kw.toLowerCase())) {
+        count++;
+      }
+    }
+    if (count > maxMatches) {
+      maxMatches = count;
+      bestEntry = item;
+    }
+  }
+
+  if (bestEntry && maxMatches > 0) {
+    return {
+      status: 'DIAGNOSIS_MATCHED',
+      query: query,
+      district: district || 'Karnal',
+      crop: bestEntry.crop,
+      hindi_crop_name: bestEntry.hindi_crop_name,
+      disease_detected: bestEntry.disease_detected,
+      severity: bestEntry.severity,
+      spoken_haryanvi: bestEntry.spoken_haryanvi,
+      spoken_hi: bestEntry.spoken_hi,
+      spoken_en: bestEntry.spoken_en,
+      prescription: bestEntry.prescription,
+      recommendation: bestEntry.prescription,
+      requested_dialect: dialect || 'haryanvi'
+    };
+  }
+
+  return {
+    status: 'GENERAL_ADVICE',
+    query: query,
+    district: district || 'Karnal',
+    crop: 'General Crop Advisory',
+    hindi_crop_name: 'सामान्य फसल सुरक्षा (Crop Care)',
+    disease_detected: 'कृषि परामर्श व नियमित रोग प्रबंधन',
+    severity: 'NORMAL',
+    spoken_haryanvi: `राम राम किसान भाई! ${district || 'हरियाणा'} म फसल की नियमित जांच करो। पत्तियां पै धब्बे या कीट दिखण पै तुरंत नजदीकी केवीके या कृषि केंद्र म दिखाओ।`,
+    spoken_hi: `किसान भाई, ${district || 'हरियाणा'} क्षेत्र में रोग-कीट के शुरुआती लक्षण दिखते ही संतुलित नीम तेल या फफूंदनाशक का स्प्रे करें और कृषि विज्ञान केंद्र (KVK) से संपर्क करें।`,
+    spoken_en: `Farmer Advisory for ${district || 'Haryana'}: Monitor fields daily for symptoms. Use balanced bio-pesticides or consult your local Krishi Vigyan Kendra (KVK).`,
+    prescription: 'जैविक नियंत्रण के लिए नीम तेल 10,000 ppm @ 2-3 मिली प्रति लीटर पानी का छिड़काव करें व नजदीकी KVK से सलाह लें।',
+    recommendation: 'जैविक नियंत्रण के लिए नीम तेल 10,000 ppm @ 2-3 मिली प्रति लीटर पानी का छिड़काव करें।',
+    requested_dialect: dialect || 'haryanvi'
+  };
 }
 
 async function submitVoiceQuery(overrideQuery = null) {
   const input = document.getElementById('voice-query-input');
-  const query = overrideQuery || (input ? input.value : '');
-  if (!query || !query.trim()) return;
+  const submitBtn = document.getElementById('voice-submit-btn');
+  const query = (overrideQuery || (input ? input.value : '')).trim();
+  if (!query) return;
 
   const districtSelect = document.getElementById('haryana-district-select');
   const district = (districtSelect && districtSelect.value) || 'Karnal';
 
-  try {
-    const res = await fetch(`/api/voice/query?query=${encodeURIComponent(query)}&district=${encodeURIComponent(district)}&dialect=${encodeURIComponent(currentVoiceDialect)}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    latestVoiceResponse = data;
-    updateVoiceResponseDisplay(data);
+  // Visual loading feedback on submit button
+  const origBtnContent = submitBtn ? submitBtn.innerHTML : 'पूछें';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> जांच जारी...';
+    submitBtn.classList.add('opacity-80');
+  }
 
-    if (data.district && districtSelect && districtSelect.value !== data.district) {
-      districtSelect.value = data.district;
-      districtSelect.dispatchEvent(new Event('change'));
+  let matchedData = null;
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`/api/voice/query?query=${encodeURIComponent(query)}&district=${encodeURIComponent(district)}&dialect=${encodeURIComponent(currentVoiceDialect)}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      matchedData = await res.json();
     }
   } catch (err) {
-    console.error('[AgriVision Voice] Error querying voice API:', err);
+    console.warn('[AgriVision Voice] API query failed, checking offline fallback:', err);
+  }
+
+  // If server was offline or returned no match, resolve from built-in offline KB
+  if (!matchedData || !matchedData.disease_detected || matchedData.status === 'ERROR') {
+    matchedData = getOfflineVoiceAdvisory(query, currentVoiceDialect, district);
+  }
+
+  if (matchedData) {
+    latestVoiceResponse = matchedData;
+    updateVoiceResponseDisplay(matchedData);
+
+    if (matchedData.district && districtSelect && districtSelect.value !== matchedData.district) {
+      districtSelect.value = matchedData.district;
+      districtSelect.dispatchEvent(new Event('change'));
+    }
+  }
+
+  // Restore button state
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = origBtnContent;
+    submitBtn.classList.remove('opacity-80');
+    if (window.lucide) window.lucide.createIcons();
   }
 }
 
@@ -1959,6 +2131,10 @@ function updateVoiceResponseDisplay(data) {
   if (treatmentEl) treatmentEl.innerText = data.prescription || data.recommendation;
 
   if (window.lucide) window.lucide.createIcons();
+
+  try {
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch (e) {}
 }
 
 function playCurrentVoiceAdvisory() {
@@ -2317,6 +2493,10 @@ async function handleBatchFilesSelected(fileList) {
   }
 
   if (window.lucide) window.lucide.createIcons();
+
+  try {
+    if (resultsPanel) resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch (e) {}
 }
 
 window.switchScannerMode = switchScannerMode;

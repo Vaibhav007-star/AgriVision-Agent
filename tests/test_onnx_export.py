@@ -41,3 +41,4 @@ def test_class_names_json():
         classes = json.load(f)
     assert len(classes) >= 3
     assert "Tomato___Early_blight" in classes
+
