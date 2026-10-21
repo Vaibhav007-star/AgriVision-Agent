@@ -126,6 +126,12 @@ async def serve_home(request: Request):
         return HTMLResponse(content=f.read())
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for process monitoring and status inspection."""
+    return {"status": "healthy", "service": "AgriVision Agent", "version": "2.2.0"}
+
+
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     """Returns 204 No Content for favicon requests to prevent 404 terminal logs."""
