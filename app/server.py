@@ -60,6 +60,9 @@ from src.utils.image_processing import segment_leaf_mask, compute_digital_lcc
 from src.utils.dataset import get_available_samples
 from app.services.predictive_pathology import calculate_disease_outbreak_risk, evaluate_climate_spray_window
 from app.services.mandi_market import get_mandi_intelligence, MANDI_DATABASE
+from app.services.mandi_forecaster import forecast_mandi_prices
+from app.services.gis_outbreak_service import get_haryana_gis_outbreak_telemetry
+from app.api.bot_routes import router as bot_router
 
 app = FastAPI(
     title="AgriVision Agent — Precision Agricultural Intelligence",
@@ -75,6 +78,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register Sub-Routers
+app.include_router(bot_router)
 
 # Mount Static Assets and Jinja Templates
 STATIC_DIR = BASE_DIR / "app" / "static"
@@ -351,6 +357,24 @@ async def market_rates_endpoint(crop: str = "Tomato", acres: float = 1.5):
     Returns live APMC Mandi commodity rates, arbitrage comparison, and farm economic projections.
     """
     return get_mandi_intelligence(crop, acreage=acres)
+
+
+@app.get("/api/mandi/forecast/{crop}")
+async def mandi_forecast_endpoint(crop: str, district: str = "Karnal", days: int = 14):
+    """
+    Returns 14-day APMC Mandi price projection with confidence intervals,
+    market arrival estimates, and commercial sell vs. hold advisory.
+    """
+    return forecast_mandi_prices(crop_key=crop, district=district, forecast_days=days)
+
+
+@app.get("/api/haryana/outbreak-map")
+async def haryana_outbreak_map_endpoint():
+    """
+    Returns geospatial disease telemetry, epidemic risk levels, and cluster coordinates
+    for all 22 administrative districts of Haryana.
+    """
+    return get_haryana_gis_outbreak_telemetry()
 
 
 @app.get("/api/haryana/districts")

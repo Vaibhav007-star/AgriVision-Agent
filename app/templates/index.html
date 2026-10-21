@@ -42,6 +42,10 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- Leaflet CSS & JS for Haryana Agricultural GIS Outbreak Mapping -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="/static/css/theme.css">
   
@@ -803,6 +807,115 @@
                 <p id="mandi-timing-text" class="text-slate-300">
                   Bullish market trend (+12.0%). Arrivals are tight. Favorable window for staggered harvesting and marketing at district APMC.
                 </p>
+              </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- PILLAR 7: APMC MANDI 14-DAY PRICE FORECASTER & SELL VS HOLD ADVISOR       -->
+            <!-- ========================================================================= -->
+            <div id="mandi-forecast-card" class="zenze-card p-5 border-emerald-500/20 space-y-4">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                  <i data-lucide="line-chart" class="w-4 h-4 text-emerald-400"></i>
+                  Haryana APMC 14-Day Price Projection & Timing Engine
+                </span>
+                <span id="forecast-action-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                  🎯 HOLD PRODUCE (+4.8%)
+                </span>
+              </div>
+
+              <!-- Commodity Selector & Target District Row -->
+              <div class="flex items-center justify-between gap-3 text-xs flex-wrap">
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-400">Select Commodity:</span>
+                  <select id="forecast-crop-select" onchange="fetchMandiForecast()" class="bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1 text-xs text-white focus:border-emerald-500 outline-none">
+                    <option value="wheat" selected>Wheat (गेहूं - HD-2967)</option>
+                    <option value="mustard">Mustard (सरसों - RH-725)</option>
+                    <option value="rice">Basmati Paddy (धान - Pusa 1121)</option>
+                    <option value="cotton">Cotton (कपास / नरमा)</option>
+                    <option value="sugarcane">Sugarcane (गन्ना)</option>
+                  </select>
+                </div>
+                <div class="text-[11px] text-slate-400" id="forecast-mandi-tag">
+                  Target APMC: <span class="text-emerald-400 font-bold">Karnal Mandi</span> (MSP: ₹2,275/Qtl)
+                </div>
+              </div>
+
+              <!-- Recommendation Banner -->
+              <div id="forecast-advisory-box" class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/20 text-xs space-y-1">
+                <div class="font-bold text-emerald-400 flex items-center gap-1.5" id="forecast-advisory-title">
+                  <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                  <span>HOLD PRODUCE: Strong Bullish Run Expected (+4.8%)</span>
+                </div>
+                <p id="forecast-advisory-desc" class="text-slate-300">
+                  Arrivals in Karnal and neighboring mandis are projected to taper by 35%. Estimated price premium outweighs warehouse storage costs.
+                </p>
+              </div>
+
+              <!-- Chart Canvas -->
+              <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                <div class="text-[10px] text-slate-400 mb-2 flex justify-between">
+                  <span>Price History & 14-Day Forward Curve (₹ / Quintal)</span>
+                  <span class="text-emerald-400 font-semibold">Green: Projected Band</span>
+                </div>
+                <div class="h-44 w-full">
+                  <canvas id="mandiForecastChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- PILLAR 8: HARYANA AGRICULTURAL GIS OUTBREAK HEATMAP & TELEMETRY           -->
+            <!-- ========================================================================= -->
+            <div id="gis-outbreak-card" class="zenze-card p-5 border-rose-500/20 space-y-4">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                  <i data-lucide="map-pin" class="w-4 h-4 text-rose-400"></i>
+                  Haryana Agricultural GIS Disease Outbreak Monitor (22 Districts)
+                </span>
+                <div class="flex items-center gap-2">
+                  <span id="gis-high-risk-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 font-bold border border-red-500/30">
+                    3 High Risk Districts
+                  </span>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                    Live GIS
+                  </span>
+                </div>
+              </div>
+
+              <!-- State Metric Bar -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div class="bg-black/40 p-2.5 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">Total Districts</div>
+                  <div class="text-base font-bold text-white">22 Haryana</div>
+                </div>
+                <div class="bg-black/40 p-2.5 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">Active Pathologies</div>
+                  <div id="gis-total-cases" class="text-base font-bold text-amber-400">184 Clusters</div>
+                </div>
+                <div class="bg-black/40 p-2.5 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">Top Outbreak</div>
+                  <div class="text-base font-bold text-rose-400 truncate">Pink Bollworm / Rust</div>
+                </div>
+                <div class="bg-black/40 p-2.5 rounded-xl border border-white/5">
+                  <div class="text-[10px] text-slate-400">KVK Surveillance</div>
+                  <div class="text-base font-bold text-emerald-400">100% Active</div>
+                </div>
+              </div>
+
+              <!-- Interactive Leaflet Map Container -->
+              <div class="rounded-xl overflow-hidden border border-white/10 shadow-lg relative" style="height: 340px;">
+                <div id="haryana-gis-map" class="w-full h-full z-10"></div>
+                <div class="absolute bottom-2 right-2 z-20 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-[10px] text-slate-300 flex items-center gap-3">
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> High Risk</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Moderate</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Controlled</span>
+                </div>
+              </div>
+
+              <!-- District Active Outbreak Ticker -->
+              <div id="gis-district-list" class="max-h-36 overflow-y-auto space-y-1.5 pr-1 text-xs">
+                <!-- Dynamically loaded district items -->
               </div>
             </div>
 

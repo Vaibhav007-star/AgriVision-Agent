@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/offline_agronomy_service.dart';
+import '../services/vernacular_audio_service.dart';
 
 class HaryanaOfflineAdvisorScreen extends StatefulWidget {
   final bool isHindi;
@@ -13,7 +14,9 @@ class HaryanaOfflineAdvisorScreen extends StatefulWidget {
 
 class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScreen> {
   final OfflineAgronomyService _service = OfflineAgronomyService();
+  final VernacularAudioService _audioService = VernacularAudioService();
   bool _isLoading = true;
+  bool _isAudioPlaying = false;
   String _selectedDistrict = 'Karnal';
   String? _selectedBlock;
   String? _selectedDiseaseKey;
@@ -22,6 +25,12 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _audioService.stop();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -339,6 +348,31 @@ class _HaryanaOfflineAdvisorScreenState extends State<HaryanaOfflineAdvisorScree
                 child: Text(
                   hi ? 'ऑफ़लाइन लक्षण जांच व सटीक निदान' : 'Offline Symptom Checklist Triage',
                   style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              IconButton(
+                tooltip: hi ? 'स्थानीय बोली में सुनें' : 'Listen in Local Dialect',
+                onPressed: () async {
+                  if (_isAudioPlaying) {
+                    await _audioService.stop();
+                    setState(() => _isAudioPlaying = false);
+                  } else {
+                    setState(() => _isAudioPlaying = true);
+                    await _audioService.speakDiagnosticChain(
+                      blockName: block.blockName,
+                      dialect: block.primaryDialect,
+                      disease: activeKey.replaceAll('_', ' '),
+                      chain: symptomChain,
+                      solution: approvedSolution,
+                      isHindi: hi,
+                    );
+                    if (mounted) setState(() => _isAudioPlaying = false);
+                  }
+                },
+                icon: Icon(
+                  _isAudioPlaying ? Icons.stop_circle_rounded : Icons.volume_up_rounded,
+                  color: _isAudioPlaying ? Colors.red.shade700 : const Color(0xFF1B5E20),
+                  size: 26,
                 ),
               ),
             ],

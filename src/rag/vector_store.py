@@ -142,7 +142,14 @@ class AgriculturalVectorStore:
         for idx, doc in enumerate(self.documents):
             match_crop = (crop is None) or (crop.lower() in doc["crop"].lower()) or (crop.lower() in doc["text"].lower())
             match_disease = (disease is None) or (disease.lower() in doc["disease"].lower()) or (disease.lower() in doc["text"].lower())
-            if match_crop or match_disease or doc["source"] == "general_agronomy.md":
+            is_general = doc.get("source") == "general_agronomy.md"
+            if crop is not None:
+                if match_crop or is_general:
+                    candidate_indices.append(idx)
+            elif disease is not None:
+                if match_disease or is_general:
+                    candidate_indices.append(idx)
+            else:
                 candidate_indices.append(idx)
                 
         if not candidate_indices:

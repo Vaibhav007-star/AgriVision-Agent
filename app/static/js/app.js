@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
   populatePrintableReport();
   initPWA();
   initHaryanaBlockAdvisor();
+  initMandiForecast();
+  initHaryanaGisMap();
 });
 
 // ============================================================================
@@ -1454,5 +1456,239 @@ async function initHaryanaBlockAdvisor() {
     console.warn('[AgriVision Haryana] Error initializing block advisor:', err);
   }
 }
+
+// ============================================================================
+// PILLAR 7: Haryana APMC Mandi 14-Day Price Forecaster
+// ============================================================================
+let mandiChartInstance = null;
+
+async function initMandiForecast() {
+  await fetchMandiForecast();
+}
+
+async function fetchMandiForecast() {
+  const cropSelect = document.getElementById('forecast-crop-select');
+  const crop = cropSelect ? cropSelect.value : 'wheat';
+  const district = (document.getElementById('haryana-district-select') && document.getElementById('haryana-district-select').value) || 'Karnal';
+
+  try {
+    const res = await fetch(`/api/mandi/forecast/${crop}?district=${encodeURIComponent(district)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // 1. Update Action Badge
+    const badge = document.getElementById('forecast-action-badge');
+    if (badge) {
+      const isHold = data.recommendation === 'STRONG_HOLD' || data.recommendation === 'HOLD';
+      const isSell = data.recommendation === 'SELL_NOW';
+      badge.textContent = `${isHold ? '🎯' : isSell ? '⚡' : '⚖️'} ${data.recommendation.replace('_', ' ')} (${data.price_change_pct >= 0 ? '+' : ''}${data.price_change_pct}%)`;
+      badge.className = `text-xs px-2.5 py-0.5 rounded-full font-bold border ${isHold ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : isSell ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'}`;
+    }
+
+    // 2. Update Mandi Tag
+    const tag = document.getElementById('forecast-mandi-tag');
+    if (tag) {
+      tag.innerHTML = `Target APMC: <span class="text-emerald-400 font-bold">${data.primary_mandi}</span> (MSP: ₹${data.msp_per_qtl}/Qtl)`;
+    }
+
+    // 3. Update Advisory Box
+    const title = document.getElementById('forecast-advisory-title');
+    const desc = document.getElementById('forecast-advisory-desc');
+    if (title && data.advisory_en) {
+      title.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i><span>${data.advisory_en.title}</span>`;
+    }
+    if (desc && data.advisory_en) {
+      desc.textContent = data.advisory_en.details;
+    }
+
+    // 4. Render Chart.js
+    const ctx = document.getElementById('mandiForecastChart');
+    if (ctx) {
+      const histDates = data.historical_series.map(d => d.date.slice(5));
+      const histPrices = data.historical_series.map(d => d.price);
+
+      const fcastDates = data.forecast_series.map(d => d.date.slice(5));
+      const fcastPrices = data.forecast_series.map(d => d.projected_price);
+      const upperBounds = data.forecast_series.map(d => d.upper_bound);
+      const lowerBounds = data.forecast_series.map(d => d.lower_bound);
+
+      const allLabels = [...histDates, ...fcastDates];
+      const histDataPadded = [...histPrices, ...Array(fcastDates.length).fill(null)];
+      const fcastDataPadded = [...Array(histDates.length - 1).fill(null), histPrices[histPrices.length - 1], ...fcastPrices];
+      const upperPadded = [...Array(histDates.length - 1).fill(null), histPrices[histPrices.length - 1], ...upperBounds];
+      const lowerPadded = [...Array(histDates.length - 1).fill(null), histPrices[histPrices.length - 1], ...lowerBounds];
+
+      if (mandiChartInstance) {
+        mandiChartInstance.destroy();
+      }
+
+      mandiChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: allLabels,
+          datasets: [
+            {
+              label: 'Historical Mandi Price',
+              data: histDataPadded,
+              borderColor: '#06b6d4',
+              backgroundColor: 'rgba(6, 182, 212, 0.1)',
+              borderWidth: 2,
+              pointRadius: 2,
+              tension: 0.3
+            },
+            {
+              label: '14-Day Forward Forecast',
+              data: fcastDataPadded,
+              borderColor: '#10b981',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              pointRadius: 2,
+              tension: 0.3
+            },
+            {
+              label: 'Confidence Band (Upper)',
+              data: upperPadded,
+              borderColor: 'transparent',
+              backgroundColor: 'rgba(16, 185, 129, 0.08)',
+              fill: '+1',
+              pointRadius: 0
+            },
+            {
+              label: 'Confidence Band (Lower)',
+              data: lowerPadded,
+              borderColor: 'transparent',
+              backgroundColor: 'transparent',
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 9 }, maxTicksLimit: 10 }
+            },
+            y: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 9 } }
+            }
+          }
+        }
+      });
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  } catch (err) {
+    console.warn('[Mandi Forecast] Error fetching forecast:', err);
+  }
+}
+
+// ============================================================================
+// PILLAR 8: Haryana Agricultural GIS Outbreak Map
+// ============================================================================
+let haryanaGisMapInstance = null;
+
+async function initHaryanaGisMap() {
+  const mapContainer = document.getElementById('haryana-gis-map');
+  if (!mapContainer || !window.L) return;
+
+  try {
+    const res = await fetch('/api/haryana/outbreak-map');
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // Update Telemetry Header Metrics
+    const highRiskBadge = document.getElementById('gis-high-risk-badge');
+    if (highRiskBadge) {
+      highRiskBadge.textContent = `${data.high_risk_districts} High Risk Districts`;
+    }
+    const totalCases = document.getElementById('gis-total-cases');
+    if (totalCases) {
+      totalCases.textContent = `${data.total_active_pathology_cases} Active Clusters`;
+    }
+
+    // Initialize Leaflet Map
+    if (!haryanaGisMapInstance) {
+      haryanaGisMapInstance = L.map('haryana-gis-map', {
+        center: data.map_center,
+        zoom: data.default_zoom,
+        zoomControl: true,
+        attributionControl: false
+      });
+
+      // CartoDB DarkMatter Tiles
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 18,
+        subdomains: 'abcd'
+      }).addTo(haryanaGisMapInstance);
+    }
+
+    const ticker = document.getElementById('gis-district-list');
+    if (ticker) ticker.innerHTML = '';
+
+    // Add Circle Markers for each of the 22 Haryana Districts
+    data.districts.forEach(d => {
+      const radius = d.risk_level === 'HIGH' ? 14 : d.risk_level === 'MODERATE' ? 10 : 7;
+      const marker = L.circleMarker([d.lat, d.lon], {
+        radius: radius,
+        fillColor: d.pin_color,
+        color: '#ffffff',
+        weight: 1.5,
+        opacity: 0.9,
+        fillOpacity: 0.75
+      }).addTo(haryanaGisMapInstance);
+
+      // Popup content
+      const popupHtml = `
+        <div style="font-family: 'Inter', sans-serif; font-size: 11px; color: #0b130e; min-width: 170px; line-height: 1.4;">
+          <div style="font-weight: 800; font-size: 13px; color: #1B5E20; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin-bottom: 4px;">
+            ${d.district} District
+          </div>
+          <div><b>Zone:</b> ${d.zone}</div>
+          <div><b>Crop:</b> ${d.primary_crop}</div>
+          <div><b>Pathogen:</b> <span style="color: ${d.pin_color}; font-weight: bold;">${d.dominant_disease}</span></div>
+          <div><b>Active Cases:</b> ${d.active_cases}</div>
+          <div style="margin-top: 5px; font-size: 10px; color: #555; background: #f4f7f4; padding: 4px; border-radius: 4px;">
+            ${d.kvk_alert_en}
+          </div>
+        </div>
+      `;
+      marker.bindPopup(popupHtml);
+
+      // Add to sidebar ticker
+      if (ticker) {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-2 rounded-lg bg-black/40 border border-white/5 hover:border-white/20 transition cursor-pointer';
+        item.onclick = () => {
+          haryanaGisMapInstance.setView([d.lat, d.lon], 10);
+          marker.openPopup();
+        };
+        item.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full" style="background-color: ${d.pin_color}"></span>
+            <span class="font-bold text-white">${d.district}</span>
+            <span class="text-[10px] text-slate-400">(${d.primary_crop})</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-slate-300 truncate max-w-[140px]">${d.dominant_disease}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${d.badge_class}">${d.risk_level}</span>
+          </div>
+        `;
+        ticker.appendChild(item);
+      }
+    });
+
+  } catch (err) {
+    console.warn('[Haryana GIS Map] Error initializing map:', err);
+  }
+}
+
 
 

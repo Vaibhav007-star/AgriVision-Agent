@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/disease_info.dart';
 import '../services/dosage_service.dart';
+import '../services/vernacular_audio_service.dart';
 
 class ResultScreen extends StatefulWidget {
   final DiagnosisResult result;
@@ -20,7 +21,9 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final VernacularAudioService _audioService = VernacularAudioService();
   double _acreage = 1.0;
+  bool _isAudioPlaying = false;
 
   @override
   void initState() {
@@ -30,6 +33,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    _audioService.stop();
     _tabController.dispose();
     super.dispose();
   }
@@ -73,6 +77,31 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             color: Colors.white,
           ),
         ),
+        actions: [
+          IconButton(
+            tooltip: hi ? 'परामर्श ऑडियो सुनें' : 'Listen to Audio Advisory',
+            icon: Icon(
+              _isAudioPlaying ? Icons.stop_circle_rounded : Icons.volume_up_rounded,
+              color: _isAudioPlaying ? Colors.amberAccent : Colors.white,
+            ),
+            onPressed: () async {
+              if (_isAudioPlaying) {
+                await _audioService.stop();
+                setState(() => _isAudioPlaying = false);
+              } else {
+                setState(() => _isAudioPlaying = true);
+                await _audioService.speakPrescription(
+                  crop: hi ? detail.cropHi : detail.cropEn,
+                  disease: hi ? detail.diseaseHi : detail.diseaseEn,
+                  chemicalRemedy: hi ? detail.chemicalTreatment.nameHi : detail.chemicalTreatment.nameEn,
+                  dosage: hi ? detail.chemicalTreatment.dosagePerLiter : detail.chemicalTreatment.dosagePerLiter,
+                  isHindi: hi,
+                );
+                if (mounted) setState(() => _isAudioPlaying = false);
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
