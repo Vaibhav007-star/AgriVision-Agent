@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
   safeRun('initHaryanaBlockAdvisor', initHaryanaBlockAdvisor);
   safeRun('initMandiForecast', initMandiForecast);
   safeRun('initHaryanaGisMap', initHaryanaGisMap);
+  safeRun('initVoiceAdvisor', initVoiceAdvisor);
+  safeRun('initDroneBatchSurvey', initDroneBatchSurvey);
+  safeRun('runNpkCalculation', runNpkCalculation);
 });
 
 // ============================================================================
@@ -1769,6 +1772,619 @@ window.focusGisDistrict = function(districtName, lat, lon) {
     select.dispatchEvent(new Event('change'));
   }
 };
+
+// ============================================================================
+// PILLAR 1: Vernacular Voice AI (Haryanvi & Hindi Speech-to-Diagnosis & TTS)
+// ============================================================================
+let voiceRecognition = null;
+let isVoiceRecording = false;
+let currentVoiceDialect = 'haryanvi';
+let latestVoiceResponse = null;
+
+function initVoiceAdvisor() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition) {
+    try {
+      voiceRecognition = new SpeechRecognition();
+      voiceRecognition.continuous = false;
+      voiceRecognition.interimResults = false;
+      voiceRecognition.lang = 'hi-IN';
+
+      voiceRecognition.onstart = () => {
+        isVoiceRecording = true;
+        const statusEl = document.getElementById('voice-listening-status');
+        const micIcon = document.getElementById('voice-mic-icon');
+        const micText = document.getElementById('voice-mic-text');
+        if (statusEl) statusEl.classList.remove('hidden');
+        if (micIcon) micIcon.classList.add('text-red-500');
+        if (micText) micText.innerText = 'रुकें (Stop)';
+      };
+
+      voiceRecognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const input = document.getElementById('voice-query-input');
+        if (input) {
+          input.value = transcript;
+          submitVoiceQuery(transcript);
+        }
+      };
+
+      voiceRecognition.onerror = (event) => {
+        console.warn('[AgriVision Voice] Recognition error:', event.error);
+        stopVoiceRecording();
+      };
+
+      voiceRecognition.onend = () => {
+        stopVoiceRecording();
+      };
+    } catch (e) {
+      console.warn('[AgriVision Voice] Speech Recognition init notice:', e);
+    }
+  }
+
+  const queryInput = document.getElementById('voice-query-input');
+  if (queryInput) {
+    queryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitVoiceQuery(queryInput.value);
+      }
+    });
+  }
+}
+
+function toggleVoiceRecording() {
+  if (!voiceRecognition) {
+    alert('Browser voice recognition is not supported in this browser. Please type your query or use Chrome / Edge.');
+    return;
+  }
+  if (isVoiceRecording) {
+    voiceRecognition.stop();
+    stopVoiceRecording();
+  } else {
+    try {
+      voiceRecognition.lang = currentVoiceDialect === 'english' ? 'en-IN' : 'hi-IN';
+      voiceRecognition.start();
+    } catch (e) {
+      console.warn('[AgriVision Voice] Error starting speech recognition:', e);
+    }
+  }
+}
+
+function stopVoiceRecording() {
+  isVoiceRecording = false;
+  const statusEl = document.getElementById('voice-listening-status');
+  const micIcon = document.getElementById('voice-mic-icon');
+  const micText = document.getElementById('voice-mic-text');
+  if (statusEl) statusEl.classList.add('hidden');
+  if (micIcon) micIcon.classList.remove('text-red-500');
+  if (micText) micText.innerText = 'बोलें (Speak)';
+}
+
+function switchVoiceDialect(dialect) {
+  currentVoiceDialect = dialect;
+  const btnHaryanvi = document.getElementById('voice-dialect-haryanvi');
+  const btnHindi = document.getElementById('voice-dialect-hindi');
+  const btnEnglish = document.getElementById('voice-dialect-english');
+
+  const inactiveClass = 'px-2.5 py-1 rounded-lg font-bold text-slate-400 hover:text-white transition cursor-pointer';
+  const activeClass = 'px-2.5 py-1 rounded-lg font-bold bg-lime-500/20 text-lime-300 border border-lime-500/30 transition cursor-pointer';
+
+  if (btnHaryanvi) btnHaryanvi.className = dialect === 'haryanvi' ? activeClass : inactiveClass;
+  if (btnHindi) btnHindi.className = dialect === 'hindi' ? activeClass : inactiveClass;
+  if (btnEnglish) btnEnglish.className = dialect === 'english' ? activeClass : inactiveClass;
+
+  if (latestVoiceResponse) {
+    updateVoiceResponseDisplay(latestVoiceResponse);
+  }
+}
+
+function setVoicePrompt(text) {
+  const input = document.getElementById('voice-query-input');
+  if (input) {
+    input.value = text;
+    submitVoiceQuery(text);
+  }
+}
+
+function clearVoiceInput() {
+  const input = document.getElementById('voice-query-input');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+}
+
+async function submitVoiceQuery(overrideQuery = null) {
+  const input = document.getElementById('voice-query-input');
+  const query = overrideQuery || (input ? input.value : '');
+  if (!query || !query.trim()) return;
+
+  const districtSelect = document.getElementById('haryana-district-select');
+  const district = (districtSelect && districtSelect.value) || 'Karnal';
+
+  try {
+    const res = await fetch(`/api/voice/query?query=${encodeURIComponent(query)}&district=${encodeURIComponent(district)}&dialect=${encodeURIComponent(currentVoiceDialect)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    latestVoiceResponse = data;
+    updateVoiceResponseDisplay(data);
+
+    if (data.district && districtSelect && districtSelect.value !== data.district) {
+      districtSelect.value = data.district;
+      districtSelect.dispatchEvent(new Event('change'));
+    }
+  } catch (err) {
+    console.error('[AgriVision Voice] Error querying voice API:', err);
+  }
+}
+
+function updateVoiceResponseDisplay(data) {
+  const panel = document.getElementById('voice-response-panel');
+  if (!panel) return;
+  panel.classList.remove('hidden');
+
+  const cropBadge = document.getElementById('voice-res-crop-badge');
+  const diseaseBadge = document.getElementById('voice-res-disease-badge');
+  const severityBadge = document.getElementById('voice-res-severity-badge');
+  const dialectLabel = document.getElementById('voice-res-dialect-label');
+  const scriptEl = document.getElementById('voice-res-script');
+  const treatmentEl = document.getElementById('voice-res-treatment');
+
+  if (cropBadge) cropBadge.innerText = data.hindi_crop_name || data.crop || 'Crop';
+  if (diseaseBadge) diseaseBadge.innerText = data.disease_detected || 'General Cultivation Guidance';
+  
+  if (severityBadge) {
+    severityBadge.innerText = `${data.severity || 'NORMAL'} SEVERITY`;
+    severityBadge.className = data.severity === 'CRITICAL'
+      ? 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30'
+      : data.severity === 'HIGH'
+      ? 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30'
+      : 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+  }
+
+  let scriptText = data.spoken_haryanvi;
+  let labelText = 'हरियाणवी बोली परामर्श (Haryanvi Spoken Audio Script):';
+
+  if (currentVoiceDialect === 'hindi') {
+    scriptText = data.spoken_hi;
+    labelText = 'हिंदी कृषक परामर्श (Hindi Spoken Audio Script):';
+  } else if (currentVoiceDialect === 'english') {
+    scriptText = data.spoken_en;
+    labelText = 'English Agronomic Voice Script:';
+  }
+
+  if (dialectLabel) dialectLabel.innerText = labelText;
+  if (scriptEl) scriptEl.innerText = scriptText || data.spoken_hi;
+  if (treatmentEl) treatmentEl.innerText = data.prescription || data.recommendation;
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function playCurrentVoiceAdvisory() {
+  if (!('speechSynthesis' in window)) {
+    alert('Text-to-Speech audio playback is not supported on this browser.');
+    return;
+  }
+
+  const scriptEl = document.getElementById('voice-res-script');
+  const textToSpeak = scriptEl ? scriptEl.innerText : '';
+  if (!textToSpeak) return;
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(textToSpeak);
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.lang = currentVoiceDialect === 'english' ? 'en-IN' : 'hi-IN';
+
+  const btnText = document.getElementById('voice-tts-btn-text');
+  utterance.onstart = () => {
+    if (btnText) btnText.innerText = '🔊 बोल रहा हूँ... (Playing)';
+  };
+  utterance.onend = () => {
+    if (btnText) btnText.innerText = '🔊 पुनः सुनें (Replay)';
+  };
+  utterance.onerror = () => {
+    if (btnText) btnText.innerText = '🔊 आवाज़ में सुनें (Play Audio)';
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+window.toggleVoiceRecording = toggleVoiceRecording;
+window.submitVoiceQuery = submitVoiceQuery;
+window.switchVoiceDialect = switchVoiceDialect;
+window.setVoicePrompt = setVoicePrompt;
+window.clearVoiceInput = clearVoiceInput;
+window.playCurrentVoiceAdvisory = playCurrentVoiceAdvisory;
+
+// ============================================================================
+// PILLAR 2: Live Camera Stream & Real-Time Bounding Box Scanner
+// ============================================================================
+let liveCameraStream = null;
+let currentCameraFacing = 'environment';
+let cameraAnimFrameId = null;
+
+function switchScannerMode(mode) {
+  playChime('click');
+  const panelSingle = document.getElementById('panel-single-upload');
+  const panelCamera = document.getElementById('panel-live-camera');
+  const panelDrone = document.getElementById('panel-drone-batch');
+
+  const tabSingle = document.getElementById('mode-tab-single');
+  const tabCamera = document.getElementById('mode-tab-camera');
+  const tabDrone = document.getElementById('mode-tab-drone');
+
+  const inactiveTab = 'py-2 px-1 rounded-lg font-bold text-slate-400 hover:text-white flex items-center justify-center gap-1.5 transition cursor-pointer';
+  const activeTab = 'py-2 px-1 rounded-lg font-bold bg-lime-500/20 text-lime-400 border border-lime-500/30 flex items-center justify-center gap-1.5 transition cursor-pointer';
+
+  if (panelSingle) panelSingle.className = mode === 'single' ? '' : 'hidden';
+  if (panelCamera) panelCamera.className = mode === 'camera' ? 'space-y-3' : 'hidden';
+  if (panelDrone) panelDrone.className = mode === 'drone' ? 'space-y-4' : 'hidden';
+
+  if (tabSingle) tabSingle.className = mode === 'single' ? activeTab : inactiveTab;
+  if (tabCamera) tabCamera.className = mode === 'camera' ? activeTab : inactiveTab;
+  if (tabDrone) tabDrone.className = mode === 'drone' ? activeTab : inactiveTab;
+
+  if (mode !== 'camera' && liveCameraStream) {
+    stopLiveCamera();
+  }
+}
+
+async function startLiveCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('WebRTC camera streaming is not supported on this device/browser.');
+    return;
+  }
+
+  const video = document.getElementById('live-camera-video');
+  const placeholder = document.getElementById('camera-idle-placeholder');
+  const hud = document.getElementById('camera-active-hud');
+  const controls = document.getElementById('camera-controls-bar');
+
+  try {
+    if (liveCameraStream) {
+      liveCameraStream.getTracks().forEach(t => t.stop());
+    }
+
+    const constraints = {
+      video: {
+        facingMode: currentCameraFacing,
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    };
+
+    liveCameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+    if (video) {
+      video.srcObject = liveCameraStream;
+      await video.play();
+    }
+
+    if (placeholder) placeholder.classList.add('hidden');
+    if (hud) hud.classList.remove('hidden');
+    if (controls) controls.classList.remove('hidden');
+
+    drawLiveBoundingBoxes();
+  } catch (err) {
+    console.warn('[AgriVision Camera] Error accessing camera:', err);
+    alert('Unable to access camera. Please allow camera permissions in your browser settings.');
+  }
+}
+
+function stopLiveCamera() {
+  if (liveCameraStream) {
+    liveCameraStream.getTracks().forEach(t => t.stop());
+    liveCameraStream = null;
+  }
+  if (cameraAnimFrameId) {
+    cancelAnimationFrame(cameraAnimFrameId);
+    cameraAnimFrameId = null;
+  }
+
+  const placeholder = document.getElementById('camera-idle-placeholder');
+  const hud = document.getElementById('camera-active-hud');
+  const controls = document.getElementById('camera-controls-bar');
+  const canvas = document.getElementById('live-camera-canvas');
+
+  if (placeholder) placeholder.classList.remove('hidden');
+  if (hud) hud.classList.add('hidden');
+  if (controls) controls.classList.add('hidden');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function flipCameraFacingMode() {
+  currentCameraFacing = currentCameraFacing === 'environment' ? 'user' : 'environment';
+  startLiveCamera();
+}
+
+function drawLiveBoundingBoxes() {
+  const video = document.getElementById('live-camera-video');
+  const canvas = document.getElementById('live-camera-canvas');
+  if (!video || !canvas || video.paused || video.ended) return;
+
+  const w = video.videoWidth || 640;
+  const h = video.videoHeight || 360;
+
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w;
+    canvas.height = h;
+  }
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+
+  // Dynamic targeting box (central 60% of viewport)
+  const boxW = Math.round(w * 0.6);
+  const boxH = Math.round(h * 0.65);
+  const boxX = Math.round((w - boxW) / 2);
+  const boxY = Math.round((h - boxH) / 2);
+
+  // Draw corner brackets
+  ctx.strokeStyle = '#84cc16';
+  ctx.lineWidth = 3;
+  const cornerLen = 24;
+
+  // Top-Left
+  ctx.beginPath();
+  ctx.moveTo(boxX, boxY + cornerLen);
+  ctx.lineTo(boxX, boxY);
+  ctx.lineTo(boxX + cornerLen, boxY);
+  ctx.stroke();
+
+  // Top-Right
+  ctx.beginPath();
+  ctx.moveTo(boxX + boxW - cornerLen, boxY);
+  ctx.lineTo(boxX + boxW, boxY);
+  ctx.lineTo(boxX + boxW, boxY + cornerLen);
+  ctx.stroke();
+
+  // Bottom-Left
+  ctx.beginPath();
+  ctx.moveTo(boxX, boxY + boxH - cornerLen);
+  ctx.lineTo(boxX, boxY + boxH);
+  ctx.lineTo(boxX + cornerLen, boxY + boxH);
+  ctx.stroke();
+
+  // Bottom-Right
+  ctx.beginPath();
+  ctx.moveTo(boxX + boxW - cornerLen, boxY + boxH);
+  ctx.lineTo(boxX + boxW, boxY + boxH);
+  ctx.lineTo(boxX + boxW, boxY + boxH - cornerLen);
+  ctx.stroke();
+
+  // Crosshair center dot
+  ctx.fillStyle = '#84cc16';
+  ctx.beginPath();
+  ctx.arc(w / 2, h / 2, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Bounding Box Label
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+  ctx.fillRect(boxX, boxY - 26, 175, 22);
+  ctx.fillStyle = '#84cc16';
+  ctx.font = 'bold 11px Inter, sans-serif';
+  ctx.fillText('🌿 Leaf ROI: Target Centered', boxX + 6, boxY - 11);
+
+  cameraAnimFrameId = requestAnimationFrame(drawLiveBoundingBoxes);
+}
+
+function captureAndDiagnoseFrame() {
+  const video = document.getElementById('live-camera-video');
+  if (!video || !video.videoWidth) {
+    alert('Please start the camera stream first.');
+    return;
+  }
+
+  playChime('click');
+  const snapCanvas = document.createElement('canvas');
+  snapCanvas.width = video.videoWidth;
+  snapCanvas.height = video.videoHeight;
+  const ctx = snapCanvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, snapCanvas.width, snapCanvas.height);
+
+  snapCanvas.toBlob((blob) => {
+    if (!blob) return;
+    const file = new File([blob], 'camera_live_capture.jpg', { type: 'image/jpeg' });
+    selectedFile = file;
+    selectedSampleId = null;
+
+    const dataUrl = snapCanvas.toDataURL('image/jpeg');
+    const orig = document.getElementById('preview-original');
+    const clahe = document.getElementById('preview-clahe');
+    const under = document.getElementById('split-img-under');
+    if (orig) orig.src = dataUrl;
+    if (clahe) clahe.src = dataUrl;
+    if (under) under.src = dataUrl;
+
+    executeDiagnosis();
+  }, 'image/jpeg', 0.92);
+}
+
+// ============================================================================
+// PILLAR 3: Drone & Multi-Leaf Batch Survey (Canopy Infection & ETL Alert)
+// ============================================================================
+let droneBatchFiles = [];
+
+function initDroneBatchSurvey() {
+  const droneDrop = document.getElementById('drone-drop-zone');
+  const batchInput = document.getElementById('batch-file-input');
+
+  if (droneDrop && batchInput) {
+    droneDrop.addEventListener('click', () => batchInput.click());
+    droneDrop.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      droneDrop.classList.add('border-amber-400');
+    });
+    droneDrop.addEventListener('dragleave', () => droneDrop.classList.remove('border-amber-400'));
+    droneDrop.addEventListener('drop', (e) => {
+      e.preventDefault();
+      droneDrop.classList.remove('border-amber-400');
+      if (e.dataTransfer.files.length) {
+        handleBatchFilesSelected(e.dataTransfer.files);
+      }
+    });
+
+    batchInput.addEventListener('change', (e) => {
+      if (e.target.files.length) {
+        handleBatchFilesSelected(e.target.files);
+      }
+    });
+  }
+}
+
+async function handleBatchFilesSelected(fileList) {
+  const files = Array.from(fileList).slice(0, 20);
+  if (files.length === 0) return;
+
+  droneBatchFiles = files;
+  playChime('click');
+
+  const resultsPanel = document.getElementById('drone-batch-results');
+  const totalCountEl = document.getElementById('batch-total-count');
+  const infectedCountEl = document.getElementById('batch-infected-count');
+  const rateEl = document.getElementById('batch-infection-rate');
+  const etlBadge = document.getElementById('batch-etl-badge');
+  const etlAdvice = document.getElementById('batch-etl-advice');
+  const strip = document.getElementById('batch-thumbnails-strip');
+
+  if (resultsPanel) resultsPanel.classList.remove('hidden');
+  if (totalCountEl) totalCountEl.innerText = files.length;
+  if (strip) strip.innerHTML = '<div class="text-xs text-amber-300 animate-pulse">Analyzing multi-leaf field survey...</div>';
+
+  let infectedCount = 0;
+  const analysisPromises = files.map(async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('acres', '1.5');
+    formData.append('target_crop', 'auto');
+
+    try {
+      const res = await fetch('/api/diagnose', { method: 'POST', body: formData });
+      if (res.ok) {
+        const d = await res.json();
+        const isHealthy = d.prediction && d.prediction.disease && d.prediction.disease.toLowerCase().includes('healthy');
+        if (!isHealthy) infectedCount++;
+        return { file, diagnosis: d, isHealthy };
+      }
+    } catch (e) {
+      console.warn('[Batch Scan Error]:', e);
+    }
+    return { file, diagnosis: null, isHealthy: true };
+  });
+
+  const results = await Promise.all(analysisPromises);
+  const infectionRate = Math.round((infectedCount / files.length) * 100);
+
+  if (infectedCountEl) infectedCountEl.innerText = infectedCount;
+  if (rateEl) rateEl.innerText = `${infectionRate}%`;
+
+  if (etlBadge && etlAdvice) {
+    if (infectionRate < 5) {
+      etlBadge.innerText = 'ETL NORMAL (<5%)';
+      etlBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      etlAdvice.innerHTML = '<b>🟢 Safe Level:</b> Field infection is negligible. Routine cultural monitoring advised. No chemical fungicide intervention warranted.';
+    } else if (infectionRate <= 15) {
+      etlBadge.innerText = 'ETL MODERATE (5-15%)';
+      etlBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+      etlAdvice.innerHTML = '<b>🟡 Moderate Warning:</b> Infection approaching economic injury level. Apply preventive organic bio-fungicide (Neem Azadirachtin / Trichoderma) to prevent secondary canopy spread.';
+    } else {
+      etlBadge.innerText = 'ETL CRITICAL BREACH (>15%)';
+      etlBadge.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30';
+      etlAdvice.innerHTML = '<b>🔴 Economic Threshold Breached:</b> Severe canopy infection detected across multiple walk points. Immediate CCS HAU recommended targeted chemical fungicide spray justified to prevent substantial yield loss.';
+    }
+  }
+
+  if (strip) {
+    strip.innerHTML = '';
+    results.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'flex-shrink-0 w-16 p-1 rounded-lg bg-black/50 border ' + (item.isHealthy ? 'border-emerald-500/40' : 'border-rose-500/50') + ' text-center text-[9px]';
+      const objUrl = URL.createObjectURL(item.file);
+      card.innerHTML = `
+        <img src="${objUrl}" class="w-14 h-12 rounded object-cover mx-auto">
+        <div class="mt-1 font-bold truncate ${item.isHealthy ? 'text-emerald-400' : 'text-rose-400'}">
+          ${item.isHealthy ? 'Healthy' : 'Diseased'}
+        </div>
+      `;
+      strip.appendChild(card);
+    });
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+window.switchScannerMode = switchScannerMode;
+window.startLiveCamera = startLiveCamera;
+window.stopLiveCamera = stopLiveCamera;
+window.flipCameraFacingMode = flipCameraFacingMode;
+window.captureAndDiagnoseFrame = captureAndDiagnoseFrame;
+window.handleBatchFilesSelected = handleBatchFilesSelected;
+
+// ============================================================================
+// PILLAR 4: N-P-K Soil Nutrition & Fertilizer Dosing Calculator
+// ============================================================================
+async function runNpkCalculation() {
+  const cropSelect = document.getElementById('npk-crop-select');
+  const stageSelect = document.getElementById('npk-stage-select');
+  const soilSelect = document.getElementById('npk-soil-select');
+  const defSelect = document.getElementById('npk-deficiency-select');
+  const slider = document.getElementById('acres-slider');
+
+  const crop = cropSelect ? cropSelect.value : 'wheat';
+  const stage = stageSelect ? stageSelect.value : 'basal';
+  const soil = soilSelect ? soilSelect.value : 'alluvial_loam';
+  const def = defSelect ? defSelect.value : '';
+  const acres = slider ? parseFloat(slider.value) || 1.0 : 1.0;
+
+  try {
+    const res = await fetch(`/api/soil/npk-calculator?crop=${encodeURIComponent(crop)}&acres=${acres}&soil_type=${encodeURIComponent(soil)}&growth_stage=${encodeURIComponent(stage)}${def ? '&deficiency=' + encodeURIComponent(def) : ''}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const ureaEl = document.getElementById('npk-res-urea');
+    const dapEl = document.getElementById('npk-res-dap');
+    const mopEl = document.getElementById('npk-res-mop');
+    const zincEl = document.getElementById('npk-res-zinc');
+    const bioSummary = document.getElementById('npk-bio-summary');
+    const alertBox = document.getElementById('npk-deficiency-alert');
+    const alertTitle = document.getElementById('npk-deficiency-title');
+    const alertDesc = document.getElementById('npk-deficiency-desc');
+    const alertSpray = document.getElementById('npk-deficiency-spray');
+
+    if (ureaEl) ureaEl.innerText = `${data.chemical_bags_needed.urea_45kg_bags} Bags`;
+    if (dapEl) dapEl.innerText = `${data.chemical_bags_needed.dap_50kg_bags} Bags`;
+    if (mopEl) mopEl.innerText = `${data.chemical_bags_needed.mop_potash_50kg_bags} Bags`;
+    if (zincEl) zincEl.innerText = `${data.chemical_bags_needed.zinc_sulphate_kg} kg`;
+
+    if (bioSummary && data.organic_alternatives) {
+      bioSummary.innerText = `🌿 जैविक विकल्प: ${data.organic_alternatives.vermicompost_tonnes} टन वर्मीकम्पोस्ट + ${data.organic_alternatives.azotobacter_bio_fertilizer_pkts} पैकेट एजोटोबैक्टर`;
+    }
+
+    if (alertBox) {
+      if (data.deficiency_triage) {
+        alertBox.classList.remove('hidden');
+        if (alertTitle) alertTitle.innerText = `${data.deficiency_triage.vernacular_name} (${data.deficiency_triage.element}):`;
+        if (alertDesc) alertDesc.innerText = `${data.deficiency_triage.symptoms} अंतर: ${data.deficiency_triage.distinction_from_pathology}`;
+        if (alertSpray) alertSpray.innerText = `⚡ आपातकालीन स्प्रे: ${data.deficiency_triage.emergency_spray}`;
+      } else {
+        alertBox.classList.add('hidden');
+      }
+    }
+  } catch (err) {
+    console.warn('[AgriVision NPK] Calculation error:', err);
+  }
+}
+
+window.runNpkCalculation = runNpkCalculation;
+
+
+
 
 
 

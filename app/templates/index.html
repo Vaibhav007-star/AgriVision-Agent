@@ -385,15 +385,144 @@
           </div>
         </div>
 
+        <!-- ========================================================================= -->
+        <!-- PILLAR 1: VERNACULAR VOICE AI AGRONOMIST (HARYANVI & HINDI SPEECH-TO-DIAGNOSIS) -->
+        <!-- ========================================================================= -->
+        <div id="voice-advisor-card" class="bg-gradient-to-r from-emerald-950/40 via-black/40 to-lime-950/40 border border-lime-500/30 rounded-2xl p-5 sm:p-6 my-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-lime-500/20 text-lime-400 flex items-center justify-center border border-lime-500/30">
+                <i data-lucide="mic" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-lg font-bold text-white">बोलकर पूछें — Vernacular Voice Agronomist</h3>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-lime-500/20 text-lime-300 font-bold border border-lime-500/30">Haryanvi & Hindi AI</span>
+                </div>
+                <p class="text-xs text-slate-400">बोलकर फसल का रोग व समाधान पूछें। अनपढ़ व बुजुर्ग किसान भाइयों के लिए 100% सुगम।</p>
+              </div>
+            </div>
+            <!-- Dialect Selection Radios -->
+            <div class="flex items-center gap-1.5 bg-black/50 p-1 rounded-xl border border-white/10 text-xs">
+              <button id="voice-dialect-haryanvi" class="px-2.5 py-1 rounded-lg font-bold bg-lime-500/20 text-lime-300 border border-lime-500/30" onclick="switchVoiceDialect('haryanvi')">हरियाणवी</button>
+              <button id="voice-dialect-hindi" class="px-2.5 py-1 rounded-lg font-bold text-slate-400 hover:text-white" onclick="switchVoiceDialect('hindi')">हिंदी</button>
+              <button id="voice-dialect-english" class="px-2.5 py-1 rounded-lg font-bold text-slate-400 hover:text-white" onclick="switchVoiceDialect('english')">English</button>
+            </div>
+          </div>
+
+          <!-- Voice Mic & Input Bar -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <input type="text" id="voice-query-input" placeholder="माइक दबाएं और बोलें, जैसे: 'कनक में पीला रतुआ है क्या करें?'" class="w-full bg-[#0b130e] border border-white/20 rounded-xl pl-4 pr-10 py-3 text-sm text-white placeholder-slate-500 focus:border-lime-500 outline-none">
+                <button id="voice-clear-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs hidden" onclick="clearVoiceInput()">✕</button>
+              </div>
+              <button id="voice-mic-btn" class="px-4 py-3 rounded-xl bg-lime-500 hover:bg-lime-400 text-black font-extrabold flex items-center gap-2 shadow-lg hover:shadow-lime-500/30 transition cursor-pointer" onclick="toggleVoiceRecording()">
+                <i data-lucide="mic" id="voice-mic-icon" class="w-5 h-5"></i>
+                <span id="voice-mic-text" class="hidden sm:inline">बोलें (Speak)</span>
+              </button>
+              <button id="voice-submit-btn" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/15" onclick="submitVoiceQuery()">
+                पूछें
+              </button>
+            </div>
+
+            <!-- Listening Status Indicator -->
+            <div id="voice-listening-status" class="hidden flex items-center justify-between p-2.5 rounded-xl bg-red-950/30 border border-red-500/30 text-xs text-red-300">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                <span class="font-bold">माइक चालू है, बोलिए... (Listening...)</span>
+              </div>
+              <span class="text-[10px] text-slate-400">बोलना बंद करने पर स्वतः निदान होगा</span>
+            </div>
+
+            <!-- Quick 1-Click Voice Prompt Chips -->
+            <div class="flex items-center gap-1.5 flex-wrap text-[11px] pt-1">
+              <span class="text-slate-400 font-semibold mr-1">त्वरित प्रश्न:</span>
+              <button onclick="setVoicePrompt('मेरी कनक में पीला रतुआ आ गया है क्या करें?')" class="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-lime-300 transition">
+                🌾 कनक में पीला रतुआ
+              </button>
+              <button onclick="setVoicePrompt('धान में पत्ती झुलसा का रोग दिख रहा है')" class="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-lime-300 transition">
+                🌾 धान में झुलसा रोग
+              </button>
+              <button onclick="setVoicePrompt('नरमा में गुलाबी सूंढी का क्या इलाज है?')" class="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-lime-300 transition">
+                🌾 नरमा में गुलाबी सूंढी
+              </button>
+              <button onclick="setVoicePrompt('टमाटर की पत्ती पर काले छल्लेदार धब्बे हैं')" class="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-lime-300 transition">
+                🌾 टमाटर में अगेती झुलसा
+              </button>
+              <button onclick="setVoicePrompt('सरसों में सफेद रतुआ और चेपा की दवाई')" class="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-lime-300 transition">
+                🌾 सरसों में सफेद रतुआ
+              </button>
+            </div>
+          </div>
+
+          <!-- Spoken Response & HAU Remedy Panel (Hidden initially until asked) -->
+          <div id="voice-response-panel" class="hidden bg-black/60 rounded-xl p-4 sm:p-5 border border-lime-500/30 space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span id="voice-res-crop-badge" class="px-2.5 py-0.5 rounded-lg bg-lime-500/20 text-lime-300 font-bold text-xs border border-lime-500/30">Wheat</span>
+                <span id="voice-res-disease-badge" class="font-extrabold text-white text-sm">Yellow Rust</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="voice-res-severity-badge" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-500/20 text-red-400 border border-red-500/30">HIGH SEVERITY</span>
+                <button id="voice-play-tts-btn" class="px-3 py-1 rounded-lg bg-lime-500 hover:bg-lime-400 text-black font-bold text-xs flex items-center gap-1.5 shadow" onclick="playCurrentVoiceAdvisory()">
+                  <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                  <span id="voice-tts-btn-text">🔊 आवाज़ में सुनें (Play Audio)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Dialect Audio Script Text -->
+            <div class="p-3 rounded-lg bg-white/[0.03] border border-white/5 space-y-1">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1">
+                <i data-lucide="mic" class="w-3 h-3"></i>
+                <span id="voice-res-dialect-label">हरियाणवी बोली परामर्श (Haryanvi Spoken Audio Script):</span>
+              </div>
+              <p id="voice-res-script" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                राम राम किसान भाई! म्हारी कनक म पीला रतुआ का अटैक सै...
+              </p>
+            </div>
+
+            <!-- Approved Dosage & Spray Recommendation -->
+            <div class="p-3 rounded-lg bg-emerald-950/30 border border-emerald-500/25 space-y-1">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                <i data-lucide="shield-check" class="w-3 h-3"></i>
+                <span>CCS HAU Hisar अनुमोदित रासायनिक / जैविक उपचार:</span>
+              </div>
+              <p id="voice-res-treatment" class="text-xs text-slate-300 leading-relaxed">
+                200 मिली प्रोपिकोनाजोल 25% EC को 200 लीटर पानी में मिलाकर प्रति एकड़ छिड़कें।
+              </p>
+            </div>
+          </div>
+        </div>
+
         <!-- Workbench Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
           
           <!-- Left Column: Image Input & Parameters (5 Cols) -->
           <div class="lg:col-span-5 space-y-6">
             
-            <!-- Upload Drop Zone -->
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">1. Upload Leaf Image</label>
+            <!-- Scanner Mode Switcher: Single File / Live Camera / Drone Batch -->
+            <div class="space-y-2">
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">1. Select Diagnostic Mode</label>
+              <div class="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10 text-xs">
+                <button id="mode-tab-single" class="py-2 px-1 rounded-lg font-bold bg-lime-500/20 text-lime-400 border border-lime-500/30 flex items-center justify-center gap-1.5 transition cursor-pointer" onclick="switchScannerMode('single')">
+                  <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                  <span class="truncate">Photo Upload</span>
+                </button>
+                <button id="mode-tab-camera" class="py-2 px-1 rounded-lg font-bold text-slate-400 hover:text-white flex items-center justify-center gap-1.5 transition cursor-pointer" onclick="switchScannerMode('camera')">
+                  <i data-lucide="video" class="w-3.5 h-3.5"></i>
+                  <span class="truncate">Live Camera</span>
+                </button>
+                <button id="mode-tab-drone" class="py-2 px-1 rounded-lg font-bold text-slate-400 hover:text-white flex items-center justify-center gap-1.5 transition cursor-pointer" onclick="switchScannerMode('drone')">
+                  <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                  <span class="truncate">Drone Batch</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel A: Single Leaf Upload Drop Zone -->
+            <div id="panel-single-upload">
               <div id="drop-zone" class="border-2 border-dashed border-lime-500/30 hover:border-lime-500/70 rounded-2xl p-6 text-center cursor-pointer bg-white/[0.02] hover:bg-lime-500/[0.04] transition-all relative">
                 <input type="file" id="leaf-file-input" accept="image/jpeg,image/png" class="hidden">
                 <div class="space-y-2">
@@ -403,6 +532,105 @@
                   <p class="text-sm font-medium text-white">Click or drag & drop leaf image here</p>
                   <p class="text-xs text-slate-400">Supports JPG, PNG (RGB leaves)</p>
                 </div>
+              </div>
+            </div>
+
+            <!-- Panel B: PILLAR 2 - Live Camera Viewport & Real-Time Bounding Box Overlay -->
+            <div id="panel-live-camera" class="hidden space-y-3">
+              <div class="relative rounded-2xl overflow-hidden border-2 border-lime-500/40 bg-black aspect-video flex items-center justify-center shadow-lg">
+                <video id="live-camera-video" playsinline autoplay muted class="w-full h-full object-cover"></video>
+                <canvas id="live-camera-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+                
+                <!-- Camera Inactive Placeholder -->
+                <div id="camera-idle-placeholder" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-black/85 space-y-3 z-10">
+                  <div class="w-12 h-12 rounded-full bg-lime-500/20 text-lime-400 flex items-center justify-center border border-lime-500/30">
+                    <i data-lucide="camera" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-white">Live Camera Scanner Inactive</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Click below to activate rear/webcam for real-time leaf diagnosis</p>
+                  </div>
+                  <button onclick="startLiveCamera()" class="px-4 py-2 rounded-xl bg-lime-500 hover:bg-lime-400 text-black font-extrabold text-xs shadow-lg flex items-center gap-2 cursor-pointer">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    <span>Start Camera Stream (कैमरा चालू करें)</span>
+                  </button>
+                </div>
+
+                <!-- Live Stream HUD -->
+                <div id="camera-active-hud" class="hidden absolute top-2 left-2 right-2 flex items-center justify-between text-[11px] pointer-events-none z-20">
+                  <span class="px-2 py-0.5 rounded-md bg-black/70 text-lime-400 font-mono border border-lime-500/30 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    <span>LIVE 30 FPS</span>
+                  </span>
+                  <span id="camera-target-badge" class="px-2 py-0.5 rounded-md bg-black/70 text-slate-200 border border-white/20">
+                    Target: Plant Leaf
+                  </span>
+                </div>
+              </div>
+
+              <!-- Camera Controls -->
+              <div id="camera-controls-bar" class="hidden flex items-center justify-between gap-2 pt-1">
+                <button onclick="captureAndDiagnoseFrame()" class="flex-1 py-2.5 rounded-xl bg-lime-500 hover:bg-lime-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+                  <i data-lucide="aperture" class="w-4 h-4"></i>
+                  <span>📸 Capture & Diagnose (तस्वीर लें व जांचें)</span>
+                </button>
+                <button onclick="flipCameraFacingMode()" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white border border-white/15 text-xs font-bold flex items-center gap-1 cursor-pointer" title="Flip Camera">
+                  <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                  <span class="hidden sm:inline">Flip</span>
+                </button>
+                <button onclick="stopLiveCamera()" class="px-3 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 text-xs font-bold flex items-center gap-1 cursor-pointer" title="Stop Camera">
+                  <i data-lucide="square" class="w-4 h-4"></i>
+                  <span class="hidden sm:inline">Stop</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel C: PILLAR 3 - Drone & Multi-Leaf Batch Survey -->
+            <div id="panel-drone-batch" class="hidden space-y-4">
+              <div id="drone-drop-zone" class="border-2 border-dashed border-amber-500/40 hover:border-amber-500/70 rounded-2xl p-6 text-center cursor-pointer bg-white/[0.02] hover:bg-amber-500/[0.04] transition-all relative">
+                <input type="file" id="batch-file-input" multiple accept="image/jpeg,image/png" class="hidden">
+                <div class="space-y-2">
+                  <div class="w-12 h-12 rounded-full bg-amber-500/15 text-amber-400 flex items-center justify-center mx-auto border border-amber-500/30">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                  </div>
+                  <p class="text-sm font-bold text-white">Upload 2 to 20 Field Walk / Drone Photos</p>
+                  <p class="text-xs text-slate-400">Computes Canopy Infection % and Economic Threshold Level (ETL)</p>
+                </div>
+              </div>
+
+              <!-- Drone Batch Results Display -->
+              <div id="drone-batch-results" class="hidden space-y-3 bg-black/40 rounded-xl p-4 border border-amber-500/30">
+                <div class="flex items-center justify-between pb-2 border-b border-white/10">
+                  <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                    <i data-lucide="bar-chart-2" class="w-4 h-4 text-amber-400"></i>
+                    <span>Canopy Infection Analysis</span>
+                  </div>
+                  <span id="batch-etl-badge" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">ETL CALCULATING...</span>
+                </div>
+
+                <!-- Metric Grid -->
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div class="p-2 rounded-lg bg-black/30 border border-white/5">
+                    <div class="text-[10px] text-slate-400">Total Samples</div>
+                    <div id="batch-total-count" class="text-base font-extrabold text-white">0</div>
+                  </div>
+                  <div class="p-2 rounded-lg bg-black/30 border border-white/5">
+                    <div class="text-[10px] text-slate-400">Infected Leaves</div>
+                    <div id="batch-infected-count" class="text-base font-extrabold text-rose-400">0</div>
+                  </div>
+                  <div class="p-2 rounded-lg bg-black/30 border border-white/5">
+                    <div class="text-[10px] text-slate-400">Infection Rate</div>
+                    <div id="batch-infection-rate" class="text-base font-extrabold text-amber-400">0%</div>
+                  </div>
+                </div>
+
+                <!-- ETL Recommendation Box -->
+                <div id="batch-etl-advice" class="p-2.5 rounded-lg bg-white/[0.03] text-xs text-slate-300 border border-white/10">
+                  Processing batch scans...
+                </div>
+
+                <!-- Mini thumbnails breakdown -->
+                <div id="batch-thumbnails-strip" class="flex gap-2 overflow-x-auto py-1"></div>
               </div>
             </div>
 
@@ -763,6 +991,110 @@
                 <p id="preventive-action-text" class="text-slate-300">
                   Scout lower canopy leaves every 24 hours. Apply preventive bio-fungicide (Trichoderma viride @ 5g/L) before rain to prevent spore germination.
                 </p>
+              </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- PILLAR 4: N-P-K SOIL NUTRITION & FERTILIZER DOSING CALCULATOR              -->
+            <!-- ========================================================================= -->
+            <div id="npk-calculator-card" class="zenze-card p-5 border-emerald-500/30 space-y-4">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400">
+                    <i data-lucide="test-tube" class="w-4 h-4"></i>
+                  </span>
+                  <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400">N-P-K मृदा पोषण व खाद कैलकुलेटर</h4>
+                    <p class="text-[11px] text-slate-400">CCS HAU Hisar अनुमोदित उर्वरक मात्रा व पोषक तत्व कमी निदान</p>
+                  </div>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                  Precision Soil Dosage
+                </span>
+              </div>
+
+              <!-- Controls Row: Crop, Stage, Soil, Deficiency -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
+                <div>
+                  <label class="block text-[10px] text-slate-400 mb-1">Crop (फसल)</label>
+                  <select id="npk-crop-select" class="w-full bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white outline-none focus:border-emerald-400" onchange="runNpkCalculation()">
+                    <option value="wheat" selected>Wheat (कनक / गेहूं)</option>
+                    <option value="paddy">Paddy (धान / बासमती)</option>
+                    <option value="cotton">Cotton (नरमा / कपास)</option>
+                    <option value="mustard">Mustard (सरसों / राई)</option>
+                    <option value="sugarcane">Sugarcane (गन्ना)</option>
+                    <option value="tomato">Tomato (टमाटर)</option>
+                    <option value="potato">Potato (आलू)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] text-slate-400 mb-1">Growth Stage (अवस्था)</label>
+                  <select id="npk-stage-select" class="w-full bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white outline-none focus:border-emerald-400" onchange="runNpkCalculation()">
+                    <option value="basal" selected>Basal Sowing (बुवाई समय)</option>
+                    <option value="first_irrigation">1st Irrigation (पहला पानी / कल्ले)</option>
+                    <option value="second_irrigation">2nd Irrigation (दूसरा पानी / गभोट)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] text-slate-400 mb-1">Soil Texture (मिट्टी का प्रकार)</label>
+                  <select id="npk-soil-select" class="w-full bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white outline-none focus:border-emerald-400" onchange="runNpkCalculation()">
+                    <option value="alluvial_loam" selected>Alluvial Loamy (दोमट)</option>
+                    <option value="sandy_loam">Sandy Loam (बलुई दोमट)</option>
+                    <option value="light_sandy">Light Sandy (रेतीली)</option>
+                    <option value="clayey_lowland">Clayey Heavy (चिकनी मिट्टी)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] text-slate-400 mb-1">Visual Deficiency (कमी पहचान)</label>
+                  <select id="npk-deficiency-select" class="w-full bg-[#0b130e] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-amber-300 outline-none focus:border-amber-400" onchange="runNpkCalculation()">
+                    <option value="" selected>Normal (संतुलित पोषण)</option>
+                    <option value="nitrogen">Nitrogen (निचली पत्तियां पीली)</option>
+                    <option value="phosphorus">Phosphorus (बैंगनी पत्तियां)</option>
+                    <option value="potassium">Potassium (किनारे जलना)</option>
+                    <option value="zinc">Zinc (खैरा / कत्थई धब्बे)</option>
+                    <option value="iron">Iron (ऊपरी सफेद पत्तियां)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Output Fertilizer Bags Display Grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                <div class="p-2.5 rounded-xl bg-black/40 border border-white/10">
+                  <div class="text-[10px] text-slate-400">यूरिया (Urea 46% N)</div>
+                  <div id="npk-res-urea" class="text-base sm:text-lg font-black text-lime-400">1.4 Bags</div>
+                  <div class="text-[9px] text-slate-500">45 kg Bag</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-black/40 border border-white/10">
+                  <div class="text-[10px] text-slate-400">डीएपी (DAP 18:46:0)</div>
+                  <div id="npk-res-dap" class="text-base sm:text-lg font-black text-cyan-400">1.1 Bags</div>
+                  <div class="text-[9px] text-slate-500">50 kg Bag</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-black/40 border border-white/10">
+                  <div class="text-[10px] text-slate-400">पोटाश (MOP 60% K2O)</div>
+                  <div id="npk-res-mop" class="text-base sm:text-lg font-black text-amber-400">0.5 Bags</div>
+                  <div class="text-[9px] text-slate-500">50 kg Bag</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-black/40 border border-white/10">
+                  <div class="text-[10px] text-slate-400">जिंक सल्फेट (Zinc)</div>
+                  <div id="npk-res-zinc" class="text-base sm:text-lg font-black text-emerald-400">10 kg</div>
+                  <div class="text-[9px] text-slate-500">33% / 21% Zn</div>
+                </div>
+              </div>
+
+              <!-- Deficiency Alert / Emergency Foliar Action -->
+              <div id="npk-deficiency-alert" class="hidden p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 text-xs space-y-1">
+                <div class="font-bold text-amber-300 flex items-center gap-1.5">
+                  <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                  <span id="npk-deficiency-title">पोषक तत्व कमी लक्षण:</span>
+                </div>
+                <p id="npk-deficiency-desc" class="text-slate-300 leading-relaxed"></p>
+                <div class="pt-1 text-[11px] text-emerald-300 font-semibold" id="npk-deficiency-spray"></div>
+              </div>
+
+              <!-- Bio-Fertilizer Equivalents Note -->
+              <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-white/5">
+                <span id="npk-bio-summary">🌿 जैविक विकल्प: 1.5 टन वर्मीकम्पोस्ट + 2 पैकेट एजोटोबैक्टर</span>
+                <span class="text-slate-500">CCS HAU Hisar Package of Practices</span>
               </div>
             </div>
 

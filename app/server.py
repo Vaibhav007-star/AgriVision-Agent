@@ -630,6 +630,99 @@ async def chat_endpoint(
     }
 
 
+@app.post("/api/voice/query")
+@app.get("/api/voice/query")
+async def voice_query_endpoint(
+    query: str = "",
+    district: Optional[str] = "Karnal",
+    dialect: Optional[str] = "Haryanvi",
+    request: Request = None
+) -> Dict[str, Any]:
+    """
+    Parses natural vernacular spoken queries (Haryanvi, Hindi, Hinglish, English),
+    matches crops, symptoms, and disease complexes, and generates synthesized
+    spoken dialect scripts and CCS HAU Hisar approved chemical recommendations.
+    """
+    final_query = query
+    if not final_query and request:
+        try:
+            body = await request.json()
+            final_query = body.get("query", "")
+            district = body.get("district", district)
+            dialect = body.get("dialect", dialect)
+        except Exception:
+            pass
+
+    if not final_query.strip():
+        return {
+            "status": "EMPTY",
+            "message": "कृपया अपनी फसल या रोग का नाम बोलकर या लिखकर बताएं।",
+            "spoken_hi": "कृपया अपनी फसल या रोग का नाम बोलकर या लिखकर बताएं।",
+            "spoken_haryanvi": "राम राम भाई! कुछ बोलकै बताओ, जैसै कनक म पीलापन या नरमा म सुंडी।",
+            "spoken_en": "Please speak or type your crop question."
+        }
+
+    from src.nlp.dialect_voice_parser import parse_voice_query
+    result = parse_voice_query(final_query, district_hint=district)
+    result["requested_dialect"] = dialect
+    return result
+
+
+@app.get("/api/soil/npk-calculator")
+@app.post("/api/soil/npk-calculator")
+async def npk_calculator_endpoint(
+    crop: str = "wheat",
+    acres: float = 1.0,
+    soil_type: str = "alluvial_loam",
+    growth_stage: str = "basal",
+    deficiency: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Computes exact chemical fertilizer bag requirements (Urea, DAP, MOP, Zinc)
+    and bio-fertilizer alternatives based on CCS HAU Hisar soil fertility packages.
+    """
+    from src.agronomy.npk_calculator import calculate_fertilizer_dosage
+    return calculate_fertilizer_dosage(
+        crop_name=crop,
+        acres=acres,
+        soil_type=soil_type,
+        growth_stage=growth_stage,
+        deficiency_observed=deficiency
+    )
+
+
+@app.get("/api/schemes/query")
+@app.post("/api/schemes/query")
+async def schemes_query_endpoint(query: str = "") -> Dict[str, Any]:
+    """
+    Retrieves grounded Haryana Government schemes (BBY, MPMV, PM-KUSUM, PMFBY)
+    and CCS HAU Hisar recommended high-yielding varieties.
+    """
+    from src.agronomy.haryana_schemes_rag import search_schemes_and_packages
+    return search_schemes_and_packages(query=query)
+
+
+@app.get("/api/weather/disease-triangle")
+async def disease_triangle_endpoint(
+    crop: str = "wheat",
+    temp: float = 18.5,
+    rh: float = 88.0,
+    lwd: float = 8.5,
+    rain_prob: float = 40.0
+) -> Dict[str, Any]:
+    """
+    Computes disease triangle epidemiological risk and 5-day outbreak trajectory.
+    """
+    from src.agronomy.disease_triangle_engine import calculate_disease_triangle
+    return calculate_disease_triangle(
+        crop=crop,
+        current_temp=temp,
+        relative_humidity=rh,
+        leaf_wetness_hours=lwd,
+        rain_probability=rain_prob
+    )
+
+
 @app.get("/api/history")
 async def fetch_history(limit: int = 20) -> Dict[str, Any]:
     """Returns previous diagnostic scan records from SQLite."""
