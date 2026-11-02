@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
   safeRun('initVoiceAdvisor', initVoiceAdvisor);
   safeRun('initDroneBatchSurvey', initDroneBatchSurvey);
   safeRun('runNpkCalculation', runNpkCalculation);
+  safeRun('runDiseaseTriangleCalculation', runDiseaseTriangleCalculation);
+  safeRun('searchHaryanaSchemes', () => searchHaryanaSchemes(''));
 });
 
 // ============================================================================
@@ -851,6 +853,17 @@ function switchRxTab(tab) {
 // ============================================================================
 // 6. Text-To-Speech (Native Web Speech Synthesis)
 // ============================================================================
+function stopVoiceAudio() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  const stopBtn = document.getElementById('tts-stop-btn');
+  if (stopBtn) stopBtn.classList.add('hidden');
+  const btnLabel = document.getElementById('tts-btn-label');
+  if (btnLabel) btnLabel.innerText = 'Listen to Prescription / परामर्श सुनें 🔊';
+}
+window.stopVoiceAudio = stopVoiceAudio;
+
 function readAloudPrescription() {
   if (!('speechSynthesis' in window)) {
     alert('Voice readout is not supported in this browser.');
@@ -875,9 +888,17 @@ function readAloudPrescription() {
   utterance.rate = 0.95;
 
   const btnLabel = document.getElementById('tts-btn-label');
+  const stopBtn = document.getElementById('tts-stop-btn');
   if (btnLabel) btnLabel.innerText = 'Speaking... 🔊';
+  if (stopBtn) stopBtn.classList.remove('hidden');
+
   utterance.onend = () => {
     if (btnLabel) btnLabel.innerText = 'Listen to Prescription / परामर्श सुनें 🔊';
+    if (stopBtn) stopBtn.classList.add('hidden');
+  };
+  utterance.onerror = () => {
+    if (btnLabel) btnLabel.innerText = 'Listen to Prescription / परामर्श सुनें 🔊';
+    if (stopBtn) stopBtn.classList.add('hidden');
   };
   window.speechSynthesis.speak(utterance);
 }
@@ -2831,6 +2852,197 @@ async function runNpkCalculation() {
 }
 
 window.runNpkCalculation = runNpkCalculation;
+
+// ============================================================================
+// 15. Epidemiological Disease Triangle & 5-Day Outbreak Trajectory Forecaster
+// ============================================================================
+async function runDiseaseTriangleCalculation() {
+  const cropSelect = document.getElementById('dt-crop-select');
+  const tempRange = document.getElementById('dt-temp-range');
+  const rhRange = document.getElementById('dt-rh-range');
+  const lwdRange = document.getElementById('dt-lwd-range');
+  const rainRange = document.getElementById('dt-rain-range');
+
+  const crop = cropSelect ? cropSelect.value : 'wheat';
+  const temp = tempRange ? parseFloat(tempRange.value) : 18.5;
+  const rh = rhRange ? parseFloat(rhRange.value) : 88.0;
+  const lwd = lwdRange ? parseFloat(lwdRange.value) : 8.5;
+  const rain = rainRange ? parseFloat(rainRange.value) : 40.0;
+
+  try {
+    const res = await fetch(`/api/weather/disease-triangle?crop=${encodeURIComponent(crop)}&temp=${temp}&rh=${rh}&lwd=${lwd}&rain_prob=${rain}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const alertBadge = document.getElementById('dt-alert-badge');
+    const compRiskEl = document.getElementById('dt-composite-risk');
+    const pathogenEl = document.getElementById('dt-pathogen-name');
+    const riskBarEl = document.getElementById('dt-risk-bar');
+    const actionTextEl = document.getElementById('dt-action-text');
+    const trajCardsEl = document.getElementById('dt-trajectory-cards');
+
+    if (alertBadge) {
+      alertBadge.innerText = data.alert_level || 'ALERT';
+      if (data.alert_level === 'HIGH_ALERT') {
+        alertBadge.className = 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+      } else if (data.alert_level === 'MODERATE_WARNING') {
+        alertBadge.className = 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+      } else {
+        alertBadge.className = 'text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+      }
+    }
+
+    if (compRiskEl) compRiskEl.innerText = `${data.composite_risk_pct}%`;
+    if (pathogenEl) pathogenEl.innerText = data.monitored_disease || '';
+    if (riskBarEl) {
+      riskBarEl.style.width = `${Math.min(100, data.composite_risk_pct)}%`;
+      if (data.composite_risk_pct >= 70) {
+        riskBarEl.className = 'h-2 rounded-full bg-gradient-to-r from-amber-400 to-rose-500';
+      } else if (data.composite_risk_pct >= 45) {
+        riskBarEl.className = 'h-2 rounded-full bg-gradient-to-r from-lime-400 to-amber-500';
+      } else {
+        riskBarEl.className = 'h-2 rounded-full bg-gradient-to-r from-emerald-400 to-lime-500';
+      }
+    }
+
+    if (actionTextEl && data.action_advisory) {
+      actionTextEl.innerText = data.action_advisory;
+    }
+
+    if (trajCardsEl && Array.isArray(data.five_day_trajectory)) {
+      trajCardsEl.innerHTML = '';
+      data.five_day_trajectory.forEach((dayItem) => {
+        const isCritical = dayItem.status === 'CRITICAL';
+        const isMod = dayItem.status === 'MODERATE';
+        const borderColor = isCritical ? 'border-rose-500/40 bg-rose-950/20' : (isMod ? 'border-amber-500/30 bg-amber-950/20' : 'border-emerald-500/30 bg-emerald-950/20');
+        const textBadgeColor = isCritical ? 'text-rose-400 bg-rose-500/10' : (isMod ? 'text-amber-300 bg-amber-500/10' : 'text-emerald-400 bg-emerald-500/10');
+
+        const card = document.createElement('div');
+        card.className = `p-2.5 rounded-xl border ${borderColor} space-y-1`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-semibold text-slate-300">${dayItem.day}</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${textBadgeColor}">${dayItem.status}</span>
+          </div>
+          <div class="text-sm font-black text-white">${dayItem.risk_score_pct}% <span class="text-[9px] font-normal text-slate-400">Risk</span></div>
+          <div class="text-[10px] text-slate-400">RH: <span class="text-cyan-300 font-mono">${dayItem.projected_rh}%</span></div>
+        `;
+        trajCardsEl.appendChild(card);
+      });
+    }
+  } catch (err) {
+    console.warn('[AgriVision Disease Triangle] Error:', err);
+  }
+}
+window.runDiseaseTriangleCalculation = runDiseaseTriangleCalculation;
+
+// ============================================================================
+// 16. Haryana Government Schemes & Subsidies Explorer
+// ============================================================================
+async function searchHaryanaSchemes(query = '') {
+  try {
+    const res = await fetch(`/api/schemes/query?query=${encodeURIComponent(query)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const gridEl = document.getElementById('schemes-results-grid');
+    if (!gridEl) return;
+    gridEl.innerHTML = '';
+
+    const schemes = data.matched_schemes && data.matched_schemes.length > 0 ? data.matched_schemes : (data.schemes || []);
+
+    if (schemes.length === 0) {
+      gridEl.innerHTML = `<div class="col-span-full p-4 rounded-xl bg-black/40 border border-white/5 text-slate-400 text-center">कोई योजना नहीं मिली। कृपया कोई अन्य शब्द खोजें।</div>`;
+      return;
+    }
+
+    schemes.forEach(sc => {
+      const card = document.createElement('div');
+      card.className = 'bg-[#111e16] p-4 rounded-xl border border-white/10 hover:border-amber-500/40 transition-all space-y-2 flex flex-col justify-between';
+      
+      let basePricesHtml = '';
+      if (sc.protected_base_prices) {
+        basePricesHtml = `<div class="flex flex-wrap gap-1.5 pt-1">` +
+          Object.entries(sc.protected_base_prices).map(([crop, price]) => `<span class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px]"><strong>${crop}:</strong> ${price}</span>`).join('') +
+          `</div>`;
+      }
+
+      card.innerHTML = `
+        <div class="space-y-1.5">
+          <div class="flex items-start justify-between gap-2">
+            <h5 class="font-extrabold text-white text-xs sm:text-sm text-amber-300">${sc.title}</h5>
+            <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shrink-0 font-bold">Active</span>
+          </div>
+          <p class="text-[10px] text-slate-400">${sc.department}</p>
+          <p class="text-[11px] text-slate-200 leading-relaxed font-medium">🎯 <strong>लाभ:</strong> ${sc.benefits}</p>
+          ${basePricesHtml}
+          <div class="text-[10px] text-slate-300 pt-1">
+            <strong>पात्रता:</strong> ${sc.eligibility}
+          </div>
+          <div class="text-[10px] text-slate-400">
+            <strong>दस्तावेज़:</strong> ${Array.isArray(sc.documents) ? sc.documents.slice(0, 3).join(', ') : ''}
+          </div>
+        </div>
+        <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+          <span class="text-[10px] text-slate-400">पोर्टल: <span class="text-amber-400 font-mono">${(sc.portal_url || '').replace('https://', '')}</span></span>
+          <a href="${sc.portal_url}" target="_blank" class="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-[10px] flex items-center gap-1 transition-all">
+            <span>आवेदन करें</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+      `;
+      gridEl.appendChild(card);
+    });
+
+    // Also append recommended varieties if available and query is related to seeds/varieties
+    if (Array.isArray(data.recommended_varieties) && (query.includes('बीज') || query.includes('seed') || query.includes('किस्म') || !query)) {
+      const varietyCard = document.createElement('div');
+      varietyCard.className = 'col-span-full bg-[#111e16] p-4 rounded-xl border border-lime-500/20 space-y-2.5 mt-1';
+      varietyCard.innerHTML = `
+        <div class="flex items-center gap-2 text-xs font-bold text-lime-400">
+          <i data-lucide="sprout" class="w-4 h-4"></i>
+          <span>CCS HAU Hisar अनुमोदित उच्च उपज व रोग प्रतिरोधी बीज किस्में (High-Yield Seed Packages)</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          ${data.recommended_varieties.map(v => `
+            <div class="p-2.5 rounded-lg bg-black/40 border border-white/5 space-y-1 text-[11px]">
+              <div class="font-bold text-white flex items-center justify-between">
+                <span>${v.crop}: ${v.variety}</span>
+                <span class="text-[9px] text-lime-400 font-mono">${v.yield_per_acre}</span>
+              </div>
+              <p class="text-[10px] text-emerald-300">🛡️ ${v.disease_resistance}</p>
+              <p class="text-[9px] text-slate-400">बीज दर: ${v.seed_rate_per_acre}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      gridEl.appendChild(varietyCard);
+    }
+
+    if (window.lucide) window.lucide.createIcons();
+  } catch (err) {
+    console.warn('[AgriVision Schemes] Error:', err);
+  }
+}
+
+function filterSchemesCategory(cat) {
+  const input = document.getElementById('schemes-search-input');
+  if (input) input.value = cat;
+
+  const buttons = document.querySelectorAll('.scheme-filter-btn');
+  buttons.forEach(btn => {
+    if (btn.innerText.includes(cat) || (cat === '' && btn.innerText.includes('सभी'))) {
+      btn.className = 'px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 scheme-filter-btn active';
+    } else {
+      btn.className = 'px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 scheme-filter-btn';
+    }
+  });
+
+  searchHaryanaSchemes(cat);
+}
+
+window.searchHaryanaSchemes = searchHaryanaSchemes;
+window.filterSchemesCategory = filterSchemesCategory;
 
 
 

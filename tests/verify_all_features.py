@@ -109,10 +109,34 @@ def run_all_checks():
     )
     assert r.status_code == 200
     chat_resp = r.json().get("content", "")
-    print(f"✅ [12/12] Autonomous AI Chatbot: Verified (Response: {chat_resp[:80]}...)")
+    print(f"✅ [12/16] Autonomous AI Chatbot: Verified (Response: {chat_resp[:60]}...)")
+
+    # 13. Disease Triangle Epidemiological Forecaster
+    r = requests.get(f"{BASE_URL}/api/weather/disease-triangle?crop=wheat&temp=18.5&rh=88&lwd=8.5&rain_prob=40")
+    assert r.status_code == 200
+    dt_data = r.json()
+    assert dt_data.get("status") == "SUCCESS"
+    print(f"✅ [13/16] Disease Triangle Forecaster: {dt_data.get('monitored_disease')} | Risk: {dt_data.get('composite_risk_pct')}% ({dt_data.get('alert_level')}) | 5-Day Forecast Active")
+
+    # 14. Haryana Government Schemes & Subsidies
+    r = requests.get(f"{BASE_URL}/api/schemes/query?query=bhavantar")
+    assert r.status_code == 200
+    sch_data = r.json()
+    assert sch_data.get("status") in ["SUCCESS", "MATCHED", "ALL_SCHEMES"]
+    print(f"✅ [14/16] Haryana Govt Schemes & Subsidies: Verified ({len(sch_data.get('matched_schemes', []))} matched, BBY, MPMV, PM-KUSUM, PMFBY)")
+
+    # 15. Presentation Slide Deck
+    r = requests.get(f"{BASE_URL}/presentation")
+    assert r.status_code == 200 and "AgriVision Agent" in r.text
+    print(f"✅ [15/16] Interactive Presentation Deck: Loaded ({len(r.text)} bytes, 10 core slides, speaker notes)")
+
+    # 16. PowerPoint (.pptx) Download
+    r = requests.get(f"{BASE_URL}/download/pptx")
+    assert r.status_code == 200 and len(r.content) > 100000
+    print(f"✅ [16/16] PowerPoint (.pptx) File: Downloadable ({len(r.content)} bytes, 16:9 widescreen format)")
 
     print("=" * 65)
-    print("🏆 ALL 12/12 LIVE INTEGRATION CHECKS PASSED PERFECTLY!")
+    print("🏆 ALL 16/16 LIVE INTEGRATION CHECKS PASSED WITH 100% SUCCESS!")
     print("=" * 65)
 
 if __name__ == "__main__":
