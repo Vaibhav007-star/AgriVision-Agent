@@ -137,6 +137,14 @@ async def serve_home(request: Request):
         return HTMLResponse(content=f.read())
 
 
+@app.get("/presentation", response_class=HTMLResponse)
+async def serve_presentation(request: Request):
+    """Renders the clean academic slide presentation deck."""
+    presentation_file = TEMPLATES_DIR / "presentation.html"
+    with open(presentation_file, "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint for process monitoring and status inspection."""
