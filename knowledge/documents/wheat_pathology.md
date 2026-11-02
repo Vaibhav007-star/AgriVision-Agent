@@ -51,3 +51,4 @@
 ## Wheat - Healthy Crop Care
 - Ensure balanced basal fertilization (NPK 150:60:40 kg/ha). Apply Zinc Sulfate 21% @ 25 kg/acre during field preparation.
 - Execute timely irrigations at critical physiological growth stages: CRI (Crown Root Initiation at 21 days), Tillering (40-45 days), Jointing (60-65 days), Flowering (80-85 days), and Milking/Dough stage (100-105 days).
+

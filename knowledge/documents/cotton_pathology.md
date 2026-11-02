@@ -15,3 +15,4 @@
 ## Cotton - Healthy Crop Care
 - Ensure balanced NPK (80:40:40 kg/ha). Apply 4 foliar sprays of 2% Potassium Nitrate (13:0:45) at flowering and boll development.
 - Monitor whitefly populations to prevent Cotton Leaf Curl Virus (CLCuV) transmission.
+

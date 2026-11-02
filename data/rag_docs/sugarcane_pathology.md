@@ -21,3 +21,4 @@
   - Elongated chlorotic flecks turning reddish-brown pustules on both leaf surfaces.
 - **Management:**
   - Spray Mancozeb 75% WP @ 500 g per acre or Propiconazole 25% EC @ 200 ml per acre in 200 L water.
+

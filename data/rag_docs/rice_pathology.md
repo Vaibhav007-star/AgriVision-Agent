@@ -32,3 +32,4 @@
   - Small, angular, slightly raised leaden-black spots scattered on both sides of rice leaves.
 - **Management:**
   - Spray Tricyclazole 75% WP @ 120 g/acre or Propiconazole 25% EC @ 200 ml/acre.
+
