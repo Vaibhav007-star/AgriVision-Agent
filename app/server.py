@@ -620,8 +620,8 @@ async def get_offline_dialects_endpoint() -> Dict[str, Any]:
 
 @app.get("/api/haryana/offline-triage")
 async def get_offline_triage_endpoint(
-    district: str,
-    block: str,
+    district: str = "Karnal",
+    block: str = "Gharaunda",
     disease_key: Optional[str] = None
 ) -> Dict[str, Any]:
     """
@@ -751,7 +751,13 @@ async def voice_query_endpoint(
             district = body.get("district", district)
             dialect = body.get("dialect", dialect)
         except Exception:
-            pass
+            try:
+                form = await request.form()
+                final_query = form.get("query", "")
+                district = form.get("district", district)
+                dialect = form.get("dialect", dialect)
+            except Exception:
+                pass
 
     if not final_query.strip():
         return {
