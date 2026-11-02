@@ -335,3 +335,4 @@ When presenting the interactive deck in any web browser (`http://localhost:8000/
 > 1. The MobileNetV2 PyTorch model runs locally on the CPU or device hardware in 42 ms without sending image bytes over the internet.
 > 2. 30 major Haryana agricultural blocks are pre-cached in local SQLite/JSON storage, providing offline disease guidelines and treatment formulations.
 > 3. The web application is configured as a Progressive Web App (PWA) with a Service Worker and manifest, allowing it to be installed directly on an Android smartphone and launched even when in airplane mode or deep field dead zones."*
+

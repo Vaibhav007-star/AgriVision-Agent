@@ -145,6 +145,20 @@ async def serve_presentation(request: Request):
         return HTMLResponse(content=f.read())
 
 
+@app.get("/download/pptx")
+async def download_presentation_pptx():
+    """Serves the generated Microsoft PowerPoint (.pptx) presentation file."""
+    pptx_file = STATIC_DIR / "AgriVision_Agent_Presentation.pptx"
+    if not pptx_file.exists():
+        from scripts.build_presentation_pptx import create_presentation
+        create_presentation()
+    return FileResponse(
+        pptx_file,
+        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        filename="AgriVision_Agent_Presentation.pptx"
+    )
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint for process monitoring and status inspection."""
