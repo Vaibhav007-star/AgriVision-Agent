@@ -1,0 +1,16 @@
+# Netlify Deployment Configuration for AgriVision Agent Presentation Deck
+[build]
+  publish = "dist-presentation"
+  command = "python scripts/build_standalone_deck.py"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

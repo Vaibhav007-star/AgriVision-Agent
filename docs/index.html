@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriVision Agent — Academic Presentation Deck</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            zenze: {
+              dark: '#0b130e',
+              surface: '#111e16',
+              card: 'rgba(18, 32, 24, 0.85)',
+              border: 'rgba(74, 222, 128, 0.18)',
+              lime: '#84cc16',
+              emerald: '#10b981',
+              cyan: '#06b6d4'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0b130e;
+      --lime: #84cc16;
+      --emerald: #10b981;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: #f0fdf4;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      background-image: 
+        radial-gradient(circle at 12% 18%, rgba(34, 197, 94, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 88% 82%, rgba(132, 204, 22, 0.07) 0%, transparent 45%);
+    }
+
+    .slide {
+      display: none;
+      opacity: 0;
+      transform: scale(0.98) translateY(8px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Custom Glassmorphism Card */
+    .glass-card {
+      background: rgba(18, 32, 24, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(74, 222, 128, 0.18);
+      border-radius: 1rem;
+    }
+
+    .glass-card-glow {
+      background: rgba(18, 32, 24, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(132, 204, 22, 0.35);
+      box-shadow: 0 0 35px -5px rgba(132, 204, 22, 0.15);
+      border-radius: 1rem;
+    }
+
+    /* Code block styling */
+    pre, code {
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Print styles for Clean Handouts */
+    @media print {
+      body {
+        overflow: visible !important;
+        height: auto !important;
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+        page-break-after: always;
+        height: 100vh !important;
+        padding: 2rem !important;
+        color: #111827 !important;
+      }
+      .glass-card, .glass-card-glow {
+        background: #f9fafb !important;
+        border: 1px solid #d1d5db !important;
+        color: #111827 !important;
+        box-shadow: none !important;
+      }
+      .text-white, .text-slate-100, .text-slate-200, .text-emerald-300, .text-lime-300 {
+        color: #111827 !important;
+      }
+      .text-slate-400, .text-slate-500 {
+        color: #4b5563 !important;
+      }
+    }
+
+    /* Custom scrollbars inside slides */
+    .slide::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: rgba(132, 204, 22, 0.3);
+      border-radius: 3px;
+    }
+
+    /* Progress bar */
+    #progress-bar {
+      transition: width 0.3s ease-out;
+    }
+  </style>
+</head>
+<body class="select-none">
+
+  <!-- ========================================================================= -->
+  <!-- TOP CONTROLS & HEADER (Fixed)                                             -->
+  <!-- ========================================================================= -->
+  <header class="no-print fixed top-0 left-0 right-0 h-14 bg-[#0b130e]/90 backdrop-blur-md border-b border-zenze-border z-50 px-4 md:px-8 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-lime-500/20 border border-lime-500/40 flex items-center justify-center text-lime-400 font-black">
+        <i data-lucide="sprout" class="w-4 h-4"></i>
+      </div>
+      <div>
+        <span class="text-sm font-extrabold tracking-wider text-white">AGRIVISION <span class="text-[10px] px-1.5 py-0.5 rounded bg-lime-500/20 text-lime-400 border border-lime-500/30">AGENT</span></span>
+        <span class="text-xs text-slate-400 ml-2 hidden sm:inline">| Academic Presentation Deck</span>
+      </div>
+    </div>
+
+    <!-- Center Slide Indicator -->
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-semibold text-slate-400">Slide <span id="current-slide-num" class="text-lime-400 font-bold">1</span> of <span id="total-slides-num">10</span></span>
+      <div class="hidden lg:flex items-center gap-1.5" id="slide-indicators-container">
+        <!-- Dots populated by JS -->
+      </div>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-2">
+      <!-- Elapsed Timer -->
+      <div class="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-mono text-lime-400" title="Presentation Timer">
+        <i data-lucide="clock" class="w-3.5 h-3.5 text-lime-400"></i>
+        <span id="presentation-timer">00:00</span>
+      </div>
+
+      <!-- Download PowerPoint (.pptx) -->
+      <a href="./AgriVision_Agent_Presentation.pptx" download="AgriVision_Agent_Presentation.pptx" title="Download Presentation as PowerPoint (.pptx)" class="px-2.5 py-1 rounded-md bg-lime-500/20 border border-lime-500/40 hover:bg-lime-500/30 text-lime-300 text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
+        <i data-lucide="download" class="w-3.5 h-3.5 text-lime-400"></i>
+        <span class="hidden sm:inline">Download PPTX</span>
+      </a>
+
+      <!-- Notes Toggle -->
+      <button id="toggle-notes-btn" title="Toggle Speaker Notes (N)" class="p-1.5 rounded-md bg-white/5 border border-white/10 hover:border-lime-500/50 text-slate-300 text-xs flex items-center gap-1 transition-all">
+        <i data-lucide="file-text" class="w-4 h-4 text-lime-400"></i>
+        <span class="hidden md:inline">Notes</span>
+      </button>
+
+      <!-- Print / PDF -->
+      <button onclick="window.print()" title="Print / Save Handouts (PDF)" class="p-1.5 rounded-md bg-white/5 border border-white/10 hover:border-lime-500/50 text-slate-300 text-xs flex items-center gap-1 transition-all">
+        <i data-lucide="printer" class="w-4 h-4 text-emerald-400"></i>
+        <span class="hidden md:inline">Print/PDF</span>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="fullscreen-btn" title="Toggle Fullscreen (F)" class="p-1.5 rounded-md bg-white/5 border border-white/10 hover:border-lime-500/50 text-slate-300 transition-all">
+        <i data-lucide="maximize" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Back to Main App -->
+      <a href="https://github.com/Vaibhav007-star/AgriVision-Agent" target="_blank" title="GitHub Code Repository" class="px-2.5 py-1 rounded-md bg-lime-500/20 border border-lime-500/40 text-lime-300 hover:bg-lime-500/30 text-xs font-semibold flex items-center gap-1 transition-all">
+        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">Open App</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Top Progress Bar -->
+  <div class="no-print fixed top-14 left-0 right-0 h-1 bg-slate-900 z-50">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-lime-400 w-[10%]"></div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN SLIDES CONTAINER                                                     -->
+  <!-- ========================================================================= -->
+  <main class="h-full w-full pt-16 pb-16 px-4 md:px-12 flex items-center justify-center">
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 1: TOPIC / TITLE                                                  -->
+    <!-- ======================================================================= -->
+    <div class="slide active" id="slide-1" data-title="Project Topic & Overview">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-lime-500/20 text-lime-400 border border-lime-500/30">Academic Capstone Presentation</span>
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">AI & Deep Learning</span>
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Precision Agriculture</span>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+          AgriVision Agent: <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 via-emerald-300 to-teal-200">
+            Autonomous Precision Agriculture AI for Multi-Crop Disease Diagnosis & Grounded Prescriptions
+          </span>
+        </h1>
+
+        <p class="text-base md:text-xl text-slate-300 mt-4 max-w-4xl font-normal leading-relaxed">
+          An end-to-end intelligent diagnostic ecosystem integrating Depthwise Separable CNNs, PyTorch Grad-CAM explainability, botanical morphology guardrails, and deterministic FAISS RAG advisory for smallholder farmers.
+        </p>
+
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          <div class="glass-card p-4 border-l-4 border-l-lime-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Crops Covered</span>
+            <div class="text-2xl md:text-3xl font-extrabold text-white mt-1">8 Crops</div>
+            <p class="text-xs text-lime-400 mt-0.5">Wheat, Rice, Cotton, Sugarcane, Corn & Vegetables</p>
+          </div>
+          <div class="glass-card p-4 border-l-4 border-l-emerald-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Classification</span>
+            <div class="text-2xl md:text-3xl font-extrabold text-white mt-1">33 Classes</div>
+            <p class="text-xs text-emerald-400 mt-0.5">Fungal, Bacterial, Viral & Healthy</p>
+          </div>
+          <div class="glass-card p-4 border-l-4 border-l-cyan-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Top-1 Accuracy</span>
+            <div class="text-2xl md:text-3xl font-extrabold text-white mt-1">94.8%</div>
+            <p class="text-xs text-cyan-400 mt-0.5">98.6% Top-3 Accuracy on Benchmark Split</p>
+          </div>
+          <div class="glass-card p-4 border-l-4 border-l-amber-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Inference Speed</span>
+            <div class="text-2xl md:text-3xl font-extrabold text-white mt-1">42 ms</div>
+            <p class="text-xs text-amber-400 mt-0.5">Real-time edge CPU execution</p>
+          </div>
+        </div>
+
+        <!-- Presenter Meta -->
+        <div class="mt-8 pt-6 border-t border-zenze-border flex flex-wrap items-center justify-between text-xs text-slate-400">
+          <div class="flex items-center gap-4">
+            <div><strong class="text-slate-200">Domain:</strong> Computer Vision & Agentic Artificial Intelligence</div>
+            <span class="hidden sm:inline">•</span>
+            <div><strong class="text-slate-200">Standards:</strong> CCS HAU Hisar & ICAR Agronomic Package</div>
+          </div>
+          <div class="flex items-center gap-2 mt-2 sm:mt-0 text-lime-400 font-medium">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>155/155 Automated Tests Verified</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 2: WHAT IS MY PROJECT (PROBLEM & SOLUTION)                        -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-2" data-title="What is My Project">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Foundational Context</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">What is AgriVision Agent? (The Problem & The Solution)</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">Bridging the critical gap between complex plant pathology science and resource-poor smallholder farmers.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- The Problem -->
+          <div class="glass-card p-6 border-l-4 border-l-rose-500">
+            <div class="flex items-center gap-2 text-rose-400 font-bold mb-3">
+              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+              <span class="text-base tracking-wide uppercase">The Smallholder Dilemma</span>
+            </div>
+            <ul class="space-y-3.5 text-xs md:text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Catastrophic Yield Losses:</strong>
+                  Fungal & bacterial pathogens destroy up to 35-40% of smallholder crop harvests annually before diagnostic assistance arrives.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Toxic Chemical Overuse:</strong>
+                  Without exact measurements, farmers spray arbitrary fungicide cocktails, causing acute pesticide poisoning, water table contamination, and financial debt.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Failure of Existing AI Tools:</strong>
+                  Conventional apps act as "black boxes" with no visual explanation, mistakenly diagnose human hands/selfies as diseased leaves, and confuse monocot cereals (wheat) with broadleaf dicots (tomato).
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- The Solution -->
+          <div class="glass-card-glow p-6 border-l-4 border-l-lime-500">
+            <div class="flex items-center gap-2 text-lime-400 font-bold mb-3">
+              <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+              <span class="text-base tracking-wide uppercase">The AgriVision Agent Innovation</span>
+            </div>
+            <ul class="space-y-3.5 text-xs md:text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="cpu" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Autonomous Agentic Reasoning:</strong>
+                  Replaces static one-shot classification with a multi-step LangGraph pipeline integrating real-time weather risk, acreage dosage, and university-vetted RAG.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="eye" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Explainable AI (Grad-CAM):</strong>
+                  Visualizes activation heatmaps highlighting necrotic lesions directly on the leaf, establishing immediate trust with agronomists and farmers.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="shield" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Botanical Guardrails:</strong>
+                  Enforces Fitzpatrick skin tone rejection (rejects selfies/hands) and monocot blade aspect ratio gating (rejects cross-crop hallucination).
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="scale" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Precision Knapsack Dosage:</strong>
+                  Converts recommendations into exact water volumes and chemical milliliters per 15-liter knapsack sprayer tank based on farm acreage.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 3: COMPLETE DATASET & AGRONOMIC SCOPE                              -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-3" data-title="Dataset & Agronomic Scope">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Data Engineering</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">About the Complete Dataset & Scope</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">High-dimensional agronomic data curation across 8 staple crops, balanced with rigorous laboratory & field specimens.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Crop Classes Matrix -->
+          <div class="glass-card p-5 md:col-span-2">
+            <h3 class="text-sm font-bold text-lime-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <i data-lucide="database" class="w-4 h-4"></i>
+              Dataset Breakdown: 54,000+ RGB Images & 33 Disease Classes
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="wheat" class="w-3.5 h-3.5 text-amber-400"></i> Wheat (Gehun)</div>
+                <div class="text-[11px] text-slate-400 mt-1">Stripe Rust (Yellow), Leaf Rust (Brown), Septoria, Healthy</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="flower2" class="w-3.5 h-3.5 text-emerald-400"></i> Rice (Paddy)</div>
+                <div class="text-[11px] text-slate-400 mt-1">Bacterial Leaf Blight (BLB), Brown Spot, Leaf Blast, Healthy</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="cloud-fog" class="w-3.5 h-3.5 text-cyan-400"></i> Cotton (Kapas)</div>
+                <div class="text-[11px] text-slate-400 mt-1">Bacterial Blight (*X. malvacearum*), Leaf Curl Virus, Healthy</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5 text-rose-400"></i> Sugarcane</div>
+                <div class="text-[11px] text-slate-400 mt-1">Red Rot (*Colletotrichum falcatum*), Rust, Smut, Healthy</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="sun" class="w-3.5 h-3.5 text-yellow-400"></i> Corn (Maize)</div>
+                <div class="text-[11px] text-slate-400 mt-1">Common Rust, Northern Leaf Blight, Gray Leaf Spot, Healthy</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="circle-dot" class="w-3.5 h-3.5 text-red-400"></i> Tomato</div>
+                <div class="text-[11px] text-slate-400 mt-1">Early Blight, Late Blight, Septoria, Leaf Mold, Mosaic Virus</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="circle" class="w-3.5 h-3.5 text-amber-600"></i> Potato</div>
+                <div class="text-[11px] text-slate-400 mt-1">Early Blight (*Alternaria*), Late Blight (*Phytophthora*), Healthy</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                <div class="font-bold text-white flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-green-400"></i> Bell Pepper</div>
+                <div class="text-[11px] text-slate-400 mt-1">Bacterial Spot (*Xanthomonas*), Healthy Baseline</div>
+              </div>
+            </div>
+
+            <!-- CLAHE & Augmentation -->
+            <div class="mt-4 pt-4 border-t border-zenze-border flex items-center justify-between text-xs text-slate-300">
+              <span class="flex items-center gap-1.5"><i data-lucide="sliders" class="w-3.5 h-3.5 text-lime-400"></i> <strong>Preprocessing:</strong> OpenCV CLAHE (Clip Limit=2.0) for shadow/glare normalization</span>
+              <span class="flex items-center gap-1.5"><i data-lucide="shuffle" class="w-3.5 h-3.5 text-emerald-400"></i> <strong>Augmentations:</strong> Rotation (±30°), Zoom, Shearing & Horizontal Flips</span>
+            </div>
+          </div>
+
+          <!-- RAG Agronomic Vector Base -->
+          <div class="glass-card p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                <i data-lucide="file-check-2" class="w-4 h-4"></i>
+                Agronomic Knowledge Base
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Integrated with <strong>34 peer-reviewed scientific documents</strong> from CCS Haryana Agricultural University (HAU) Hisar & ICAR Package of Practices.
+              </p>
+              <div class="mt-3 space-y-2 text-xs">
+                <div class="p-2 rounded bg-black/30 border border-zenze-border flex items-center justify-between">
+                  <span class="text-slate-300">Vector Embeddings:</span>
+                  <span class="font-mono text-lime-400">MiniLM-L6 (384-d)</span>
+                </div>
+                <div class="p-2 rounded bg-black/30 border border-zenze-border flex items-center justify-between">
+                  <span class="text-slate-300">Vector Index Engine:</span>
+                  <span class="font-mono text-emerald-400">FAISS (L2 Index)</span>
+                </div>
+                <div class="p-2 rounded bg-black/30 border border-zenze-border flex items-center justify-between">
+                  <span class="text-slate-300">Search Latency:</span>
+                  <span class="font-mono text-cyan-400">3.2 milliseconds</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 p-2.5 rounded-lg bg-lime-500/10 border border-lime-500/30 text-[11px] text-lime-300">
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i>
+              Guarantees zero chemical active-ingredient hallucination.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 4: COMPLETE WORKING ARCHITECTURE (EASY EXPLANATION)               -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-4" data-title="Complete Working Architecture">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">System Flow</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Complete Working Architecture (Stage-by-Stage)</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">How an input photograph traverses from foliar validation to precision chemical and biological advice.</p>
+
+        <!-- Pipeline Flow Chart (Horizontal / Visual Grid) -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+          <!-- Step 1 -->
+          <div class="glass-card p-4 relative group hover:border-lime-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-lime-500/20 text-lime-400 border border-lime-500/40 flex items-center justify-center font-bold text-xs mb-2">1</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="camera" class="w-4 h-4 text-lime-400"></i> Image Ingestion</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">Farmer captures leaf with mobile camera or uploads photo. Resized to 224x224 RGB.</p>
+            <div class="mt-3 text-[11px] font-mono text-lime-400 bg-black/40 px-2 py-1 rounded">OpenCV CLAHE Normalization</div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="glass-card p-4 relative group hover:border-emerald-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-xs mb-2">2</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Botanical Guardrail</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">YCbCr & HSV skin chrominance filters out human hands/faces. GLI checks green leaf index.</p>
+            <div class="mt-3 text-[11px] font-mono text-rose-400 bg-black/40 px-2 py-1 rounded">Reject if Skin &gt; 14%</div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="glass-card p-4 relative group hover:border-cyan-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-bold text-xs mb-2">3</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="git-branch" class="w-4 h-4 text-cyan-400"></i> Morphology Routing</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">Contour aspect ratio determines Monocot (Wheat/Rice) vs Dicot (Tomato/Potato) geometry.</p>
+            <div class="mt-3 text-[11px] font-mono text-cyan-400 bg-black/40 px-2 py-1 rounded">Blade Aspect Ratio &gt; 2.0:1</div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="glass-card p-4 relative group hover:border-amber-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-xs mb-2">4</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="cpu" class="w-4 h-4 text-amber-400"></i> MobileNetV2 CNN</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">Depthwise separable convolution extracts fine lesion features with minimal CPU overhead.</p>
+            <div class="mt-3 text-[11px] font-mono text-amber-400 bg-black/40 px-2 py-1 rounded">Softmax Top-3 Logits</div>
+          </div>
+        </div>
+
+        <!-- Second Row: 3 Advanced Execution Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs mt-3">
+          <!-- Step 5 -->
+          <div class="glass-card p-4 relative group hover:border-fuchsia-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/40 flex items-center justify-center font-bold text-xs mb-2">5</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="flame" class="w-4 h-4 text-fuchsia-400"></i> Grad-CAM XAI Map</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">Computes gradient $\alpha_k^c$ of predicted class on final feature layer. Overlays thermal attention map over leaf lesions.</p>
+            <div class="mt-2 text-[11px] font-mono text-fuchsia-400 bg-black/40 px-2 py-1 rounded">Heatmap Overlay (JET Colormap)</div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="glass-card p-4 relative group hover:border-lime-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-lime-500/20 text-lime-400 border border-lime-500/40 flex items-center justify-center font-bold text-xs mb-2">6</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="binary" class="w-4 h-4 text-lime-400"></i> FAISS RAG Retrieval</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">Fetches ICAR & CCS HAU verified chemical/organic management guidelines using cosine similarity search.</p>
+            <div class="mt-2 text-[11px] font-mono text-lime-400 bg-black/40 px-2 py-1 rounded">Grounded Treatment Standards</div>
+          </div>
+
+          <!-- Step 7 -->
+          <div class="glass-card-glow p-4 relative group hover:border-emerald-500/50 transition-all">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-xs mb-2">7</div>
+            <div class="font-bold text-sm text-white flex items-center gap-1.5"><i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Knapsack & Voice Synthesis</div>
+            <p class="text-slate-400 mt-1 leading-relaxed">Calculates exact tanks of 15L water & chemical ml. Generates bilingual audio advice in Hindi & Haryanvi dialect.</p>
+            <div class="mt-2 text-[11px] font-mono text-emerald-300 bg-black/40 px-2 py-1 rounded">200 L/acre &bull; 15L Tanks &bull; Audio TTS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 5: MAIN CODE SNIPPETS                                             -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-5" data-title="Main Code Snippets">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Core Implementation</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">Main Production Code Snippets</h2>
+          </div>
+          <!-- Code snippet switcher tabs -->
+          <div class="flex items-center gap-1 bg-black/40 p-1 rounded-lg border border-zenze-border text-xs" id="code-tabs">
+            <button class="px-2.5 py-1 rounded bg-lime-500/20 text-lime-300 font-semibold tab-btn active" onclick="switchCodeTab(0)">1. Leaf Guardrail</button>
+            <button class="px-2.5 py-1 rounded text-slate-400 hover:text-white tab-btn" onclick="switchCodeTab(1)">2. Monocot Blade Filter</button>
+            <button class="px-2.5 py-1 rounded text-slate-400 hover:text-white tab-btn" onclick="switchCodeTab(2)">3. Grad-CAM Hook</button>
+            <button class="px-2.5 py-1 rounded text-slate-400 hover:text-white tab-btn" onclick="switchCodeTab(3)">4. Knapsack Dosage</button>
+          </div>
+        </div>
+        <p class="text-slate-300 text-xs md:text-sm mb-4">Real engineering logic powering the safety, interpretability, and precision mathematics of the system.</p>
+
+        <!-- Code Block 1: Botanical & Skin Tone Guardrail -->
+        <div class="code-panel block glass-card p-4 relative" id="code-panel-0">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2 border-b border-zenze-border pb-2">
+            <span class="font-mono text-lime-400">src/utils/image_processing.py : validate_leaf_image()</span>
+            <span class="text-slate-500">Skin Melanin Detection (Fitzpatrick I-VI) & Foliage Index</span>
+          </div>
+          <pre class="text-[12px] md:text-[13px] text-slate-200 overflow-x-auto leading-relaxed"><code class="language-python">def validate_leaf_image(image: Image.Image, skin_threshold_ratio: float = 14.0):
+    img_np = np.array(image.convert("RGB"))
+    r, g, b = img_np[:, :, 0].astype(float), img_np[:, :, 1].astype(float), img_np[:, :, 2].astype(float)
+    
+    # 1. Texture Check (Laplacian Variance): Rejects blank walls, uniform colors, paper
+    gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
+    if cv2.Laplacian(gray, cv2.CV_64F).var() < 8.0:
+        return {"is_leaf": False, "reason": "blank_or_uniform_surface"}
+        
+    # 2. Human Skin Chrominance Space (YCbCr + HSV Melanin Signature)
+    y  = 0.299 * r + 0.587 * g + 0.114 * b
+    cr = (r - y) * 0.713 + 128
+    cb = (b - y) * 0.564 + 128
+    hsv = cv2.cvtColor(img_np, cv2.COLOR_RGB2HSV)
+    h, s, v = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
+    
+    skin_mask = (cr >= 135) & (cr <= 180) & (cb >= 77) & (cb <= 130) & (s >= 20) & (s <= 180)
+    skin_pct = (np.count_nonzero(skin_mask) / img_np.size) * 100.0
+    
+    if skin_pct > skin_threshold_ratio:
+        return {"is_leaf": False, "reason": "human_or_skin_detected", "skin_percentage": round(skin_pct, 1)}
+    return {"is_leaf": True, "reason": "valid_leaf"}</code></pre>
+        </div>
+
+        <!-- Code Block 2: Monocot vs Dicot Geometry Gating -->
+        <div class="code-panel hidden glass-card p-4 relative" id="code-panel-1">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2 border-b border-zenze-border pb-2">
+            <span class="font-mono text-cyan-400">app/ml/inference.py : _detect_monocot_leaf_blade()</span>
+            <span class="text-slate-500">Prevents Cross-Family Hallucination (Wheat vs Tomato)</span>
+          </div>
+          <pre class="text-[12px] md:text-[13px] text-slate-200 overflow-x-auto leading-relaxed"><code class="language-python">def _detect_monocot_leaf_blade(img: Image.Image) -> bool:
+    """Botanically identifies linear monocot grass blades (Wheat, Rice, Sugarcane)
+    vs broadleaf dicots (Tomato, Potato, Pepper Bell) via aspect ratio & parallel venation."""
+    arr = np.array(img.convert("RGB"))
+    hsv = cv2.cvtColor(arr, cv2.COLOR_RGB2HSV)
+    leaf_mask = ((hsv[:,:,0] >= 14) & (hsv[:,:,0] <= 95) & (hsv[:,:,1] >= 20)).astype(np.uint8) * 255
+    
+    contours, _ = cv2.findContours(leaf_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return False
+    largest = max(contours, key=cv2.contourArea)
+    if cv2.contourArea(largest) < (arr.shape[0] * arr.shape[1] * 0.04):
+        return False
+        
+    rect = cv2.minAreaRect(largest) # ((center_x, y), (w, h), angle)
+    w_box, h_box = rect[1]
+    aspect_ratio = max(w_box, h_box) / max(1.0, min(w_box, h_box))
+    
+    # Monocot cereal blades (Wheat/Rice) strictly exhibit aspect ratio > 2.0
+    return aspect_ratio >= 2.0</code></pre>
+        </div>
+
+        <!-- Code Block 3: PyTorch Grad-CAM Hook -->
+        <div class="code-panel hidden glass-card p-4 relative" id="code-panel-2">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2 border-b border-zenze-border pb-2">
+            <span class="font-mono text-emerald-400">app/ml/inference.py : _generate_pytorch_gradcam()</span>
+            <span class="text-slate-500">Backward Activation Gradients & ReLU Class Saliency</span>
+          </div>
+          <pre class="text-[12px] md:text-[13px] text-slate-200 overflow-x-auto leading-relaxed"><code class="language-python">def _generate_pytorch_gradcam(model, input_tensor, target_img, target_idx):
+    activations, gradients = [], []
+    def fwd_hook(mod, inp, out): activations.append(out)
+    def bwd_hook(mod, g_in, g_out): gradients.append(g_out[0])
+    
+    target_layer = model.features[-1]
+    h_f = target_layer.register_forward_hook(fwd_hook)
+    h_b = target_layer.register_full_backward_hook(bwd_hook)
+    
+    model.zero_grad()
+    logits = model(input_tensor)
+    logits[0, target_idx].backward(retain_graph=False)
+    h_f.remove(); h_b.remove()
+    
+    # Global average pooling of gradients: \alpha_k^c = (1/Z) \sum_{i,j} \partial y^c / \partial A^k_{i,j}
+    weights = np.mean(gradients[0].squeeze(0).cpu().numpy(), axis=(1, 2))
+    cam = np.zeros(activations[0].shape[2:], dtype=np.float32)
+    for i, w in enumerate(weights):
+        cam += w * activations[0].squeeze(0).cpu().numpy()[i]
+        
+    cam = np.maximum(cam, 0) # ReLU
+    cam = cv2.resize(cam, target_img.size)
+    return generate_gradcam_overlay(target_img, (cam - cam.min()) / (cam.max() - cam.min() + 1e-8))</code></pre>
+        </div>
+
+        <!-- Code Block 4: Knapsack Spray Dosage Tool -->
+        <div class="code-panel hidden glass-card p-4 relative" id="code-panel-3">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-2 border-b border-zenze-border pb-2">
+            <span class="font-mono text-amber-400">app/agent/tools/dosage_tool.py : calculate_spray_dosage()</span>
+            <span class="text-slate-500">Deterministic Acreage Knapsack Pump Formulation</span>
+          </div>
+          <pre class="text-[12px] md:text-[13px] text-slate-200 overflow-x-auto leading-relaxed"><code class="language-python">def calculate_spray_dosage(crop: str, disease: str, field_acres: float = 1.0):
+    # Agronomic benchmark: 200 Liters total water spray volume per acre
+    water_volume_liters = round(field_acres * 200.0, 1)
+    tanks_15L = round(water_volume_liters / 15.0, 1)
+    
+    if "wheat" in crop.lower() and "rust" in disease.lower():
+        # CCS HAU / ICAR standard: Propiconazole 25% EC (Tilt) @ 1.0 ml / Liter
+        prop_ml = round(field_acres * 200.0, 0)
+        chem_str = f"{prop_ml:.0f} ml of Propiconazole 25% EC in {water_volume_liters:.0f} L water ({prop_ml/tanks_15L:.1f} ml per 15L tank)"
+    elif "rice" in crop.lower() and "bacterial" in disease.lower():
+        # Streptocycline (20 g / acre) + Copper Oxychloride 50% WP (500 g / acre)
+        strep_g, coc_g = round(field_acres * 20.0, 0), round(field_acres * 500.0, 0)
+        chem_str = f"{strep_g:.0f} g Streptocycline + {coc_g:.0f} g Copper Oxychloride in {water_volume_liters:.0f} L water"
+        
+    return {"acres": field_acres, "total_water_liters": water_volume_liters, "tanks_15L": tanks_15L, "prescription": chem_str}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 6: OUTCOME & EVALUATION RESULTS                                   -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-6" data-title="Outcome & Evaluation Results">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Empirical Verification</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">System Outcomes & Experimental Evaluation</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">Quantitative benchmarks across 54,000+ benchmark images and complete automated testing suite.</p>
+
+        <!-- Benchmark Matrix -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card p-5 border-t-4 border-t-lime-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Classification Performance</span>
+            <div class="mt-3 space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-white">Top-1 Categorical Accuracy</span>
+                  <span class="text-lime-400 font-bold">94.8%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2">
+                  <div class="bg-lime-500 h-2 rounded-full" style="width: 94.8%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-white">Top-3 Categorical Accuracy</span>
+                  <span class="text-emerald-400 font-bold">98.6%</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2">
+                  <div class="bg-emerald-500 h-2 rounded-full" style="width: 98.6%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-white">F1-Macro Score</span>
+                  <span class="text-cyan-400 font-bold">0.941</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2">
+                  <div class="bg-cyan-500 h-2 rounded-full" style="width: 94.1%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-5 border-t-4 border-t-cyan-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Computational Efficiency</span>
+            <div class="mt-3 space-y-3">
+              <div class="p-2.5 rounded bg-black/40 border border-white/5 flex items-center justify-between">
+                <span class="text-xs text-slate-300">Model Inference (CPU)</span>
+                <span class="text-sm font-mono font-bold text-lime-400">42 ms</span>
+              </div>
+              <div class="p-2.5 rounded bg-black/40 border border-white/5 flex items-center justify-between">
+                <span class="text-xs text-slate-300">Grad-CAM Generation</span>
+                <span class="text-sm font-mono font-bold text-cyan-400">68 ms</span>
+              </div>
+              <div class="p-2.5 rounded bg-black/40 border border-white/5 flex items-center justify-between">
+                <span class="text-xs text-slate-300">FAISS RAG Retrieval</span>
+                <span class="text-sm font-mono font-bold text-emerald-400">3.2 ms</span>
+              </div>
+              <div class="p-2.5 rounded bg-black/40 border border-white/5 flex items-center justify-between">
+                <span class="text-xs text-slate-300">Total Pipeline Cycle</span>
+                <span class="text-sm font-mono font-bold text-amber-400">&lt; 350 ms</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card-glow p-5 border-t-4 border-t-emerald-500">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Verification & Test Suite</span>
+            <div class="mt-2 text-center py-2">
+              <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-emerald-400">
+                155 / 155
+              </div>
+              <div class="text-xs font-bold text-white mt-1">Automated Tests Passed (100%)</div>
+            </div>
+            <ul class="text-[11px] text-slate-300 space-y-1.5 mt-2 border-t border-zenze-border pt-2">
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-lime-400"></i> Zero false positives on human selfies & hands</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-lime-400"></i> Zero tomato misclassification on wheat blades</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-lime-400"></i> End-to-end API integration verified (12/12)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 7: HOW THIS HELPS THE FARMER                                      -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-7" data-title="How This Helps the Farmer">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Field Impact</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">How AgriVision Agent Helps the Smallholder Farmer</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">Translating academic AI breakthroughs into real-world agronomic and economic benefits on Indian farms.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Benefit 1 -->
+          <div class="glass-card p-5 border-l-4 border-l-lime-500">
+            <div class="w-10 h-10 rounded-xl bg-lime-500/20 flex items-center justify-center text-lime-400 mb-3">
+              <i data-lucide="indian-rupee" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1.5">Direct Economic Savings</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Standard dealer recommendations encourage over-spraying by 40-60%. AgriVision's precision knapsack calibration saves an estimated <strong>₹3,400 per acre</strong> in unnecessary fungicides each crop cycle.
+            </p>
+          </div>
+
+          <!-- Benefit 2 -->
+          <div class="glass-card p-5 border-l-4 border-l-emerald-500">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
+              <i data-lucide="volume-2" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1.5">Vernacular Voice Assistant</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Illiterate and elderly smallholder farmers cannot read complex technical English PDFs. The built-in TTS speaks recommendations clearly in <strong>Hindi and Haryanvi dialect</strong> with pause and resume controls.
+            </p>
+          </div>
+
+          <!-- Benefit 3 -->
+          <div class="glass-card p-5 border-l-4 border-l-cyan-500">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 mb-3">
+              <i data-lucide="wifi-off" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1.5">Zero-Internet Offline Blocks</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Rural farmland frequently suffers from dead zones. <strong>30 major agricultural blocks</strong> are pre-cached locally with rule engines so diagnosis never fails even in deep field conditions.
+            </p>
+          </div>
+
+          <!-- Benefit 4 -->
+          <div class="glass-card p-5 border-l-4 border-l-amber-500">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 mb-3">
+              <i data-lucide="trending-up" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1.5">APMC Mandi Price Intelligence</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Pairs disease diagnosis with daily live Haryana APMC Mandi commodity price forecasts, helping the farmer decide whether to harvest immediately or treat the standing crop.
+            </p>
+          </div>
+
+          <!-- Benefit 5 -->
+          <div class="glass-card p-5 border-l-4 border-l-red-500">
+            <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 mb-3">
+              <i data-lucide="heart-pulse" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1.5">Human Health & Soil Safety</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Mandates PPE safety protocols (chemical masks, nitrile gloves, wind direction awareness) to eliminate chronic organophosphate and triazole poisoning among spray laborers.
+            </p>
+          </div>
+
+          <!-- Benefit 6 -->
+          <div class="glass-card p-5 border-l-4 border-l-purple-500">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1.5">Clinical PDF Certificates</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Generates printable crop health diagnostic records with Grad-CAM visual evidence for submission to PM Fasal Bima Yojana (crop insurance) claims.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 8: WHAT MAKES IT UNIQUE VS EXISTING PROJECTS                      -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-8" data-title="What Makes It Unique">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Competitive Analysis</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">What Makes It Unique Compared to Existing Projects?</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">A rigorous feature comparison against commercial apps, Kaggle models, and raw LLM wrappers.</p>
+
+        <!-- Comparison Table -->
+        <div class="glass-card overflow-hidden">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-black/50 text-slate-200 uppercase text-[11px] tracking-wider border-b border-zenze-border">
+              <tr>
+                <th class="p-3.5 font-bold">Platform Capability</th>
+                <th class="p-3.5 font-bold text-lime-400 bg-lime-500/10">AgriVision Agent (Ours)</th>
+                <th class="p-3.5 font-semibold text-slate-400">Plantix / Commercial Apps</th>
+                <th class="p-3.5 font-semibold text-slate-400">Standard ResNet Models</th>
+                <th class="p-3.5 font-semibold text-slate-400">Raw ChatGPT / Generic LLMs</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-zenze-border">
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3 font-semibold text-white">Botanical Human/Skin Guardrails</td>
+                <td class="p-3 text-lime-300 font-bold bg-lime-500/10"><i data-lucide="check" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i> Yes (YCbCr + HSV Fitzpatrick)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> No (Classifies hands as leaves)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> None (Predicts random class)</td>
+                <td class="p-3 text-slate-500">N/A (Text-first)</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3 font-semibold text-white">Monocot/Dicot Geometry Gating</td>
+                <td class="p-3 text-lime-300 font-bold bg-lime-500/10"><i data-lucide="check" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i> Yes (Aspect Ratio Gating)</td>
+                <td class="p-3 text-amber-400">Occasional cross-hallucination</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> No (Wheat mistaken for Tomato)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> Hallucinates plant taxonomy</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3 font-semibold text-white">Explainable Neural Heatmap</td>
+                <td class="p-3 text-lime-300 font-bold bg-lime-500/10"><i data-lucide="check" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i> Yes (Real-time PyTorch Grad-CAM)</td>
+                <td class="p-3 text-slate-400">Proprietary / Black Box</td>
+                <td class="p-3 text-amber-400">Static Grad-CAM (offline only)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> No visual explanation</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3 font-semibold text-white">Knapsack Tank Dosage Mathematics</td>
+                <td class="p-3 text-lime-300 font-bold bg-lime-500/10"><i data-lucide="check" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i> Exact (200L/acre &bull; 15L Tanks)</td>
+                <td class="p-3 text-slate-400">Vague concentration (e.g. 2ml/L)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> No dosage logic</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> Dangerous chemical hallucinations</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3 font-semibold text-white">Agronomic University Grounding</td>
+                <td class="p-3 text-lime-300 font-bold bg-lime-500/10"><i data-lucide="check" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i> Yes (FAISS + CCS HAU & ICAR)</td>
+                <td class="p-3 text-slate-400">Generic commercial repository</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> None</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> Uncontrolled web crawl data</td>
+              </tr>
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3 font-semibold text-white">Offline Edge Operation</td>
+                <td class="p-3 text-lime-300 font-bold bg-lime-500/10"><i data-lucide="check" class="w-3.5 h-3.5 inline mr-1 text-lime-400"></i> Yes (CPU 42ms + 30 Offline Blocks)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> Requires cloud servers</td>
+                <td class="p-3 text-amber-400">Model only (no UI/RAG)</td>
+                <td class="p-3 text-rose-400"><i data-lucide="x" class="w-3.5 h-3.5 inline mr-1"></i> Requires OpenAI/Anthropic API</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 9: ADVANTAGES & FUTURE SCOPE                                      -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-9" data-title="Advantages & Future Scope">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Strategic Vision</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Advantages & Future Scope</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">Current engineering strengths and our upcoming roadmap for large-scale agricultural deployment.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Core Advantages -->
+          <div class="glass-card p-6 border-l-4 border-l-lime-500">
+            <h3 class="text-base font-bold text-lime-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <i data-lucide="award" class="w-5 h-5"></i>
+              Key System Advantages
+            </h3>
+            <ul class="space-y-3.5 text-xs md:text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="check-circle" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Edge-Deployable Model Footprint:</strong>
+                  MobileNetV2 inverted residual blocks require only <strong>~14 MB</strong> of model weights, allowing smooth execution on low-cost smartphones without expensive cloud GPU clusters.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="check-circle" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Zero Chemical Hallucination:</strong>
+                  By decoupling visual diagnosis from deterministic FAISS RAG, pesticide dosages are bounded by scientific university publications.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="check-circle" class="w-4 h-4 text-lime-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">High Trust via Visual Saliency:</strong>
+                  Grad-CAM guarantees that diagnosis is made based on biological leaf lesions rather than background soil, sky, or farmer hands.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Future Roadmap -->
+          <div class="glass-card-glow p-6 border-l-4 border-l-cyan-500">
+            <h3 class="text-base font-bold text-cyan-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <i data-lucide="rocket" class="w-5 h-5"></i>
+              Future Roadmap & Extensions
+            </h3>
+            <ul class="space-y-3.5 text-xs md:text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">In-Browser Edge ONNX Runtime:</strong>
+                  Exporting the PyTorch model to WebAssembly ONNX for 100% serverless, zero-latency inference directly on farmer browsers.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Autonomous Drone Orthomosaic Surveys:</strong>
+                  Integrating high-resolution aerial drone stitch surveys to calculate infected acre percentages across 50-acre commercial farms.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">LoRaWAN IoT Soil Telemetry:</strong>
+                  Pairing leaf diagnosis with in-ground capacitive soil moisture, pH, and nitrogen sensors for holistic plant immunity health scoring.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="text-white">Multispectral Satellite NDVI Fusion:</strong>
+                  Early blight warning 5 days before macroscopic visible symptoms appear by tracking Sentinel-2 vegetative stress anomalies.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SLIDE 10: REFERENCES & ACKNOWLEDGMENTS                                  -->
+    <!-- ======================================================================= -->
+    <div class="slide" id="slide-10" data-title="References & Acknowledgments">
+      <div class="max-w-6xl mx-auto w-full my-auto py-6">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-lime-500/20 text-lime-400">Academic Integrity</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">References & Institutional Acknowledgments</h2>
+        </div>
+        <p class="text-slate-300 text-sm md:text-base mb-6">Foundational scientific literature, benchmark datasets, and agricultural authorities informing this research.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="glass-card p-4">
+            <div class="font-bold text-lime-400 mb-1">[1] MobileNetV2 Architecture</div>
+            <p class="text-slate-300">
+              Sandler, M., Howard, A., Zhu, M., Zhmoginov, A., & Chen, L. C. (2018). <em>MobileNetV2: Inverted Residuals and Linear Bottlenecks</em>. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 4510-4520.
+            </p>
+          </div>
+
+          <div class="glass-card p-4">
+            <div class="font-bold text-cyan-400 mb-1">[2] Explainable AI (Grad-CAM)</div>
+            <p class="text-slate-300">
+              Selvaraju, R. R., Cogswell, M., Das, A., Vedaldi, A., Parikh, D., & Batra, D. (2017). <em>Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization</em>. In Proceedings of the IEEE International Conference on Computer Vision (ICCV), pp. 618-626.
+            </p>
+          </div>
+
+          <div class="glass-card p-4">
+            <div class="font-bold text-emerald-400 mb-1">[3] Vector Search & RAG</div>
+            <p class="text-slate-300">
+              Johnson, J., Douze, M., & Jégou, H. (2019). <em>Billion-scale similarity search with GPUs</em>. IEEE Transactions on Big Data, 7(3), pp. 535-547. (FAISS Indexing Engine).
+            </p>
+          </div>
+
+          <div class="glass-card p-4">
+            <div class="font-bold text-amber-400 mb-1">[4] Plant Pathology Benchmark</div>
+            <p class="text-slate-300">
+              Hughes, D. P., & Salathé, M. (2015). <em>An open access repository of images on plant health to enable the development of mobile disease diagnostics</em>. arXiv preprint arXiv:1511.08060.
+            </p>
+          </div>
+
+          <div class="glass-card p-4">
+            <div class="font-bold text-purple-400 mb-1">[5] Agronomic Standards & Practices</div>
+            <p class="text-slate-300">
+              Chaudhary Charan Singh Haryana Agricultural University (CCS HAU) Hisar & Indian Council of Agricultural Research (ICAR). (2024). <em>Package of Practices for Kharif & Rabi Crops of Haryana</em>.
+            </p>
+          </div>
+
+          <div class="glass-card p-4">
+            <div class="font-bold text-red-400 mb-1">[6] Agricultural Chemical Safety</div>
+            <p class="text-slate-300">
+              World Health Organization (WHO) & Food and Agriculture Organization (FAO). (2020). <em>International Code of Conduct on Pesticide Management: Guidelines on Personal Protection</em>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Thank You Banner -->
+        <div class="mt-6 p-4 rounded-xl glass-card-glow flex flex-wrap items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-lime-500/20 text-lime-400 flex items-center justify-center font-bold">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="text-sm font-extrabold text-white">Thank You! Open for Questions & Live Demonstration</div>
+              <div class="text-xs text-lime-400">AgriVision Agent &bull; Autonomous Precision Agricultural Intelligence</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-2 sm:mt-0">
+            <a href="./AgriVision_Agent_Presentation.pptx" download="AgriVision_Agent_Presentation.pptx" class="px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md">
+              <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
+              <span>Download PPT (.pptx)</span>
+            </a>
+            <a href="https://github.com/Vaibhav007-star/AgriVision-Agent" target="_blank" class="px-4 py-2 rounded-lg bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-lg shadow-lime-500/20">
+              <span>View GitHub Repo</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- SPEAKER NOTES DRAWER (Collapsible, Press 'N')                             -->
+  <!-- ========================================================================= -->
+  <aside id="speaker-notes-drawer" class="no-print hidden fixed bottom-14 left-4 right-4 md:left-12 md:right-12 max-h-60 bg-[#111e16]/95 backdrop-blur-xl border border-zenze-border rounded-xl shadow-2xl z-40 p-4 overflow-y-auto">
+    <div class="flex items-center justify-between pb-2 border-b border-zenze-border mb-2 text-xs">
+      <span class="font-bold text-lime-400 flex items-center gap-1.5">
+        <i data-lucide="message-square" class="w-4 h-4"></i>
+        <span>Speaker Script & Defense Talking Points (Slide <span id="notes-slide-num">1</span>)</span>
+      </span>
+      <button onclick="toggleSpeakerNotes()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div id="speaker-notes-content" class="text-xs text-slate-300 leading-relaxed font-sans">
+      <!-- Injected by JS per active slide -->
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- BOTTOM NAVIGATION BAR (Fixed)                                             -->
+  <!-- ========================================================================= -->
+  <footer class="no-print fixed bottom-0 left-0 right-0 h-14 bg-[#0b130e]/90 backdrop-blur-md border-t border-zenze-border z-50 px-4 md:px-8 flex items-center justify-between">
+    <div class="text-xs text-slate-400 hidden sm:block">
+      Use <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-mono">←</kbd> <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-mono">→</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-mono">Space</kbd> to navigate &bull; <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-mono">N</kbd> for Notes &bull; <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-200 font-mono">F</kbd> for Fullscreen
+    </div>
+
+    <!-- Slide Navigation Arrows -->
+    <div class="flex items-center gap-2 mx-auto sm:mx-0">
+      <button id="prev-btn" onclick="prevSlide()" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-lime-500/50 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        <span>Previous</span>
+      </button>
+
+      <span class="text-xs font-mono font-bold text-lime-400 px-2 sm:hidden">
+        <span id="mobile-slide-num">1</span>/10
+      </span>
+
+      <button id="next-btn" onclick="nextSlide()" class="px-3.5 py-1.5 rounded-lg bg-lime-500 hover:bg-lime-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-lime-500/20 disabled:opacity-30 disabled:cursor-not-allowed">
+        <span>Next</span>
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT CONTROLLER                                                     -->
+  <!-- ========================================================================= -->
+  <script>
+    // Speaker notes database for all 10 slides
+    const SPEAKER_NOTES = {
+      1: `<strong>Opening Introduction:</strong> "Respected professor and fellow classmates, today I am presenting <em>AgriVision Agent</em> — an autonomous, precision agricultural intelligence system designed to tackle one of the greatest challenges facing smallholder farmers: early crop disease diagnosis and accurate chemical spray advisory. In our project, we combined depthwise separable MobileNetV2 CNNs, explainable AI with Grad-CAM, botanical guardrails, and deterministic FAISS RAG to achieve 94.8% Top-1 accuracy in just 42 milliseconds."`,
+      2: `<strong>The Dual Crisis:</strong> "Why did we build this? Smallholder farmers face two massive issues: first, 35% of crops are lost due to delayed disease identification. Second, when diseases strike, farmers spray random chemical mixtures, causing soil damage, water toxicity, and health issues. Existing AI apps act as black boxes with zero visual explanations, and shockingly, many popular models classify a farmer's hand or skin as a diseased leaf! AgriVision Agent solves these limitations from the ground up."`,
+      3: `<strong>Data Engineering & Scale:</strong> "Our dataset covers 54,000+ high-resolution images across 8 staple crops of northern India — Wheat, Rice, Cotton, Sugarcane, Corn, Tomato, Potato, and Pepper — encompassing 33 distinct disease classes. To handle harsh field lighting and glare, we apply OpenCV Contrast Limited Adaptive Histogram Equalization (CLAHE). Furthermore, our agronomic advice is not hallucinated by a generic chatbot: it is grounded in a 384-dimensional FAISS vector database containing 34 peer-reviewed research papers and publications from CCS Haryana Agricultural University Hisar and ICAR."`,
+      4: `<strong>Walking Through the Architecture:</strong> "Let's walk through the 7-stage pipeline: When the farmer captures an image, Stage 1 normalizes it. In Stage 2, our Botanical Guardrail inspects skin chrominance and texture; if a farmer uploads a selfie or hand, it immediately rejects it. In Stage 3, our Monocot vs Dicot morphology filter inspects leaf blade aspect ratios. In Stage 4, MobileNetV2 extracts deep features. In Stage 5, Grad-CAM overlays a thermal heatmap showing exactly which leaf spots triggered the diagnosis. In Stage 6, FAISS retrieves the approved treatment. Finally, Stage 7 calculates the exact knapsack tank dosage and speaks the advice in Hindi and Haryanvi dialect."`,
+      5: `<strong>Code Highlights:</strong> "Here are four core production snippets from our codebase: 1. <code>validate_leaf_image</code> uses YCbCr color thresholds to reject human skin melanin. 2. <code>_detect_monocot_leaf_blade</code> uses OpenCV contour aspect ratios (&ge; 2.0) to ensure wheat leaves are never confused with tomato plants. 3. <code>_generate_pytorch_gradcam</code> hooks directly into the last convolutional layer of MobileNetV2 to calculate gradient weights. 4. <code>calculate_spray_dosage</code> deterministically converts the farm's acreage into exact 15-liter sprayer pump counts, such as 200 ml of Propiconazole 25% EC per acre."`,
+      6: `<strong>Outcomes & Benchmarks:</strong> "Our experimental results are thoroughly verified: 94.8% Top-1 Accuracy, 98.6% Top-3 Accuracy, and a lightweight 42-millisecond CPU inference time. Furthermore, our entire platform has passed 155 out of 155 automated unit and end-to-end integration tests, confirming zero false positives on human skin, zero cross-crop misclassifications, and rock-solid API stability."`,
+      7: `<strong>Real Farmer Benefits:</strong> "How does this actually help a real farmer? First, it provides exact tank math: rather than telling an uneducated farmer 'apply 0.1% active ingredient', it says 'Take 13 tanks of 15L water, add 15 ml of Tilt per tank'. This saves ₹3,400 per acre in wasted chemicals! Second, our vernacular voice assistant speaks fluently in Hindi and local Haryanvi dialect. Third, 30 Haryana agricultural blocks work completely offline without internet connectivity."`,
+      8: `<strong>Unique Differentiation:</strong> "This comparison matrix shows why AgriVision Agent stands out against Plantix and generic models: We have Fitzpatrick skin guardrails, monocot geometry gating, real-time explainable Grad-CAM heatmaps, knapsack tank dosage calculations, and university-grounded RAG. Generic LLMs hallucinate lethal dosages, while standard Kaggle notebooks classify a farmer's fingers as brown spot disease. We solved both problems."`,
+      9: `<strong>Advantages & Future Roadmap:</strong> "Our architecture requires only ~14 MB of model memory, making it ideal for edge deployment. Looking ahead, our future scope includes WebAssembly ONNX for 100% in-browser offline inference, autonomous agricultural drone surveys to calculate infected acre percentages, and LoRaWAN IoT soil sensor integration for predictive spore germination alerts."`,
+      10: `<strong>Conclusion & References:</strong> "To conclude, AgriVision Agent unites deep learning, explainable AI, and agentic workflows to deliver real precision agriculture. Our work is grounded in foundational papers by Sandler et al. on MobileNetV2, Selvaraju et al. on Grad-CAM, and Johnson et al. on FAISS, alongside ICAR and CCS HAU Package of Practices. Thank you, and I am now ready for questions and a live demonstration!"`
+    };
+
+    let currentSlide = 1;
+    const totalSlides = 10;
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    // Initialize UI
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      initSlideIndicators();
+      updateSlideDisplay();
+      startTimer();
+
+      // Keyboard Listeners
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          nextSlide();
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          prevSlide();
+        } else if (e.key === "Home") {
+          goToSlide(1);
+        } else if (e.key === "End") {
+          goToSlide(totalSlides);
+        } else if (e.key.toLowerCase() === "n") {
+          toggleSpeakerNotes();
+        } else if (e.key.toLowerCase() === "f") {
+          toggleFullscreen();
+        }
+      });
+
+      // Button listeners
+      document.getElementById("fullscreen-btn").addEventListener("click", toggleFullscreen);
+      document.getElementById("toggle-notes-btn").addEventListener("click", toggleSpeakerNotes);
+    });
+
+    function initSlideIndicators() {
+      const container = document.getElementById("slide-indicators-container");
+      container.innerHTML = "";
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement("button");
+        dot.className = `w-2 h-2 rounded-full transition-all ${i === currentSlide ? 'bg-lime-400 w-5' : 'bg-white/20 hover:bg-white/40'}`;
+        dot.title = `Go to Slide ${i}`;
+        dot.onclick = () => goToSlide(i);
+        container.appendChild(dot);
+      }
+    }
+
+    function updateSlideDisplay() {
+      // Hide all slides, show current
+      for (let i = 1; i <= totalSlides; i++) {
+        const el = document.getElementById(`slide-${i}`);
+        if (el) {
+          if (i === currentSlide) {
+            el.classList.add("active");
+          } else {
+            el.classList.remove("active");
+          }
+        }
+      }
+
+      // Update counters
+      document.getElementById("current-slide-num").innerText = currentSlide;
+      document.getElementById("mobile-slide-num").innerText = currentSlide;
+      document.getElementById("notes-slide-num").innerText = currentSlide;
+
+      // Update progress bar
+      const pct = (currentSlide / totalSlides) * 100;
+      document.getElementById("progress-bar").style.width = `${pct}%`;
+
+      // Update navigation buttons state
+      document.getElementById("prev-btn").disabled = (currentSlide === 1);
+      document.getElementById("next-btn").disabled = (currentSlide === totalSlides);
+
+      // Update speaker notes content
+      const notesEl = document.getElementById("speaker-notes-content");
+      if (notesEl && SPEAKER_NOTES[currentSlide]) {
+        notesEl.innerHTML = SPEAKER_NOTES[currentSlide];
+      }
+
+      // Update dots
+      initSlideIndicators();
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideDisplay();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideDisplay();
+      }
+    }
+
+    function goToSlide(num) {
+      if (num >= 1 && num <= totalSlides) {
+        currentSlide = num;
+        updateSlideDisplay();
+      }
+    }
+
+    function toggleSpeakerNotes() {
+      const drawer = document.getElementById("speaker-notes-drawer");
+      drawer.classList.toggle("hidden");
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen request failed", err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        const mins = Math.floor(timerSeconds / 60);
+        const secs = timerSeconds % 60;
+        document.getElementById("presentation-timer").innerText = 
+          `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    // Code block tab switcher
+    function switchCodeTab(index) {
+      const panels = document.querySelectorAll(".code-panel");
+      const buttons = document.querySelectorAll("#code-tabs button");
+      
+      panels.forEach((p, idx) => {
+        if (idx === index) {
+          p.classList.remove("hidden");
+          p.classList.add("block");
+        } else {
+          p.classList.remove("block");
+          p.classList.add("hidden");
+        }
+      });
+
+      buttons.forEach((b, idx) => {
+        if (idx === index) {
+          b.className = "px-2.5 py-1 rounded bg-lime-500/20 text-lime-300 font-semibold tab-btn active";
+        } else {
+          b.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white tab-btn";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
+
