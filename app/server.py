@@ -845,6 +845,7 @@ async def fetch_stats() -> Dict[str, Any]:
 
 if __name__ == "__main__":
     import uvicorn
+    import argparse
     try:
         if hasattr(sys.stdout, "reconfigure"):
             sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -854,6 +855,29 @@ if __name__ == "__main__":
         pass
 
     import socket
+
+    parser = argparse.ArgumentParser(description="AgriVision Agent Server")
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)), help="Port to listen on")
+    parser.add_argument("--host", type=str, default=os.environ.get("HOST", "127.0.0.1"), help="Host address")
+    args, _ = parser.parse_known_args()
+
+    def is_port_in_use(port_num: int, host_addr: str = "127.0.0.1") -> bool:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.5)
+                return s.connect_ex((host_addr, port_num)) == 0
+        except Exception:
+            return False
+
+    target_port = args.port
+    if is_port_in_use(target_port, args.host):
+        alt_port = target_port + 1
+        while is_port_in_use(alt_port, args.host) and alt_port < target_port + 50:
+            alt_port += 1
+        print(f"\n[!] Notice: Port {target_port} is currently in use by another local application.")
+        print(f"[*] AgriVision Agent automatically binding to available port: {alt_port}\n")
+        target_port = alt_port
+
     def get_local_ip():
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -868,10 +892,10 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 70)
     print("[*] AgriVision Agent — Autonomous Precision Agriculture Web Platform")
-    print("[+] Server is RUNNING at http://127.0.0.1:8000")
+    print(f"[+] Server is RUNNING at http://127.0.0.1:{target_port}")
     print("")
     print("👉 OPEN IN BROWSER (Click or copy this link into your browser):")
-    print("   http://localhost:8000")
-    print("   http://127.0.0.1:8000")
+    print(f"   http://localhost:{target_port}")
+    print(f"   http://127.0.0.1:{target_port}")
     print("=" * 70 + "\n")
-    uvicorn.run("app.server:app", host="127.0.0.1", port=8000, reload=False, log_level="info")
+    uvicorn.run("app.server:app", host=args.host, port=target_port, reload=False, log_level="info")

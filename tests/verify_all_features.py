@@ -1,3 +1,4 @@
+import os
 import sys
 if sys.stdout.encoding != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -6,7 +7,19 @@ import requests
 import json
 from pathlib import Path
 
-BASE_URL = "http://127.0.0.1:8000"
+def resolve_base_url():
+    if "BASE_URL" in os.environ:
+        return os.environ["BASE_URL"]
+    for port in (8000, 8001, 8002, 8080):
+        try:
+            r = requests.get(f"http://127.0.0.1:{port}/health", timeout=1.0)
+            if r.status_code == 200 and "AgriVision" in r.text:
+                return f"http://127.0.0.1:{port}"
+        except Exception:
+            continue
+    return "http://127.0.0.1:8000"
+
+BASE_URL = resolve_base_url()
 
 def run_all_checks():
     print("=" * 65)
